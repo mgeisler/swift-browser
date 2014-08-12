@@ -1,0 +1,9 @@
+/* app css stylesheet */
+
+body {
+    margin: 1em;
+}
+
+.right {
+    text-align: right;
+}
