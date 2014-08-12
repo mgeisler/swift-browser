@@ -14,4 +14,13 @@ config(['$routeProvider', function($routeProvider) {
         templateUrl: 'partials/root.html',
         controller: 'RootCtrl'
     });
+    $routeProvider.when('/:container', {
+        templateUrl: 'partials/container.html',
+        controller: 'ContainerCtrl'
+    });
+    $routeProvider.when('/:container/:object*', {
+        templateUrl: 'partials/object.html',
+        controller: 'ObjectCtrl'
+    });
+    $routeProvider.otherwise({redirectTo: '/'});
 }]);
