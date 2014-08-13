@@ -24,7 +24,7 @@ module.exports = function(config){
             'karma-coverage',
             ],
 
-    reporters : ['coverage'],
+    reporters : ['progress', 'coverage'],
 
     preprocessors : {'app/js/**/*.js': 'coverage'}
 
