@@ -32,6 +32,15 @@ angular.module('swiftBrowser.controllers', [])
                 $scope.orderProp = column;
             }
 
+            $scope.breadcrumbs = [];
+            var parts = path.split('/');
+            for (var i = 0; i < parts.length - 2; i++) {
+                var crumb = {name: parts.slice(0, i+1).join('/') + '/',
+                             title: parts[i]};
+                $scope.breadcrumbs.push(crumb);
+            }
+            $scope.directory = parts[parts.length - 2];
+
             var client = new SwiftClient($http);
             var params = {prefix: path, delimiter: '/'};
             client.listObjects(container, params).then(function (result) {
@@ -56,14 +65,5 @@ angular.module('swiftBrowser.controllers', [])
                         return item;
                     }
                 });
-
-                $scope.breadcrumbs = [];
-                var parts = path.split('/');
-                for (var i = 0; i < parts.length - 2; i++) {
-                    var crumb = {name: parts.slice(0, i+1).join('/') + '/',
-                                 title: parts[i]};
-                    $scope.breadcrumbs.push(crumb);
-                }
-                $scope.directory = parts[parts.length - 2];
             });
         }]);
