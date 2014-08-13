@@ -14,7 +14,7 @@ config(['$routeProvider', function($routeProvider) {
         templateUrl: 'partials/root.html',
         controller: 'RootCtrl'
     });
-    $routeProvider.when('/:container', {
+    $routeProvider.when('/:container/', {
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });
