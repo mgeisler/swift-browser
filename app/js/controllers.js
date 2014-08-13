@@ -19,9 +19,10 @@ angular.module('swiftBrowser.controllers', [])
         });
     }])
     .controller('ContainerCtrl', [
-        '$scope', '$http', '$routeParams',
-        function($scope, $http, $routeParams) {
+        '$scope', '$http', '$routeParams', '$location',
+        function($scope, $http, $routeParams, $location) {
             var container = $routeParams.container;
+            var path = $routeParams.path || '';
             $scope.container = container;
             $scope.orderProp = 'name';
 
@@ -32,13 +33,37 @@ angular.module('swiftBrowser.controllers', [])
             }
 
             var client = new SwiftClient($http);
-            client.listObjects(container).then(function (result) {
-                $scope.objects = result.data;
+            var params = {prefix: path, delimiter: '/'};
+            client.listObjects(container, params).then(function (result) {
+                var items = result.data;
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].subdir == path + '/') {
+                        // Add trailing slash for pseudo-directory
+                        $location.path($location.path() + '/');
+                        return;
+                    }
+                }
+
+                $scope.items = $.map(items, function (item) {
+                    var parts = (item.subdir || item.name).split('/');
+
+                    if (item.subdir) {
+                        return {name: item.subdir,
+                                title: parts[parts.length - 2] + '/',
+                                bytes: '\u2014'} // em dash
+                    } else {
+                        item.title = parts[parts.length - 1];
+                        return item;
+                    }
+                });
+
+                $scope.breadcrumbs = [];
+                var parts = path.split('/');
+                for (var i = 0; i < parts.length - 2; i++) {
+                    var crumb = {name: parts.slice(0, i+1).join('/') + '/',
+                                 title: parts[i]};
+                    $scope.breadcrumbs.push(crumb);
+                }
+                $scope.directory = parts[parts.length - 2];
             });
-        }])
-    .controller('ObjectCtrl', [
-        '$scope', '$http', '$routeParams',
-        function($scope, $http, $routeParams) {
-            $scope.container = $routeParams.container;
-            $scope.object = $routeParams.object;
         }]);

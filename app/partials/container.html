@@ -1,8 +1,15 @@
-<h1>Container</h1>
+<h1>Listing</h1>
 
 <p>
   <a href="#/">Root</a> /
-  <a href="#/{{ container }}">{{ container }}</a>
+  <a ng-if="directory" href="#/{{ container }}">{{ container }}</a>
+  <span ng-if="!directory">{{ container }}</span>
+  <span ng-repeat="crumb in breadcrumbs">
+    / <a href="#/{{ container }}/{{ crumb.name }}">{{ crumb.title }}</a>
+  </span>
+  <span ng-if="directory">
+    / {{ directory }}
+  </span>
 </p>
 
 <table>
@@ -10,8 +17,8 @@
     <th ng-click="updateOrderBy('name')">Name</th>
     <th ng-click="updateOrderBy('bytes')">Size</th>
   </tr>
-  <tr ng-repeat="object in objects | orderBy:orderProp">
-    <td><a href="#/{{ container }}/{{ object.name }}">{{ object.name }}</a></td>
-    <td class="right">{{ object.bytes | humanReadable }}</td>
+  <tr ng-repeat="item in items | orderBy:orderProp">
+    <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
+    <td class="right">{{ item.bytes | humanReadable }}</td>
   </tr>
 </table>
