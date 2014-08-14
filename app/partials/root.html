@@ -3,8 +3,8 @@
 <table class="table table-striped">
   <tr>
     <th ng-click="updateOrderBy('name')">Name</th>
-    <th ng-click="updateOrderBy('bytes')">Size</th>
-    <th ng-click="updateOrderBy('count')">Count</th>
+    <th ng-click="updateOrderBy('bytes')" class="size">Size</th>
+    <th ng-click="updateOrderBy('count')" class="count">Count</th>
   </tr>
   <tr ng-repeat="container in containers | orderBy:orderProp">
     <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>

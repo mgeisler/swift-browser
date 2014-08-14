@@ -8,6 +8,14 @@ body {
     text-align: right;
 }
 
+th.size {
+    width: 6em;
+}
+
+th.count {
+    width: 7em;
+}
+
 span.unit {
     display: inline-block;
     min-width: 1.5em;
