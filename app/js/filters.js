@@ -3,7 +3,7 @@
 /* Filters */
 
 angular.module('swiftBrowser.filters', []).
-  filter('humanReadable', function() {
+  filter('bytes', function() {
       return function(input) {
           if (!angular.isNumber(input))
               return input;

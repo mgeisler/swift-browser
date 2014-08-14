@@ -8,14 +8,14 @@ angular.module('swiftBrowser.directives', []).
             elm.text(version);
         };
     }]).
-    directive('sbFormatBytes', ['humanReadableFilter', function(humanReadableFilter) {
+    directive('sbFormatBytes', ['bytesFilter', function(bytesFilter) {
         return {
             restrict: 'AE',
             scope: {
                 count: '=',
             },
             link: function (scope, element, attrs) {
-                var formatted = humanReadableFilter(scope.count);
+                var formatted = bytesFilter(scope.count);
                 var parts = formatted.split(' ');
 
                 element.text(parts[0] + ' ');

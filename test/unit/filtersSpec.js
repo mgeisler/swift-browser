@@ -5,16 +5,16 @@
 describe('filter', function() {
   beforeEach(module('swiftBrowser.filters'));
 
-  describe('humanReadable', function() {
-    it('should add bytes to small numbers', inject(function(humanReadableFilter) {
-      expect(humanReadableFilter(100)).toEqual('100.0 B');
-      expect(humanReadableFilter(1500)).toEqual('1.5 KB');
-      expect(humanReadableFilter(2500000)).toEqual('2.5 MB');
+  describe('bytes', function() {
+    it('should add bytes to small numbers', inject(function(bytesFilter) {
+      expect(bytesFilter(100)).toEqual('100.0 B');
+      expect(bytesFilter(1500)).toEqual('1.5 KB');
+      expect(bytesFilter(2500000)).toEqual('2.5 MB');
     }));
 
-    it('should ignore non-numbers', inject(function(humanReadableFilter) {
-        expect(humanReadableFilter(null)).toEqual(null);
-        expect(humanReadableFilter('hey')).toEqual('hey');
+    it('should ignore non-numbers', inject(function(bytesFilter) {
+        expect(bytesFilter(null)).toEqual(null);
+        expect(bytesFilter('hey')).toEqual('hey');
     }));
   });
 });
