@@ -3,16 +3,9 @@
 </div>
 
 <ol class="breadcrumb">
-  <li><a href="#/">Root</a></li>
-  <li ng-class="{active: !directory}">
-    <a ng-if="directory" href="#/{{ container }}">{{ container }}</a>
-    <span ng-if="!directory">{{ container }}</span>
-  </li>
-  <li ng-repeat="crumb in breadcrumbs">
-    <a href="#/{{ container }}/{{ crumb.name }}">{{ crumb.title }}</a>
-  </li>
-  <li ng-if="directory" class="active">
-     {{ directory }}
+  <li ng-repeat="crumb in breadcrumbs" ng-class="{active: $last}">
+    <a ng-if="!$last" href="#/{{ crumb.name }}">{{ crumb.title }}</a>
+    <span ng-if="$last">{{ crumb.title }}</span>
   </li>
 </ol>
 
