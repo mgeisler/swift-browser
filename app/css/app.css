@@ -7,3 +7,8 @@ body {
 .right {
     text-align: right;
 }
+
+span.unit {
+    display: inline-block;
+    min-width: 1.5em;
+}

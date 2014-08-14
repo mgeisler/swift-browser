@@ -19,6 +19,6 @@
   </tr>
   <tr ng-repeat="item in items | orderBy:orderProp">
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
-    <td class="right">{{ item.bytes | humanReadable }}</td>
+    <td class="right" sb-format-bytes count="item.bytes" />
   </tr>
 </table>

@@ -8,7 +8,7 @@
   </tr>
   <tr ng-repeat="container in containers | orderBy:orderProp">
     <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>
-    <td class="right">{{ container.bytes | humanReadable }}</td>
+    <td class="right" sb-format-bytes count="container.bytes" />
     <td class="right">{{ container.count | number }} objects</td>
   </tr>
 </table>
