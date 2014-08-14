@@ -13,3 +13,18 @@ span.unit {
     display: inline-block;
     min-width: 1.5em;
 }
+
+/* Bootstrap adds "/ " between the crumbs. To be symmetrical, this
+   relies on there already being whitespace *before* the slash. This
+   doens't work when AngularJS generates the crumbs with ngRepeat
+   since the elements are inserted with no whitespace between them. We
+   do add whitespace, though, but at the beginning of each crumb (the
+   newline between <li> and <a>). This meanst that we can move the
+   space to the other side of the slash. The generated " " is now at
+   the beginning of the li element, and would normally be removed due
+   to whitespace normalization. We can prevent this by setting the
+   white-space property. */
+.breadcrumb > li + li[ng-repeat]:before {
+    content: " /";
+    white-space: pre;
+}
