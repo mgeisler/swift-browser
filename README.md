@@ -1,7 +1,7 @@
 Swift Browser
 =============
 
-JavaScript based UI for OpenStack Swift.
+JavaScript based UI for [OpenStack Swift][].
 
 Deployment
 ----------
@@ -31,6 +31,7 @@ Other Swift File Managers
 
 * [swift-ui][]: implemented in JavaScript using Backbone.js
 
+[OpenStack Swift]: http://docs.openstack.org/developer/swift/
 [Bower]: http://bower.io/
 [npm]: https://www.npmjs.org/
 [Swift Explorer]: http://www.619.io/swift-explorer
