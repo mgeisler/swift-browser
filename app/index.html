@@ -10,11 +10,16 @@
   <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
-  <div ng-view></div>
 
-  <hr/>
-  
-  <p>Swift Browser version <span sb-version></span>.</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <div ng-view></div>
+        <hr/>
+        <p>Swift Browser version <span sb-version></span>.</p>
+      </div>
+    </div>
+  </div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
