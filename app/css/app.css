@@ -14,6 +14,14 @@ span.unit {
     min-width: 1.5em;
 }
 
+span.sort-asc:after {
+    content: "↓";
+}
+
+span.sort-desc:after {
+    content: "↑";
+}
+
 /* Bootstrap adds "/ " between the crumbs. To be symmetrical, this
    relies on there already being whitespace *before* the slash. This
    doens't work when AngularJS generates the crumbs with ngRepeat

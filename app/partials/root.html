@@ -8,9 +8,15 @@
 
 <table class="table table-striped">
   <tr>
-    <th ng-click="updateOrderBy('name')">Name</th>
-    <th ng-click="updateOrderBy('bytes')" class="size">Size</th>
-    <th ng-click="updateOrderBy('count')" class="count">Count</th>
+    <th ng-click="updateOrderBy('name')">
+      Name <span ng-class="sortCls.name"></span>
+    </th>
+    <th ng-click="updateOrderBy('bytes')" class="size">
+      Size <span ng-class="sortCls.bytes"></span>
+    </th>
+    <th ng-click="updateOrderBy('count')" class="count">
+      Count <span ng-class="sortCls.count"></span>
+    </th>
   </tr>
   <tr ng-repeat="container in containers | orderBy:orderProp">
     <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>
