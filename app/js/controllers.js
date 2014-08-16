@@ -39,7 +39,7 @@ angular.module('swiftBrowser.controllers', [])
             var parts = path.split('/');
             parts.unshift(container);
             for (var i = 0; i < parts.length - 1; i++) {
-                var crumb = {name: parts.slice(0, i+1).join('/') + '/',
+                var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
                              title: parts[i]};
                 $scope.breadcrumbs.push(crumb);
             }
