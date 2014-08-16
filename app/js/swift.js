@@ -14,7 +14,7 @@ SwiftClient.prototype.auth = function (swiftAuth) {
     var self = this;
     var headers = {
         'X-Auth-User': swiftAuth.authUser,
-        'X-Auth-Key': swiftAuth.authKey,
+        'X-Auth-Key': swiftAuth.authKey
     };
     var req = this._$http({method: 'GET',
                            url: swiftAuth.authURL, headers: headers});
