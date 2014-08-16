@@ -16,3 +16,4 @@ rules:
   - 2
   - vars: all
     args: none
+  eqeqeq: 0
