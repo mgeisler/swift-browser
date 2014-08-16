@@ -20,4 +20,10 @@ describe('RootCtrl', function(){
         expect(scope.containers).toEqual(containers);
     }));
 
+    it('should set sort order', inject(function($controller) {
+        var scope = {};
+        $controller('RootCtrl', {$scope: scope});
+        expect(scope.orderProp).toEqual('name');
+    }));
+
 });
