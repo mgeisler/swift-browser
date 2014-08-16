@@ -37,19 +37,33 @@ describe('ContainerCtrl', function(){
 
     beforeEach(module('swiftBrowser.controllers'));
 
-    beforeEach(inject(function($controller) {
-        var params = {container: 'cont'};
-        scope = {};
-        $controller('ContainerCtrl',
-                    {$scope: scope, $routeParams: params});
-    }));
+    function setupCtrl(params) {
+        inject(function($controller) {
+            scope = {};
+            $controller('ContainerCtrl',
+                        {$scope: scope, $routeParams: params});
+        });
+    }
 
     it('should set sort order', function() {
+        setupCtrl({container: 'cont'});
         expect(scope.orderProp).toEqual('name');
     });
 
     it('should set container', function() {
+        setupCtrl({container: 'cont'});
         expect(scope.container).toEqual('cont');
+    });
+
+    it('should create breadcrumbs', function() {
+        setupCtrl({container: 'cont',
+                   path: 'foo/bar/'});
+        expect(scope.breadcrumbs).toEqual([
+            {name: '', title: 'Root'},
+            {name: 'cont/', title: 'cont'},
+            {name: 'cont/foo/', title: 'foo'},
+            {name: 'cont/foo/bar/', title: 'bar'},
+        ]);
     });
 
 });
