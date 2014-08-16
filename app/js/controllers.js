@@ -7,8 +7,9 @@ function mkUpdateOrderBy($scope) {
         var rev = column == $scope.orderProp;
         $scope.sortCls = {};
         $scope.sortCls[column] = 'sort-' + (rev ? 'desc' : 'asc');
-        if (rev)
+        if (rev) {
             column = '-' + column;
+        }
         $scope.orderProp = column;
     };
 }

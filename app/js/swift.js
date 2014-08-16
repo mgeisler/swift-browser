@@ -30,8 +30,9 @@ SwiftClient.prototype.listContainers = function () {
 };
 
 SwiftClient.prototype.listObjects = function (container, params) {
-    if (!params)
+    if (!params) {
         params = {};
+    }
     params.format = 'json';
     var url = this._swiftUrl + '/' + container + '?' + $.param(params);
     return this._$http.get(url, this._headers);
