@@ -30,3 +30,26 @@ describe('RootCtrl', function(){
     });
 
 });
+
+
+describe('ContainerCtrl', function(){
+    var scope;
+
+    beforeEach(module('swiftBrowser.controllers'));
+
+    beforeEach(inject(function($controller) {
+        var params = {container: 'cont'};
+        scope = {};
+        $controller('ContainerCtrl',
+                    {$scope: scope, $routeParams: params});
+    }));
+
+    it('should set sort order', function() {
+        expect(scope.orderProp).toEqual('name');
+    });
+
+    it('should set container', function() {
+        expect(scope.container).toEqual('cont');
+    });
+
+});
