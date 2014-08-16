@@ -17,6 +17,8 @@ module.exports = function(config){
 
     browsers : ['Chrome'],
 
+    urlRoot : '/v1/AUTH_abc/container/',
+
     plugins : [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
