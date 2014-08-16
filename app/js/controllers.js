@@ -61,7 +61,7 @@ angular.module('swiftBrowser.controllers', [])
                     if (item.subdir) {
                         return {name: item.subdir,
                                 title: parts[parts.length - 2] + '/',
-                                bytes: '\u2014'} // em dash
+                                bytes: '\u2014'}; // em dash
                     } else {
                         item.title = parts[parts.length - 1];
                         return item;
