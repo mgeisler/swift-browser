@@ -1,3 +1,4 @@
+'use strict';
 
 function SwiftClient($http) {
     this._$http = $http;
