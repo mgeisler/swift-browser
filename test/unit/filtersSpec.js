@@ -11,5 +11,10 @@ describe('filter', function() {
       expect(humanReadableFilter(1500)).toEqual('1.5 KB');
       expect(humanReadableFilter(2500000)).toEqual('2.5 MB');
     }));
+
+    it('should ignore non-numbers', inject(function(humanReadableFilter) {
+        expect(humanReadableFilter(null)).toEqual(null);
+        expect(humanReadableFilter('hey')).toEqual('hey');
+    }));
   });
 });

@@ -29,7 +29,10 @@ SwiftClient.prototype.listContainers = function () {
     return this._$http.get(this._swiftUrl + '?format=json', this._headers);
 }
 
-SwiftClient.prototype.listObjects = function (container) {
-    var url = this._swiftUrl + '/' + container + '?format=json';
+SwiftClient.prototype.listObjects = function (container, params) {
+    if (!params)
+        params = {};
+    params.format = 'json';
+    var url = this._swiftUrl + '/' + container + '?' + $.param(params);
     return this._$http.get(url, this._headers);
 }
