@@ -1,0 +1,17 @@
+<h1>Container</h1>
+
+<p>
+  <a href="#/">Root</a> /
+  <a href="#/{{ container }}">{{ container }}</a>
+</p>
+
+<table>
+  <tr>
+    <th ng-click="updateOrderBy('name')">Name</th>
+    <th ng-click="updateOrderBy('bytes')">Size</th>
+  </tr>
+  <tr ng-repeat="object in objects | orderBy:orderProp">
+    <td><a href="#/{{ container }}/{{ object.name }}">{{ object.name }}</a></td>
+    <td class="right">{{ object.bytes | humanReadable }}</td>
+  </tr>
+</table>
