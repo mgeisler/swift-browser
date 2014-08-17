@@ -1,6 +1,8 @@
 Swift Browser
 =============
 
+[![Build Status](https://travis-ci.org/zerovm/swift-browser.svg?branch=master)](https://travis-ci.org/zerovm/swift-browser)
+
 JavaScript based UI for [OpenStack Swift][].
 
 Deployment
