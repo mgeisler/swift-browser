@@ -3,3 +3,4 @@ app/bower_components/
 coverage/
 
 *~
+*.orig
