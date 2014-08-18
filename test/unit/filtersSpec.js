@@ -12,6 +12,11 @@ describe('filter', function() {
       expect(bytesFilter(2500000)).toEqual('2.5 MB');
     }));
 
+    it('should use powers of 1000, not 1024', inject(function(bytesFilter) {
+      expect(bytesFilter(4000)).toEqual('4.0 KB');
+      expect(bytesFilter(4096)).toEqual('4.1 KB');
+    }));
+
     it('should ignore non-numbers', inject(function(bytesFilter) {
         expect(bytesFilter(null)).toEqual(null);
         expect(bytesFilter('hey')).toEqual('hey');
