@@ -2,16 +2,22 @@
 
 /* Controllers */
 
+function mkUpdateOrderBy($scope) {
+    return function(column) {
+        var rev = column == $scope.orderProp;
+        $scope.sortCls = {};
+        $scope.sortCls[column] = 'sort-' + (rev ? 'desc' : 'asc');
+        if (rev)
+            column = '-' + column;
+        $scope.orderProp = column;
+    };
+}
+
 angular.module('swiftBrowser.controllers', [])
     .controller('RootCtrl', ['$scope', '$http', function($scope, $http) {
         $scope.containers = [];
-        $scope.orderProp = 'name';
-
-        $scope.updateOrderBy = function(column) {
-            if (column == $scope.orderProp)
-                column = '-' + column;
-            $scope.orderProp = column;
-        }
+        $scope.updateOrderBy = mkUpdateOrderBy($scope);
+        $scope.updateOrderBy('name');
 
         var client = new SwiftClient($http);
         client.listContainers().then(function (result) {
@@ -24,13 +30,8 @@ angular.module('swiftBrowser.controllers', [])
             var container = $routeParams.container;
             var path = $routeParams.path || '';
             $scope.container = container;
-            $scope.orderProp = 'name';
-
-            $scope.updateOrderBy = function(column) {
-                if (column == $scope.orderProp)
-                    column = '-' + column;
-                $scope.orderProp = column;
-            }
+            $scope.updateOrderBy = mkUpdateOrderBy($scope);
+            $scope.updateOrderBy('name');
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 

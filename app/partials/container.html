@@ -11,8 +11,12 @@
 
 <table class="table table-striped">
   <tr>
-    <th ng-click="updateOrderBy('name')">Name</th>
-    <th ng-click="updateOrderBy('bytes')" class="size">Size</th>
+    <th ng-click="updateOrderBy('name')">
+      Name <span ng-class="sortCls.name"></span>
+    </th>
+    <th ng-click="updateOrderBy('bytes')" class="size">
+      Size <span ng-class="sortCls.bytes"></span>
+    </th>
   </tr>
   <tr ng-repeat="item in items | orderBy:orderProp">
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
