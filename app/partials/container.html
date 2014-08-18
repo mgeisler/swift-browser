@@ -1,4 +1,6 @@
-<h1>Listing</h1>
+<div class="page-header">
+  <h1>Listing</h1>
+</div>
 
 <p>
   <a href="#/">Root</a> /
@@ -19,6 +21,6 @@
   </tr>
   <tr ng-repeat="item in items | orderBy:orderProp">
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
-    <td class="right" sb-format-bytes count="item.bytes" />
+    <td class="text-right" sb-format-bytes count="item.bytes" />
   </tr>
 </table>

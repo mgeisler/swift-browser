@@ -1,4 +1,6 @@
-<h1>Swift Containers</h1>
+<div class="page-header">
+  <h1>Swift Containers</h1>
+</div>
 
 <table class="table table-striped">
   <tr>
@@ -8,7 +10,7 @@
   </tr>
   <tr ng-repeat="container in containers | orderBy:orderProp">
     <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>
-    <td class="right" sb-format-bytes count="container.bytes" />
-    <td class="right">{{ container.count | number }} objects</td>
+    <td class="text-right" sb-format-bytes count="container.bytes" />
+    <td class="text-right">{{ container.count | number }} objects</td>
   </tr>
 </table>
