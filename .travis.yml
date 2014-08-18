@@ -10,5 +10,6 @@ before_script:
   - npm run update-webdriver
   - sleep 1 # give server time to start
 script:
+  - eslint app/js
   - karma start test/karma.conf.js --single-run --reporters=dots --browsers=Firefox
   - protractor test/protractor-conf.js --browser=firefox
