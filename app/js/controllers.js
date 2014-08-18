@@ -32,14 +32,15 @@ angular.module('swiftBrowser.controllers', [])
                 $scope.orderProp = column;
             }
 
-            $scope.breadcrumbs = [];
+            $scope.breadcrumbs = [{name: '', title: 'Root'}];
+
             var parts = path.split('/');
-            for (var i = 0; i < parts.length - 2; i++) {
+            parts.unshift(container);
+            for (var i = 0; i < parts.length - 1; i++) {
                 var crumb = {name: parts.slice(0, i+1).join('/') + '/',
                              title: parts[i]};
                 $scope.breadcrumbs.push(crumb);
             }
-            $scope.directory = parts[parts.length - 2];
 
             var client = new SwiftClient($http);
             var params = {prefix: path, delimiter: '/'};

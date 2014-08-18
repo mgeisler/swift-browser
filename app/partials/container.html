@@ -2,17 +2,12 @@
   <h1>Listing</h1>
 </div>
 
-<p>
-  <a href="#/">Root</a> /
-  <a ng-if="directory" href="#/{{ container }}">{{ container }}</a>
-  <span ng-if="!directory">{{ container }}</span>
-  <span ng-repeat="crumb in breadcrumbs">
-    / <a href="#/{{ container }}/{{ crumb.name }}">{{ crumb.title }}</a>
-  </span>
-  <span ng-if="directory">
-    / {{ directory }}
-  </span>
-</p>
+<ol class="breadcrumb">
+  <li ng-repeat="crumb in breadcrumbs" ng-class="{active: $last}">
+    <a ng-if="!$last" href="#/{{ crumb.name }}">{{ crumb.title }}</a>
+    <span ng-if="$last">{{ crumb.title }}</span>
+  </li>
+</ol>
 
 <table class="table table-striped">
   <tr>
