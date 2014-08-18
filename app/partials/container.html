@@ -15,10 +15,10 @@
 <table class="table table-striped">
   <tr>
     <th ng-click="updateOrderBy('name')">Name</th>
-    <th ng-click="updateOrderBy('bytes')">Size</th>
+    <th ng-click="updateOrderBy('bytes')" class="size">Size</th>
   </tr>
   <tr ng-repeat="item in items | orderBy:orderProp">
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
-    <td class="right">{{ item.bytes | humanReadable }}</td>
+    <td class="right" sb-format-bytes count="item.bytes" />
   </tr>
 </table>

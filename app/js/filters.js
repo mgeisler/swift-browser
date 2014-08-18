@@ -3,12 +3,11 @@
 /* Filters */
 
 angular.module('swiftBrowser.filters', []).
-  filter('humanReadable', function() {
+  filter('bytes', function() {
       return function(input) {
-          if (!angular.isNumber(input))
-              return input;
-
           var number = parseInt(input);
+          if (isNaN(number))
+              return input;
           var units = ['B', 'KB', 'MB', 'GB'];
           var unit = units.shift();
 
