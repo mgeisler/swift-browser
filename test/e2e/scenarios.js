@@ -25,16 +25,10 @@ describe('Container listing', function () {
         }
 
         beforeEach(function () {
-            browser.addMockModule('swiftBrowserE2E', function () {
-                angular.module('swiftBrowserE2E').run(function($httpBackend) {
-                    $httpBackend.whenGET('/app/index.html?format=json').respond([
-                        {name: "bar", count: 20, bytes: 1234},
-                        {name: "foo", count: 10, bytes: 2345}
-                    ]);
-                    $httpBackend.whenGET(/.*/).passThrough();
-                });
-            });
-
+            SwiftSimulator.setContainers([
+                {name: "bar", count: 20, bytes: 1234},
+                {name: "foo", count: 10, bytes: 2345}
+            ]);
             browser.get('index.html#/');
         });
 
