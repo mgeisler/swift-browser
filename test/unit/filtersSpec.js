@@ -16,5 +16,9 @@ describe('filter', function() {
         expect(bytesFilter(null)).toEqual(null);
         expect(bytesFilter('hey')).toEqual('hey');
     }));
+
+    it('should parse strings as numbers', inject(function(bytesFilter) {
+        expect(bytesFilter("123")).toEqual("123.0 B");
+    }));
   });
 });
