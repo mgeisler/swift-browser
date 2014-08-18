@@ -12,7 +12,7 @@ angular.module('swiftBrowser.directives', []).
         return {
             restrict: 'AE',
             scope: {
-                count: '=',
+                count: '='
             },
             link: function (scope, element, attrs) {
                 var formatted = bytesFilter(scope.count);
@@ -20,6 +20,6 @@ angular.module('swiftBrowser.directives', []).
                 scope.number = parts[0];
                 scope.unit = parts[1];
             },
-            template: '{{number}} <span class="unit">{{unit}}</span>',
+            template: '{{number}} <span class="unit">{{unit}}</span>'
         };
     }]);

@@ -7,8 +7,9 @@ function mkUpdateOrderBy($scope) {
         var rev = column == $scope.orderProp;
         $scope.sortCls = {};
         $scope.sortCls[column] = 'sort-' + (rev ? 'desc' : 'asc');
-        if (rev)
+        if (rev) {
             column = '-' + column;
+        }
         $scope.orderProp = column;
     };
 }
@@ -38,7 +39,7 @@ angular.module('swiftBrowser.controllers', [])
             var parts = path.split('/');
             parts.unshift(container);
             for (var i = 0; i < parts.length - 1; i++) {
-                var crumb = {name: parts.slice(0, i+1).join('/') + '/',
+                var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
                              title: parts[i]};
                 $scope.breadcrumbs.push(crumb);
             }
@@ -61,7 +62,7 @@ angular.module('swiftBrowser.controllers', [])
                     if (item.subdir) {
                         return {name: item.subdir,
                                 title: parts[parts.length - 2] + '/',
-                                bytes: '\u2014'} // em dash
+                                bytes: '\u2014'}; // em dash
                     } else {
                         item.title = parts[parts.length - 1];
                         return item;

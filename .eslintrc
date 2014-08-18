@@ -1,0 +1,19 @@
+# -*- yaml -*-
+---
+env:
+  browser: true
+
+globals:
+  angular: false
+  $: false
+  SwiftClient: false
+
+rules:
+  quotes: 0
+  no-underscore-dangle: 0
+  no-global-strict: 0
+  no-unused-vars:
+  - 2
+  - vars: all
+    args: none
+  eqeqeq: 0
