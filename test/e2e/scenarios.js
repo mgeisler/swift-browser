@@ -45,7 +45,7 @@ describe('Container listing', function () {
             // Initial sort order is by name
             expect(mapGetText(names)).toEqual(['bar', 'foo']);
             // Clicking the name header sorts reverses the order
-            element(by.css('th')).click();
+            element(by.css('th:first-child')).click();
             expect(mapGetText(names)).toEqual(['foo', 'bar']);
         });
 
