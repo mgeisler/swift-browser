@@ -11,5 +11,5 @@ before_script:
   - sleep 1 # give server time to start
 script:
   - eslint app/js
-  - karma start test/karma.conf.js --single-run --reporters=dots --browsers=Firefox
+  - karma start test/karma-travis.conf.js
   - protractor test/protractor-conf.js --browser=firefox
