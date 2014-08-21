@@ -17,3 +17,4 @@ rules:
   - vars: all
     args: none
   eqeqeq: 0
+  space-in-brackets: 2
