@@ -18,6 +18,7 @@
     "start": "http-server -a localhost -p 8000",
     "test": "karma start test/karma.conf.js",
     "test-single-run": "karma start test/karma.conf.js --single-run",
+    "coverage": "karma start test/karma-coverage.conf.js",
     "update-webdriver": "webdriver-manager update",
     "protractor": "protractor test/protractor-conf.js"
   }
