@@ -20,3 +20,4 @@ rules:
   space-in-brackets: 2
   space-after-keywords: 2
   space-unary-word-ops: 2
+  brace-style: 2
