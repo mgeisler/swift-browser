@@ -13,3 +13,5 @@ script:
   - eslint app/js
   - karma start test/karma-travis.conf.js
   - protractor test/protractor-conf.js --browser=firefox
+after_script:
+  - coveralls < coverage/lcov.info
