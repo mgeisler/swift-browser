@@ -17,3 +17,10 @@ rules:
   - vars: all
     args: none
   eqeqeq: 0
+  space-in-brackets: 2
+  space-after-keywords: 2
+  space-unary-word-ops: 2
+  brace-style: 2
+  no-lonely-if: 2
+  no-trailing-spaces: 2
+  max-len: 2
