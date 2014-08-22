@@ -13,16 +13,18 @@ describe('my app', function() {
 });
 
 
+function mapGetText(locator) {
+    return element.all(locator).map(function (el) {
+        return el.getText()
+    });
+}
+
+
 describe('Container listing', function () {
 
     beforeEach(SwiftSimulator.loadAngularMocks);
 
     describe('should be sortable', function () {
-        function mapGetText(locator) {
-            return element.all(locator).map(function (el) {
-                return el.getText()
-            });
-        }
 
         beforeEach(function () {
             SwiftSimulator.setContainers([
