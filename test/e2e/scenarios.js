@@ -76,3 +76,45 @@ describe('Container listing', function () {
     });
 
 });
+
+
+describe('Object listing', function () {
+
+    beforeEach(SwiftSimulator.loadAngularMocks);
+
+    describe('should be sortable', function () {
+
+        beforeEach(function () {
+            SwiftSimulator.setContainers([
+                {name: "foo", count: 2, bytes: 20}
+            ]);
+            SwiftSimulator.setObjects('foo', [
+                {hash: "401b30e3b8b5d629635a5c613cdb7919",
+                 last_modified: "2014-08-16T13:33:21.848400",
+                 bytes: 20,
+                 name: "x.txt",
+                 content_type: "text/plain"},
+                {hash: "009520053b00386d1173f3988c55d192",
+                 last_modified: "2014-08-16T13:33:21.848400",
+                 bytes: 10,
+                 name: "y.txt",
+                 content_type: "text/plain"}
+            ]);
+            SwiftSimulator.commit();
+            browser.get('index.html#/foo/');
+        });
+
+        it('by name', function () {
+            var rows = by.repeater('item in items');
+            var names = rows.column('{{ item.title }}');
+
+            // Initial sort order is by name
+            expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
+            // Clicking the name header sorts reverses the order
+            element.all(by.css('th')).get(0).click();
+            expect(mapGetText(names)).toEqual(['y.txt', 'x.txt']);
+        });
+
+    });
+
+});

@@ -41,3 +41,46 @@ exports.setContainers = function(containers) {
         });
     }, JSON.stringify(containers));
 }
+
+exports.setObjects = function(container, objects) {
+    browser.addMockModule('swiftBrowserE2E', function () {
+        var container = arguments[0];
+        var objects = JSON.parse(arguments[1]);
+
+        function escape(string) {
+            return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
+        }
+
+        function parseQueryString(qs) {
+            var params = {};
+            var parts = qs.split('&');
+            for (var i = 0; i < parts.length; i++) {
+                var keyvalue = parts[i].split('=');
+                var key = decodeURIComponent(keyvalue[0]);
+                var value = decodeURIComponent(keyvalue[1]);
+                params[key] = value;
+            }
+            return params;
+        }
+
+        var fixed = '/app/index.html/' + container + '?';
+        var regex = new RegExp(escape(fixed) + '(.*)');
+
+        function listObjects(method, url, data) {
+            var match = url.match(regex);
+            var params = parseQueryString(match[1]);
+            var results = [];
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects[i];
+                if (object.name.indexOf(params.prefix) == 0) {
+                    results.push(object);
+                }
+            }
+            return [200, results];
+        }
+
+        angular.module('swiftBrowserE2E').run(function($httpBackend) {
+            $httpBackend.whenGET(regex).respond(listObjects);
+        });
+    }, container, JSON.stringify(objects));
+}
