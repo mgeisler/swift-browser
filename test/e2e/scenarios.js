@@ -31,6 +31,7 @@ describe('Container listing', function () {
                 {name: "bar", count: 20, bytes: 1234},
                 {name: "foo", count: 10, bytes: 2345}
             ]);
+            SwiftSimulator.commit();
             browser.get('index.html#/');
         });
 

@@ -11,6 +11,14 @@ exports.loadAngularMocks = function () {
     });
 };
 
+exports.commit = function () {
+    browser.addMockModule('swiftBrowserE2E', function () {
+        angular.module('swiftBrowserE2E').run(function($httpBackend) {
+            $httpBackend.whenGET(/.*/).passThrough();
+        });
+    });
+}
+
 exports.setContainers = function(containers) {
     /* Testing with Firefox revealed that the array passed in
        arguments[0] loses its "own properties" when passed into the
@@ -30,7 +38,6 @@ exports.setContainers = function(containers) {
         angular.module('swiftBrowserE2E').run(function($httpBackend) {
             $httpBackend.whenGET('/app/index.html?format=json')
                 .respond(containers);
-            $httpBackend.whenGET(/.*/).passThrough();
         });
     }, JSON.stringify(containers));
 }
