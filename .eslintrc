@@ -23,3 +23,4 @@ rules:
   brace-style: 2
   no-lonely-if: 2
   no-trailing-spaces: 2
+  max-len: 2
