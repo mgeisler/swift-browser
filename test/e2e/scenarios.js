@@ -127,4 +127,26 @@ describe('Object listing', function () {
 
     });
 
+    it('should understand pseudo-directories', function () {
+        SwiftSimulator.setContainers([
+            {name: "foo", count: 2, bytes: 20}
+        ]);
+        SwiftSimulator.setObjects('foo', [
+            {hash: "401b30e3b8b5d629635a5c613cdb7919",
+             last_modified: "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "x.txt",
+             content_type: "text/plain"},
+            {hash: "009520053b00386d1173f3988c55d192",
+             last_modified: "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "dir/y.txt",
+             content_type: "text/plain"}
+        ]);
+        SwiftSimulator.commit();
+        browser.get('index.html#/foo/');
+
+        var names = by.css('td:first-child');
+        expect(mapGetText(names)).toEqual(['dir/', 'x.txt']);
+    });
 });

@@ -73,7 +73,13 @@ exports.setObjects = function(container, objects) {
             for (var i = 0; i < objects.length; i++) {
                 var object = objects[i];
                 if (object.name.indexOf(params.prefix) == 0) {
-                    results.push(object);
+                    var rest = object.name.slice(params.prefix.length);
+                    var idx = rest.indexOf(params.delimiter);
+                    if (idx > -1) {
+                        results.push({subdir: rest.slice(0, idx + 1)})
+                    } else {
+                        results.push(object);
+                    }
                 }
             }
             return [200, results];
