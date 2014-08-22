@@ -1,6 +1,7 @@
 node_modules/
 app/bower_components/
 coverage/
+npm-debug.log
 
 *~
 *.orig
