@@ -115,6 +115,16 @@ describe('Object listing', function () {
             expect(mapGetText(names)).toEqual(['y.txt', 'x.txt']);
         });
 
+        it('by size', function () {
+            var sizes = by.css('td:last-child');
+
+            // Initial sort order is by name
+            expect(mapGetText(sizes)).toEqual(['20.0 B', '10.0 B']);
+            // Clicking the header sorts
+            element(by.css('th:last-child')).click();
+            expect(mapGetText(sizes)).toEqual(['10.0 B', '20.0 B']);
+        });
+
     });
 
 });
