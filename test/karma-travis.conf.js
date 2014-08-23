@@ -4,9 +4,9 @@ module.exports = function(config){
   coverage(config);
 
   config.set({
-      singleRun : true,
-      browsers : ['Firefox'],
-      coverageReporter : {
+      singleRun: true,
+      browsers: ['Firefox'],
+      coverageReporter: {
           type: 'lcovonly',
           subdir: '.',
       },
