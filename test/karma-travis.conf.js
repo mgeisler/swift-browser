@@ -10,5 +10,6 @@ module.exports = function(config){
           type: 'lcovonly',
           subdir: '.',
       },
+      reporters: ['dots', 'coverage'],
   });
 };
