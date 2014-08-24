@@ -10,7 +10,7 @@ before_script:
   - npm run update-webdriver
   - sleep 1 # give server time to start
 script:
-  - eslint app/js
+  - eslint app/js test
   - karma start test/karma-travis.conf.js
   - protractor test/protractor-conf.js
 after_script:
