@@ -1,4 +1,4 @@
-coverage = require('./karma-coverage.conf.js');
+var coverage = require('./karma-coverage.conf.js');
 
 module.exports = function(config){
   coverage(config);

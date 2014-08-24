@@ -1,4 +1,4 @@
-base = require('./karma.conf.js');
+var base = require('./karma.conf.js');
 
 module.exports = function(config){
   base(config);
