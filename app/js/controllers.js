@@ -1,5 +1,7 @@
 'use strict';
 
+/* global SwiftClient:false */
+
 /* Controllers */
 
 function mkUpdateOrderBy($scope) {

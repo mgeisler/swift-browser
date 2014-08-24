@@ -6,7 +6,6 @@ env:
 globals:
   angular: false
   $: false
-  SwiftClient: false
 
 rules:
   quotes: 0
