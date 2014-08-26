@@ -38,3 +38,6 @@ SwiftClient.prototype.listObjects = function (container, params) {
     var url = this._swiftUrl + '/' + container + '?' + $.param(params);
     return this._$http.get(url, this._headers);
 };
+
+angular.module('swiftBrowser.swift', [])
+    .service('$swift', ['$http', SwiftClient]);
