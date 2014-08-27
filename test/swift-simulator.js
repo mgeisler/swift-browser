@@ -17,7 +17,7 @@ exports.commit = function () {
             $httpBackend.whenGET(/.*/).passThrough();
         });
     });
-}
+};
 
 exports.setContainers = function(containers) {
     /* Testing with Firefox revealed that the array passed in
@@ -40,7 +40,7 @@ exports.setContainers = function(containers) {
                 .respond(containers);
         });
     }, JSON.stringify(containers));
-}
+};
 
 exports.setObjects = function(container, objects) {
     browser.addMockModule('swiftBrowserE2E', function () {
@@ -76,7 +76,7 @@ exports.setObjects = function(container, objects) {
                     var rest = object.name.slice(params.prefix.length);
                     var idx = rest.indexOf(params.delimiter);
                     if (idx > -1) {
-                        results.push({subdir: rest.slice(0, idx + 1)})
+                        results.push({subdir: rest.slice(0, idx + 1)});
                     } else {
                         results.push(object);
                     }
@@ -89,4 +89,4 @@ exports.setObjects = function(container, objects) {
             $httpBackend.whenGET(regex).respond(listObjects);
         });
     }, container, JSON.stringify(objects));
-}
+};
