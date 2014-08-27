@@ -12,6 +12,9 @@ module.exports = function(config){
       'test/unit/**/*.js'
     ],
 
+    // Files created by Emacs FlyCheck
+    exclude : ['**/flycheck_*.js'],
+
     autoWatch: true,
 
     frameworks: ['jasmine'],
