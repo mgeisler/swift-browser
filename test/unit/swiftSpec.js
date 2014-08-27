@@ -47,4 +47,21 @@ describe('Swift', function() {
         }));
     });
 
+    it('should send X-Auth-Token with requests', inject(function($swift) {
+        var headers = {'X-Auth-Token': 'a token',
+                       'X-Storage-Url': 'http://swift'};
+
+        function check(headers) {
+            return headers['X-Auth-Token'] == 'a token';
+        }
+
+        $httpBackend.expectGET('/auth/url')
+            .respond(200, null, headers);
+        $swift.auth(credentials);
+        $httpBackend.flush();
+
+        $httpBackend.expectGET('http://swift?format=json', check)
+            .respond(200, []);
+        $swift.listContainers();
+    }));
 });
