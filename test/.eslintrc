@@ -23,5 +23,8 @@ globals:
   module: false
   browser: false
 
+  element: false
+  by: false
+
 rules:
   no-comma-dangle: 0
