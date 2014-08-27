@@ -15,7 +15,7 @@ describe('my app', function() {
 
 function mapGetText(locator) {
     return element.all(locator).map(function (el) {
-        return el.getText()
+        return el.getText();
     });
 }
 
