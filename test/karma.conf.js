@@ -1,9 +1,9 @@
 module.exports = function(config){
   config.set({
 
-    basePath : '../',
+    basePath: '../',
 
-    files : [
+    files: [
       'app/bower_components/jquery/dist/jquery.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
@@ -12,15 +12,15 @@ module.exports = function(config){
       'test/unit/**/*.js'
     ],
 
-    autoWatch : true,
+    autoWatch: true,
 
     frameworks: ['jasmine'],
 
-    browsers : ['Chrome'],
+    browsers: ['Chrome'],
 
-    urlRoot : '/v1/AUTH_abc/container/',
+    urlRoot: '/v1/AUTH_abc/container/',
 
-    plugins : [
+    plugins: [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-jasmine',
