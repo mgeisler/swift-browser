@@ -72,20 +72,20 @@ describe('ContainerCtrl', function(){
 
         var reply = [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             last_modified: "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.848400",
              bytes: 10,
              name: "foo/x.txt",
-             content_type: "text/plain"},
+             'content_type': "text/plain"},
             {subdir: "foo/bar/"},
         ];
 
         var items = [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             last_modified: "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.848400",
              bytes: 10,
              name: "foo/x.txt",
              title: "x.txt",
-             content_type: "text/plain"},
+             'content_type': "text/plain"},
             {name: "foo/bar/",
              title: "bar/",
              bytes: "\u2014"},

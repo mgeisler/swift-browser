@@ -1,0 +1,30 @@
+# -*- yaml -*-
+---
+env:
+  node: true
+
+globals:
+  afterEach: false
+  beforeEach: false
+  describe: false
+  ddescribe: false
+  expect: false
+  it: false
+  iit: false
+  jasmine: false
+  pending: false
+  spyOn: false
+  waits: false
+  waitsFor: false
+  xdescribe: false
+  xit: false
+
+  inject: false
+  module: false
+  browser: false
+
+  element: false
+  by: false
+
+rules:
+  no-comma-dangle: 0

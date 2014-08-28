@@ -17,4 +17,3 @@ describe('directives', function() {
     });
   });
 });
-
