@@ -2,7 +2,6 @@
 
 
 describe('Swift', function() {
-    var $httpBackend;
     var credentials = {
         authURL: '/auth/url',
         authUser: 'user',
@@ -10,44 +9,45 @@ describe('Swift', function() {
     };
 
     beforeEach(module('swiftBrowser.swift'));
-    beforeEach(inject(function (_$httpBackend_) {
-        $httpBackend = _$httpBackend_;
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
     }));
     afterEach(function () {
-        $httpBackend.verifyNoOutstandingExpectation();
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
-    it('should not be logged in', inject(function($swift) {
-        expect($swift._headers).toEqual({});
-    }));
+    it('should not be logged in', function() {
+        expect(this.$swift._headers).toEqual({});
+    });
 
     describe('when logging in', function () {
-        it('should send X-Auth-User and X-Auth-Key', inject(function($swift) {
+        it('should send X-Auth-User and X-Auth-Key', function() {
             function check(headers) {
                 return (headers['X-Auth-User'] == 'user' &&
                         headers['X-Auth-Key'] == 'key');
             }
 
-            $httpBackend.expectGET('/auth/url', check)
+            this.$httpBackend.expectGET('/auth/url', check)
                 .respond(200);
-            $swift.auth(credentials);
-        }));
+            this.$swift.auth(credentials);
+        });
 
-        it('should set X-Auth-Token', inject(function($swift) {
+        it('should set X-Auth-Token', function() {
             var headers = {'X-Auth-Token': 'a token',
                            'X-Storage-Url': 'http://swift'};
 
-            $httpBackend.expectGET('/auth/url')
+            this.$httpBackend.expectGET('/auth/url')
                 .respond(200, null, headers);
-            $swift.auth(credentials);
-            $httpBackend.flush();
+            this.$swift.auth(credentials);
+            this.$httpBackend.flush();
 
-            expect($swift._headers['X-Auth-Token']).toEqual('a token');
-            expect($swift._swiftUrl).toEqual('http://swift');
-        }));
+            expect(this.$swift._headers['X-Auth-Token']).toEqual('a token');
+            expect(this.$swift._swiftUrl).toEqual('http://swift');
+        });
     });
 
-    it('should send X-Auth-Token with requests', inject(function($swift) {
+    it('should send X-Auth-Token with requests', function() {
         var headers = {'X-Auth-Token': 'a token',
                        'X-Storage-Url': 'http://swift'};
 
@@ -55,13 +55,13 @@ describe('Swift', function() {
             return headers['X-Auth-Token'] == 'a token';
         }
 
-        $httpBackend.expectGET('/auth/url')
+        this.$httpBackend.expectGET('/auth/url')
             .respond(200, null, headers);
-        $swift.auth(credentials);
-        $httpBackend.flush();
+        this.$swift.auth(credentials);
+        this.$httpBackend.flush();
 
-        $httpBackend.expectGET('http://swift?format=json', check)
+        this.$httpBackend.expectGET('http://swift?format=json', check)
             .respond(200, []);
-        $swift.listContainers();
-    }));
+        this.$swift.listContainers();
+    });
 });
