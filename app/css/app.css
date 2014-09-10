@@ -36,3 +36,9 @@ span.sort-desc:after {
     content: " /";
     white-space: pre;
 }
+
+.popup {
+    position: fixed;
+    top: 15px;
+    width: 100%;
+}

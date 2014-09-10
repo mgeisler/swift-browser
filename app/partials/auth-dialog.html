@@ -1,0 +1,37 @@
+<div class="popup" ng-hide="authState == 'auth-done'">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-offset-1 col-xs-10">
+        <div class="panel panel-default">
+          <p class="panel-heading">Authorization Needed</p>
+          <div class="panel-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-1 control-label" for="authUser">
+                  User
+                </label>
+                <div class="col-sm-11">
+                  <input class="form-control" type="text"
+                         name="user" id="authUser" ng-model="authUser" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-1 control-label" for="authKey">Key</label>
+                <div class="col-sm-11">
+                  <input class="form-control" type="text"
+                         name="key" id="authKey" ng-model="authKey" />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-11">
+                  <input type="submit" class="btn btn-default"
+                         ng-click="submit()" value="Authenticate" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

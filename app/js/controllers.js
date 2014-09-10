@@ -1,7 +1,5 @@
 'use strict';
 
-/* global SwiftClient:false */
-
 /* Controllers */
 
 function mkUpdateOrderBy($scope) {
@@ -16,20 +14,19 @@ function mkUpdateOrderBy($scope) {
     };
 }
 
-angular.module('swiftBrowser.controllers', [])
-    .controller('RootCtrl', ['$scope', '$http', function($scope, $http) {
+angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
+    .controller('RootCtrl', ['$scope', '$swift', function($scope, $swift) {
         $scope.containers = [];
         $scope.updateOrderBy = mkUpdateOrderBy($scope);
         $scope.updateOrderBy('name');
 
-        var client = new SwiftClient($http);
-        client.listContainers().then(function (result) {
+        $swift.listContainers().then(function (result) {
             $scope.containers = result.data;
         });
     }])
     .controller('ContainerCtrl', [
-        '$scope', '$http', '$routeParams', '$location',
-        function($scope, $http, $routeParams, $location) {
+        '$scope', '$swift', '$routeParams', '$location',
+        function($scope, $swift, $routeParams, $location) {
             var container = $routeParams.container;
             var path = $routeParams.path || '';
             $scope.container = container;
@@ -46,9 +43,8 @@ angular.module('swiftBrowser.controllers', [])
                 $scope.breadcrumbs.push(crumb);
             }
 
-            var client = new SwiftClient($http);
             var params = {prefix: path, delimiter: '/'};
-            client.listObjects(container, params).then(function (result) {
+            $swift.listObjects(container, params).then(function (result) {
                 var items = result.data;
                 for (var i = 0; i < items.length; i++) {
                     if (items[i].subdir == path + '/') {
