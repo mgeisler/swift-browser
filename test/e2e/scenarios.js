@@ -19,6 +19,11 @@ function mapGetText(locator) {
     });
 }
 
+function mapIsSelected(locator) {
+    return element.all(locator).map(function (el) {
+        return el.isSelected();
+    });
+}
 
 describe('Container listing', function () {
 
@@ -75,6 +80,38 @@ describe('Container listing', function () {
 
     });
 
+    describe('selection', function () {
+
+        beforeEach(function () {
+            SwiftSimulator.setContainers([
+                {name: "bar", count: 20, bytes: 1234},
+                {name: "foo", count: 10, bytes: 2345}
+            ]);
+            SwiftSimulator.commit();
+            browser.get('index.html#/');
+        });
+
+        var toggle = by.css('th.toggle input');
+        var checkboxes = by.css('td:nth-child(1) input');
+
+        it('should be deselected by default', function () {
+            expect(element(toggle).isSelected()).toBe(false);
+            expect(mapIsSelected(checkboxes)).toEqual([false, false]);
+        });
+
+        it('should allow toggle all', function () {
+            element(toggle).click();
+            expect(mapIsSelected(checkboxes)).toEqual([true, true]);
+        });
+
+        it('should notice manually selecting all', function () {
+            element.all(checkboxes).each(function (el) {
+                el.click();
+            });
+            expect(element(toggle).isSelected()).toBe(true);
+        });
+
+    });
 });
 
 
