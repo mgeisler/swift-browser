@@ -90,7 +90,7 @@ describe('ContainerCtrl', function(){
         var url = '/v1/AUTH_abc/cont?prefix=foo%2F&delimiter=%2F&format=json';
         $httpBackend.whenGET(url).respond(200, reply);
 
-        expect(this.scope.items).toBeUndefined();
+        expect(this.scope.items).toEqual([]);
         $httpBackend.flush();
         expect(this.scope.items).toEqual(items);
     }));

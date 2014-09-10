@@ -59,6 +59,10 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
 
+            $scope.items = [];
+            $scope.allSelected = mkAllSelected($scope, 'items');
+            $scope.toggleAll = mkToggleAll($scope, 'items', $scope.allSelected);
+
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 
             var parts = path.split('/');

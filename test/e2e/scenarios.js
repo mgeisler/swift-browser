@@ -148,7 +148,7 @@ describe('Object listing', function () {
             // Initial sort order is by name
             expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
             // Clicking the name header sorts reverses the order
-            element.all(by.css('th')).get(0).click();
+            element.all(by.css('th')).get(1).click();
             expect(mapGetText(names)).toEqual(['y.txt', 'x.txt']);
         });
 
@@ -183,7 +183,51 @@ describe('Object listing', function () {
         SwiftSimulator.commit();
         browser.get('index.html#/foo/');
 
-        var names = by.css('td:first-child');
+        var names = by.css('td:nth-child(2)');
         expect(mapGetText(names)).toEqual(['dir/', 'x.txt']);
     });
+
+    describe('selection', function () {
+
+        beforeEach(function () {
+            SwiftSimulator.setContainers([
+                {name: "foo", count: 2, bytes: 20}
+            ]);
+            SwiftSimulator.setObjects('foo', [
+                {hash: "401b30e3b8b5d629635a5c613cdb7919",
+                 'last_modified': "2014-08-16T13:33:21.848400",
+                 bytes: 20,
+                 name: "x.txt",
+                 'content_type': "text/plain"},
+                {hash: "009520053b00386d1173f3988c55d192",
+                 'last_modified': "2014-08-16T13:33:21.848400",
+                 bytes: 10,
+                 name: "y.txt",
+                 'content_type': "text/plain"}
+            ]);
+            SwiftSimulator.commit();
+            browser.get('index.html#/foo/');
+        });
+
+        var toggle = by.css('th.toggle input');
+        var checkboxes = by.css('td:nth-child(1) input');
+
+        it('should be deselected by default', function () {
+            expect(element(toggle).isSelected()).toBe(false);
+            expect(mapIsSelected(checkboxes)).toEqual([false, false]);
+        });
+
+        it('should allow toggle all', function () {
+            element(toggle).click();
+            expect(mapIsSelected(checkboxes)).toEqual([true, true]);
+        });
+
+        it('should notice manually selecting all', function () {
+            element.all(checkboxes).each(function (el) {
+                el.click();
+            });
+            expect(element(toggle).isSelected()).toBe(true);
+        });
+    });
+
 });
