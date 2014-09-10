@@ -17,6 +17,9 @@ function mkUpdateOrderBy($scope) {
 function mkAllSelected($scope, key) {
     return function () {
         var collection = $scope[key];
+        if (collection.length == 0) {
+            return false;
+        }
         for (var i = 0; i < collection.length; i++) {
             if (!collection[i].selected) {
                 return false;

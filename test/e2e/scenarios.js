@@ -112,6 +112,18 @@ describe('Container listing', function () {
         });
 
     });
+
+    describe('with no containers', function () {
+
+        it('should not show all containers selected', function () {
+            SwiftSimulator.setContainers([]);
+            SwiftSimulator.commit();
+            browser.get('index.html#/');
+
+            var toggle = by.css('th.toggle input');
+            expect(element(toggle).isSelected()).toBe(false);
+        });
+    });
 });
 
 
@@ -227,6 +239,20 @@ describe('Object listing', function () {
                 el.click();
             });
             expect(element(toggle).isSelected()).toBe(true);
+        });
+    });
+
+    describe('with no objects', function () {
+
+        it('should not show all objects selected', function () {
+            SwiftSimulator.setContainers([
+                {name: "foo", count: 0, bytes: 0}
+            ]);
+            SwiftSimulator.commit();
+            browser.get('index.html#/foo/');
+
+            var toggle = by.css('th.toggle input');
+            expect(element(toggle).isSelected()).toBe(false);
         });
     });
 
