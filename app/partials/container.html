@@ -9,6 +9,16 @@
   </li>
 </ol>
 
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group">
+    <a class="btn btn-default" ng-disabled="nothingSelected()"
+       ng-href="../{{ container }}/{{ downloadLink() }}">Open</a>
+    <a class="btn btn-default" download
+       ng-disabled="nothingSelected()"
+       ng-href="../{{ container }}/{{ downloadLink() }}">Download</a>
+  </div>
+</div>
+
 <table class="table table-striped">
   <tr>
     <th class="toggle">

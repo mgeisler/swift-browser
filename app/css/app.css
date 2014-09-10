@@ -45,3 +45,7 @@ span.sort-desc:after {
     top: 15px;
     width: 100%;
 }
+
+.btn-toolbar {
+    margin-bottom: 20px;
+}
