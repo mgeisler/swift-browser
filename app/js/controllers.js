@@ -20,6 +20,22 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
         $scope.updateOrderBy = mkUpdateOrderBy($scope);
         $scope.updateOrderBy('name');
 
+        $scope.toggleAll = function () {
+            var newValue = !$scope.allSelected();
+            for (var i = 0; i < $scope.containers.length; i++) {
+                $scope.containers[i].selected = newValue;
+            }
+        };
+
+        $scope.allSelected = function () {
+            for (var i = 0; i < $scope.containers.length; i++) {
+                if (!$scope.containers[i].selected) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
         $swift.listContainers().then(function (result) {
             $scope.containers = result.data;
         });

@@ -8,6 +8,10 @@
 
 <table class="table table-striped">
   <tr>
+    <th class="toggle">
+      <input type="checkbox" ng-checked="allSelected()"
+             ng-click="toggleAll()" />
+    </th>
     <th ng-click="updateOrderBy('name')">
       Name <span ng-class="sortCls.name"></span>
     </th>
@@ -19,6 +23,7 @@
     </th>
   </tr>
   <tr ng-repeat="container in containers | orderBy:orderProp">
+    <td><input type="checkbox" ng-model="container.selected" /></td>
     <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>
     <td class="text-right" sb-format-bytes count="container.bytes" />
     <td class="text-right">{{ container.count | number }} objects</td>

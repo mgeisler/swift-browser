@@ -42,20 +42,20 @@ describe('Container listing', function () {
             // Initial sort order is by name
             expect(mapGetText(names)).toEqual(['bar', 'foo']);
             // Clicking the name header sorts reverses the order
-            element(by.css('th:first-child')).click();
+            element(by.css('th:nth-child(2)')).click();
             expect(mapGetText(names)).toEqual(['foo', 'bar']);
         });
 
         it('by size', function () {
-            var sizes = by.css('td:nth-child(2)');
+            var sizes = by.css('td:nth-child(3)');
 
             // Initial sort
             expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
             // Sorting by size makes no change
-            element.all(by.css('th')).get(1).click();
+            element.all(by.css('th')).get(2).click();
             expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
             // Clicking again reverses
-            element.all(by.css('th')).get(1).click();
+            element.all(by.css('th')).get(2).click();
             expect(mapGetText(sizes)).toEqual(['2.3 KB', '1.2 KB']);
         });
 
@@ -66,10 +66,10 @@ describe('Container listing', function () {
             // Initial sort order is by name
             expect(mapGetText(counts)).toEqual(['20 objects', '10 objects']);
             // Clicking the header sorts
-            element.all(by.css('th')).get(2).click();
+            element.all(by.css('th')).get(3).click();
             expect(mapGetText(counts)).toEqual(['10 objects', '20 objects']);
             // Clicking the header sorts reverses the order
-            element.all(by.css('th')).get(2).click();
+            element.all(by.css('th')).get(3).click();
             expect(mapGetText(counts)).toEqual(['20 objects', '10 objects']);
         });
 
