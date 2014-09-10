@@ -14,27 +14,37 @@ function mkUpdateOrderBy($scope) {
     };
 }
 
+function mkAllSelected($scope, key) {
+    return function () {
+        var collection = $scope[key];
+        for (var i = 0; i < collection.length; i++) {
+            if (!collection[i].selected) {
+                return false;
+            }
+        }
+        return true;
+    };
+}
+
+function mkToggleAll($scope, key, allSelected) {
+    return function() {
+        var collection = $scope[key];
+        var newValue = !allSelected();
+        for (var i = 0; i < collection.length; i++) {
+            collection[i].selected = newValue;
+        }
+    };
+}
+
 angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
     .controller('RootCtrl', ['$scope', '$swift', function($scope, $swift) {
         $scope.containers = [];
         $scope.updateOrderBy = mkUpdateOrderBy($scope);
         $scope.updateOrderBy('name');
 
-        $scope.toggleAll = function () {
-            var newValue = !$scope.allSelected();
-            for (var i = 0; i < $scope.containers.length; i++) {
-                $scope.containers[i].selected = newValue;
-            }
-        };
-
-        $scope.allSelected = function () {
-            for (var i = 0; i < $scope.containers.length; i++) {
-                if (!$scope.containers[i].selected) {
-                    return false;
-                }
-            }
-            return true;
-        };
+        $scope.allSelected = mkAllSelected($scope, 'containers');
+        $scope.toggleAll = mkToggleAll($scope, 'containers',
+                                       $scope.allSelected);
 
         $swift.listContainers().then(function (result) {
             $scope.containers = result.data;
