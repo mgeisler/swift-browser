@@ -1,5 +1,8 @@
 /* app css stylesheet */
 
+th.toggle {
+    width: 1em;
+}
 
 th.size {
     width: 6em;
