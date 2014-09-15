@@ -26,5 +26,8 @@ globals:
   element: false
   by: false
 
+  $: false
+  $$: false
+
 rules:
   no-comma-dangle: 0
