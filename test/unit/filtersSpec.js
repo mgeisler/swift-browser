@@ -26,4 +26,14 @@ describe('filter', function() {
         expect(bytesFilter("123")).toEqual("123.0 B");
     }));
   });
+
+  describe('notUndefined', function() {
+    it('should remove undefined', inject(function(notUndefinedFilter) {
+        expect(notUndefinedFilter([10, undefined])).toEqual([10]);
+    }));
+
+    it('should accept null', inject(function(notUndefinedFilter) {
+        expect(notUndefinedFilter([10, null])).toEqual([10, null]);
+    }));
+  });
 });

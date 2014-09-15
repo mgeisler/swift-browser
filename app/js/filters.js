@@ -19,4 +19,11 @@ angular.module('swiftBrowser.filters', []).
 
           return number.toFixed(1) + ' ' + unit;
       };
+  }).
+  filter('notUndefined', function() {
+      return function(items) {
+          return items.filter(function(item) {
+              return item !== undefined;
+          });
+      };
   });
