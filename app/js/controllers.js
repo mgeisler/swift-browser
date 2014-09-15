@@ -89,6 +89,17 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
             $scope.nothingSelected = mkNothingSelected($scope, 'items');
             $scope.downloadLink = mkDownloadLink($scope, 'items');
 
+            $scope.delete = function () {
+                $scope.items.forEach(function (item, idx) {
+                    if (item.selected) {
+                        var req = $swift.deleteObject(container, item.name);
+                        req.success(function (result) {
+                            delete $scope.items[idx];
+                        });
+                    }
+                });
+            };
+
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 
             var parts = path.split('/');

@@ -16,6 +16,8 @@
     <a class="btn btn-default" download
        ng-disabled="nothingSelected()"
        ng-href="../{{ container }}/{{ downloadLink() }}">Download</a>
+    <a class="btn btn-warning"
+       ng-click="delete()" ng-disabled="nothingSelected()">Delete</a>
   </div>
 </div>
 
@@ -32,7 +34,7 @@
       Size <span ng-class="sortCls.bytes"></span>
     </th>
   </tr>
-  <tr ng-repeat="item in items | orderBy:orderProp">
+  <tr ng-repeat="item in items | notUndefined | orderBy:orderProp">
     <td><input type="checkbox" ng-model="item.selected" /></td>
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
     <td class="text-right" sb-format-bytes count="item.bytes" />
