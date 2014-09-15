@@ -20,24 +20,18 @@ function mkAllSelected($scope, key) {
         if (collection.length == 0) {
             return false;
         }
-        for (var i = 0; i < collection.length; i++) {
-            if (!collection[i].selected) {
-                return false;
-            }
-        }
-        return true;
+        return collection.every(function (item) {
+            return item.selected;
+        });
     };
 }
 
 function mkNothingSelected($scope, key) {
     return function() {
         var collection = $scope[key];
-        for (var i = 0; i < collection.length; i++) {
-            if (collection[i].selected) {
-                return false;
-            }
-        }
-        return true;
+        return !collection.some(function (item) {
+            return item.selected;
+        });
     };
 }
 
@@ -45,20 +39,23 @@ function mkToggleAll($scope, key, allSelected) {
     return function() {
         var collection = $scope[key];
         var newValue = !allSelected();
-        for (var i = 0; i < collection.length; i++) {
-            collection[i].selected = newValue;
-        }
+        collection.forEach(function (item) {
+            item.selected = newValue;
+        });
     };
 }
 
 function mkDownloadLink($scope, key) {
     return function() {
         var collection = $scope[key];
-        for (var i = 0; i < collection.length; i++) {
-            if (collection[i].selected) {
-                return collection[i].name;
+        var name = null;
+        collection.some(function (item) {
+            if (item.selected) {
+                name = item.name;
             }
-        }
+            return item.selected;
+        });
+        return name;
     };
 }
 
