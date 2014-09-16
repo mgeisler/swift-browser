@@ -6,8 +6,24 @@ module.exports = function(grunt) {
             options: {
                 config: '.eslintrc'
             }
+        },
+        karma: {
+            options: {
+                configFile: 'test/karma.conf.js'
+            },
+            unit: {},
+            single: {
+                singleRun: true
+            },
+            coverage: {
+                configFile: 'test/karma-coverage.conf.js'
+            },
+            travis: {
+                configFile: 'test/karma-travis.conf.js'
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-eslint');
+    grunt.loadNpmTasks('grunt-karma');
 };

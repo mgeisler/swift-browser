@@ -14,7 +14,7 @@ before_script:
   - sleep 1 # give server time to start
 script:
   - grunt eslint
-  - karma start test/karma-travis.conf.js
+  - grunt karma:travis
   - protractor test/protractor-conf.js
 after_script:
   - coveralls < coverage/lcov.info
