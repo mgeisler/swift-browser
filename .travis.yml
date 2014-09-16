@@ -16,4 +16,4 @@ script:
   - grunt karma:travis
   - grunt protractor
 after_script:
-  - coveralls < coverage/lcov.info
+  - grunt coveralls

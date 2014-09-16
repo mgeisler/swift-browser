@@ -28,10 +28,16 @@ module.exports = function(grunt) {
                     configFile: 'test/protractor-conf.js'
                 }
             }
+        },
+        coveralls: {
+            target: {
+                src: 'coverage/lcov.info'
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-protractor-runner');
+    grunt.loadNpmTasks('grunt-coveralls');
 };
