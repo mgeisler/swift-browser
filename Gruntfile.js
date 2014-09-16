@@ -21,9 +21,17 @@ module.exports = function(grunt) {
             travis: {
                 configFile: 'test/karma-travis.conf.js'
             }
+        },
+        protractor: {
+            all: {
+                options :{
+                    configFile: 'test/protractor-conf.js'
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-protractor-runner');
 };
