@@ -1,3 +1,4 @@
+'use strict';
 
 exports.loadAngularMocks = function () {
     browser.addMockModule('swiftBrowserE2E', function () {
