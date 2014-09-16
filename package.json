@@ -23,8 +23,6 @@
     "postinstall": "bower install",
     "start": "http-server -a localhost -p 8000",
     "test": "grunt karma:unit",
-    "test-single-run": "grunt karma:single",
-    "coverage": "grunt karma:coverage",
     "update-webdriver": "webdriver-manager update",
     "protractor": "protractor test/protractor-conf.js"
   }
