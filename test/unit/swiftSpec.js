@@ -64,4 +64,11 @@ describe('Swift', function() {
             .respond(200, []);
         this.$swift.listContainers();
     });
+
+    it('should send DELETE request when deleting an objct', function() {
+        this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo/bar')
+            .respond(204, null);
+        this.$swift.deleteObject('cont', 'foo/bar');
+        this.$httpBackend.flush();
+    });
 });

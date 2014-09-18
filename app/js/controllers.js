@@ -20,12 +20,18 @@ function mkAllSelected($scope, key) {
         if (collection.length == 0) {
             return false;
         }
-        for (var i = 0; i < collection.length; i++) {
-            if (!collection[i].selected) {
-                return false;
-            }
-        }
-        return true;
+        return collection.every(function (item) {
+            return item.selected;
+        });
+    };
+}
+
+function mkNothingSelected($scope, key) {
+    return function() {
+        var collection = $scope[key];
+        return !collection.some(function (item) {
+            return item.selected;
+        });
     };
 }
 
@@ -33,9 +39,23 @@ function mkToggleAll($scope, key, allSelected) {
     return function() {
         var collection = $scope[key];
         var newValue = !allSelected();
-        for (var i = 0; i < collection.length; i++) {
-            collection[i].selected = newValue;
-        }
+        collection.forEach(function (item) {
+            item.selected = newValue;
+        });
+    };
+}
+
+function mkDownloadLink($scope, key) {
+    return function() {
+        var collection = $scope[key];
+        var name = null;
+        collection.some(function (item) {
+            if (item.selected) {
+                name = item.name;
+            }
+            return item.selected;
+        });
+        return name;
     };
 }
 
@@ -48,6 +68,7 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
         $scope.allSelected = mkAllSelected($scope, 'containers');
         $scope.toggleAll = mkToggleAll($scope, 'containers',
                                        $scope.allSelected);
+        $scope.nothingSelected = mkNothingSelected($scope, 'containers');
 
         $swift.listContainers().then(function (result) {
             $scope.containers = result.data;
@@ -65,6 +86,19 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
             $scope.items = [];
             $scope.allSelected = mkAllSelected($scope, 'items');
             $scope.toggleAll = mkToggleAll($scope, 'items', $scope.allSelected);
+            $scope.nothingSelected = mkNothingSelected($scope, 'items');
+            $scope.downloadLink = mkDownloadLink($scope, 'items');
+
+            $scope.delete = function () {
+                $scope.items.forEach(function (item, idx) {
+                    if (item.selected) {
+                        var req = $swift.deleteObject(container, item.name);
+                        req.success(function (result) {
+                            delete $scope.items[idx];
+                        });
+                    }
+                });
+            };
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 

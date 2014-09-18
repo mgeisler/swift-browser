@@ -63,11 +63,12 @@ exports.setObjects = function(container, objects) {
             return params;
         }
 
-        var fixed = '/app/index.html/' + container + '?';
-        var regex = new RegExp(escape(fixed) + '(.*)');
+        var fixed = '/app/index.html/' + container;
+        var listRegex = new RegExp(escape(fixed + '?') + '(.*)');
+        var deleteRegex = new RegExp(escape(fixed + '/') + '(.*)');
 
         function listObjects(method, url, data) {
-            var match = url.match(regex);
+            var match = url.match(listRegex);
             var params = parseQueryString(match[1]);
             var results = [];
             for (var i = 0; i < objects.length; i++) {
@@ -85,8 +86,21 @@ exports.setObjects = function(container, objects) {
             return [200, results];
         }
 
+        function deleteObject(method, url, data) {
+            var match = url.match(deleteRegex);
+            var name = match[1];
+            for (var i = 0; i < objects.length; i++) {
+                if (objects[i].name == name) {
+                    objects.splice(i, 1);
+                    return [204, null];
+                }
+            }
+            return [404, 'Not Found'];
+        }
+
         angular.module('swiftBrowserE2E').run(function($httpBackend) {
-            $httpBackend.whenGET(regex).respond(listObjects);
+            $httpBackend.whenGET(listRegex).respond(listObjects);
+            $httpBackend.whenDELETE(deleteRegex).respond(deleteObject);
         });
     }, container, JSON.stringify(objects));
 };

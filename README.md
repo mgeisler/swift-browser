@@ -25,6 +25,12 @@ page in your browser. Provided you have read access to Swift, you
 should see a container listing and be able to browse the containers
 and pseudo-directories.
 
+Supported Browsers
+------------------
+
+We support IE 9+ and test with Firefox and Chrome.
+
+
 Other Swift File Managers
 -------------------------
 
