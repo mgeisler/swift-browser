@@ -1,3 +1,5 @@
+'use strict';
+
 var coverage = require('./karma-coverage.conf.js');
 
 module.exports = function(config){

@@ -1,3 +1,5 @@
+'use strict';
+
 exports.config = {
   allScriptsTimeout: 11000,
 
