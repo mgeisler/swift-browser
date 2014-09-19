@@ -12,6 +12,6 @@ before_script:
 script:
   - grunt eslint
   - grunt karma:travis
-  - grunt protractor
+  - grunt coverage
 after_script:
   - grunt coveralls

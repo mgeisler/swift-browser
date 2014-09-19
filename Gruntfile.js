@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         },
         coveralls: {
             target: {
-                src: 'coverage/lcov.info'
+                src: ['coverage/lcov.info', 'coverage/e2e/lcov.info']
             }
         },
 
