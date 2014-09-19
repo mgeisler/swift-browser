@@ -37,6 +37,11 @@ module.exports = function(grunt) {
                 }
             }
         },
+        exec: {
+            webdriver: {
+                cmd: "node_modules/.bin/webdriver-manager update"
+            }
+        },
         coveralls: {
             target: {
                 src: 'coverage/lcov.info'
@@ -44,10 +49,12 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('update-webdriver', ['exec:webdriver']);
     grunt.registerTask('start', ['connect:server']);
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-protractor-runner');
+    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-coveralls');
 };
