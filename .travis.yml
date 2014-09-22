@@ -13,4 +13,4 @@ script:
   - grunt karma:travis
   - grunt coverage
 after_script:
-  - grunt coveralls
+  - grunt concat:coverage coveralls

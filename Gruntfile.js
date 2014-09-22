@@ -42,9 +42,17 @@ module.exports = function(grunt) {
                 cmd: "node_modules/.bin/webdriver-manager update"
             }
         },
+
+        concat: {
+            coverage: {
+                src: ['coverage/lcov.info', 'coverage/e2e/lcov.info'],
+                dest: 'coverage/merged.info'
+            }
+        },
+
         coveralls: {
             target: {
-                src: ['coverage/lcov.info', 'coverage/e2e/lcov.info']
+                src: 'coverage/merged.info'
             }
         },
 
@@ -96,5 +104,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-protractor-coverage');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-istanbul');
 };
