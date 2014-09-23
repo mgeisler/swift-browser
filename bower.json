@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "angular": "1.2.x",
+    "angular-bootstrap": "~0.11.0",
     "angular-route": "1.2.x",
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
