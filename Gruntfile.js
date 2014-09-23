@@ -1,6 +1,14 @@
 /* eslint-env node */
 module.exports = function(grunt) {
     grunt.initConfig({
+        connect: {
+            server: {
+                options: {
+                    debug: true,
+                    keepalive: true
+                }
+            }
+        },
         eslint: {
             target: ['app/js', 'test'],
             options: {
@@ -36,6 +44,8 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('start', ['connect:server']);
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-protractor-runner');
