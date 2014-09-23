@@ -96,14 +96,14 @@ module.exports = function(grunt) {
         'copy', 'instrument', 'protractor_coverage', 'makeReport'
     ]);
 
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-eslint');
-    grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-protractor-runner');
-    grunt.loadNpmTasks('grunt-exec');
-    grunt.loadNpmTasks('grunt-coveralls');
-    grunt.loadNpmTasks('grunt-protractor-coverage');
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-coveralls');
+    grunt.loadNpmTasks('grunt-eslint');
+    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-istanbul');
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-protractor-coverage');
+    grunt.loadNpmTasks('grunt-protractor-runner');
 };
