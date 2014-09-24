@@ -1,29 +1,29 @@
-          <div class="modal-header">
-            <h3 class="modal-title">Authorization Needed</h3>
-          </div>
-          <div class="modal-body">
-            <form class="form-horizontal" role="form">
-              <div class="form-group">
-                <label class="col-sm-1 control-label" for="authUser">
-                  User
-                </label>
-                <div class="col-sm-11">
-                  <input class="form-control" type="text"
-                         name="user" id="authUser" ng-model="credentials.authUser" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-1 control-label" for="authKey">Key</label>
-                <div class="col-sm-11">
-                  <input class="form-control" type="text"
-                         name="key" id="authKey" ng-model="credentials.authKey" />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-1 col-sm-11">
-                  <input type="submit" class="btn btn-default"
-                         ng-click="$close()" value="Authenticate" />
-                </div>
-              </div>
-            </form>
-          </div>
+<div class="modal-header">
+  <h3 class="modal-title">Authorization Needed</h3>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal" role="form">
+    <div class="form-group">
+      <label class="col-sm-1 control-label" for="authUser">
+        User
+      </label>
+      <div class="col-sm-11">
+        <input class="form-control" type="text"
+               name="user" id="authUser" ng-model="credentials.authUser" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-1 control-label" for="authKey">Key</label>
+      <div class="col-sm-11">
+        <input class="form-control" type="text"
+               name="key" id="authKey" ng-model="credentials.authKey" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-1 col-sm-11">
+        <input type="submit" class="btn btn-default"
+               ng-click="$close()" value="Authenticate" />
+      </div>
+    </div>
+  </form>
+</div>
