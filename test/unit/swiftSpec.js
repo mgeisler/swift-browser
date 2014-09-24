@@ -65,6 +65,13 @@ describe('Swift', function() {
         this.$swift.listContainers();
     });
 
+    it('should send GET request when listing objects', function() {
+        this.$httpBackend.expectGET('/v1/AUTH_abc/cont?format=json')
+            .respond(200, []);
+        this.$swift.listObjects('cont');
+        this.$httpBackend.flush();
+    });
+
     it('should send DELETE request when deleting an objct', function() {
         this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo/bar')
             .respond(204, null);
