@@ -58,7 +58,7 @@ AuthService.prototype.authenticate = function(credentials) {
 AuthService.prototype.openModal = function() {
     var scope = this.$rootScope.$new();
     scope.credentials = {authURL: '/auth/v1.0'};
-    var opts = {templateUrl: 'partials/auth-dialog.html',
+    var opts = {templateUrl: 'partials/auth-modal.html',
                 scope: scope};
     var that = this;
     this.$modal.open(opts).result.then(function () {
