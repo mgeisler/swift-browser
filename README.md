@@ -28,7 +28,7 @@ and pseudo-directories.
 Supported Browsers
 ------------------
 
-We support IE 9+ and test with Firefox and Chrome.
+We support IE 10+ and test with Firefox and Chrome.
 
 
 Other Swift File Managers
