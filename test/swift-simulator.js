@@ -37,7 +37,10 @@ exports.setContainers = function(containers) {
     browser.addMockModule('swiftBrowserE2E', function () {
         var containers = JSON.parse(arguments[0]);
         angular.module('swiftBrowserE2E').run(function($httpBackend) {
-            $httpBackend.whenGET('/app/index.html?format=json')
+            var path = window.location.pathname;
+            var accountUrl = path.split('/').slice(0, 3).join('/');
+
+            $httpBackend.whenGET(accountUrl + '?format=json')
                 .respond(containers);
         });
     }, JSON.stringify(containers));
@@ -64,7 +67,9 @@ exports.setObjects = function(container, objects) {
             return params;
         }
 
-        var fixed = '/app/index.html/' + container;
+        var path = window.location.pathname;
+        var accountUrl = path.split('/').slice(0, 3).join('/');
+        var fixed = accountUrl + '/' + container;
         var listRegex = new RegExp(escape(fixed + '?') + '(.*)');
         var deleteRegex = new RegExp(escape(fixed + '/') + '(.*)');
 

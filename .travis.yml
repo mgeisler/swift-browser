@@ -7,10 +7,10 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - grunt start > /dev/null &
-  - sleep 1 # give server time to start
+  - grunt update-webdriver
 script:
   - grunt eslint
   - grunt karma:travis
-  - grunt protractor
+  - grunt coverage
 after_script:
-  - grunt coveralls
+  - grunt concat:coverage coveralls
