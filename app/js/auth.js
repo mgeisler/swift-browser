@@ -5,10 +5,12 @@
  *
  * Initial status is 'auth-done'.
  */
-function AuthService($q, $swift, $http) {
+function AuthService($q, $swift, $http, $modal, $rootScope) {
     this.$q = $q;
     this.$swift = $swift;
     this.$http = $http;
+    this.$modal = $modal;
+    this.$rootScope = $rootScope;
     this.state = 'auth-done';
     this.deferreds = [];
     this.configs = [];
@@ -25,6 +27,7 @@ AuthService.prototype.requestAuth = function (config) {
     this.deferreds.push(result);
     this.configs.push(config);
     this.state = 'auth-requested';
+    this.openModal();
     return result.promise;
 };
 
@@ -48,5 +51,21 @@ AuthService.prototype.authenticate = function(credentials) {
     return authPromise;
 };
 
-angular.module('swiftBrowser.auth', ['swiftBrowser.swift'])
-    .service('$auth', ['$q', '$swift', '$http', AuthService]);
+/**
+ * Open a login modal dialog. When submitted, authentication will be
+ * attempted.
+ */
+AuthService.prototype.openModal = function() {
+    var scope = this.$rootScope.$new();
+    scope.credentials = {authURL: '/auth/v1.0'};
+    var opts = {templateUrl: 'partials/auth-modal.html',
+                scope: scope};
+    var that = this;
+    this.$modal.open(opts).result.then(function () {
+        that.authenticate(scope.credentials);
+    });
+};
+
+angular.module('swiftBrowser.auth', ['swiftBrowser.swift', 'ui.bootstrap'])
+    .service('$auth', ['$q', '$swift', '$http', '$modal', '$rootScope',
+                       AuthService]);
