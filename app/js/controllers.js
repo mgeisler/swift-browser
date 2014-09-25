@@ -59,7 +59,8 @@ function mkDownloadLink($scope, key) {
     };
 }
 
-angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
+angular.module('swiftBrowser.controllers',
+               ['swiftBrowser.swift', 'ui.bootstrap'])
     .controller('RootCtrl', ['$scope', '$swift', function($scope, $swift) {
         $scope.containers = [];
         $scope.updateOrderBy = mkUpdateOrderBy($scope);
@@ -75,8 +76,8 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
         });
     }])
     .controller('ContainerCtrl', [
-        '$scope', '$swift', '$routeParams', '$location',
-        function($scope, $swift, $routeParams, $location) {
+        '$scope', '$swift', '$routeParams', '$location', '$modal',
+        function($scope, $swift, $routeParams, $location, $modal) {
             var container = $routeParams.container;
             var path = $routeParams.path || '';
             $scope.container = container;
@@ -97,6 +98,25 @@ angular.module('swiftBrowser.controllers', ['swiftBrowser.swift'])
                             delete $scope.items[idx];
                         });
                     }
+                });
+            };
+
+            $scope.upload = function () {
+                var scope = $scope.$new(true);
+                scope.path = path + container;
+                var opt = {templateUrl: 'partials/upload-modal.html',
+                           scope: scope};
+                var inst = $modal.open(opt);
+                inst.result.then(function () {
+                    var file = $('#file-1').get(0).files[0];
+                    var name = path + file.name;
+                    var item = {name: name,
+                                title: file.name,
+                                bytes: file.size};
+                    var upload = $swift.uploadObject(container, name, file);
+                    upload.success(function () {
+                        $scope.items.push(item);
+                    });
                 });
             };
 
