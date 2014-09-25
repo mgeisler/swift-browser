@@ -59,14 +59,16 @@ window.setObjects = function(container, objects) {
         var defaults = {prefix: '', delimiter: null};
         var match = url.match(listRegex);
         var params = angular.extend(defaults, parseQueryString(match[1]));
+        var prefix = params.prefix;
+        var delimiter = params.delimiter;
         var results = [];
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
-            if (object.name.indexOf(params.prefix) == 0) {
-                var rest = object.name.slice(params.prefix.length);
-                var idx = rest.indexOf(params.delimiter);
+            var name = object.name;
+            if (name.indexOf(prefix) == 0) {
+                var idx = name.indexOf(delimiter, prefix.length);
                 if (idx > -1) {
-                    results.push({subdir: rest.slice(0, idx + 1)});
+                    results.push({subdir: name.slice(0, idx + 1)});
                 } else {
                     results.push(object);
                 }
