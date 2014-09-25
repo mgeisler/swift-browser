@@ -6,8 +6,7 @@ window.commit = function() {
     });
 };
 
-window.setContainers = function() {
-    var containers = JSON.parse(arguments[0]);
+window.setContainers = function(containers) {
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
         var path = window.location.pathname;
         var accountUrl = path.split('/').slice(0, 3).join('/');
@@ -17,10 +16,7 @@ window.setContainers = function() {
     });
 };
 
-window.setObjects = function() {
-    var container = arguments[0];
-    var objects = JSON.parse(arguments[1]);
-
+window.setObjects = function(container, objects) {
     function escape(string) {
         return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
     }

@@ -34,14 +34,13 @@ exports.setContainers = function(containers) {
        properties are no longer defined. Converting to and from JSON
        is a work-around for this.
     */
-    browser.addMockModule('swiftBrowserE2E',
-                          'window.setContainers(arguments[0])',
-                          JSON.stringify(containers));
+    browser.addMockModule('swiftBrowserE2E', function(jsonContainers) {
+        window.setContainers(JSON.parse(jsonContainers));
+    }, JSON.stringify(containers));
 };
 
 exports.setObjects = function(container, objects) {
-    browser.addMockModule('swiftBrowserE2E',
-                          'window.setObjects(arguments[0], arguments[1])',
-                          container, JSON.stringify(objects));
-
+    browser.addMockModule('swiftBrowserE2E', function(container, jsonObjects) {
+        window.setObjects(container, JSON.parse(jsonObjects));
+    }, container, JSON.stringify(objects));
 };
