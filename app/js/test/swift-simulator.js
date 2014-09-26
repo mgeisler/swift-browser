@@ -62,13 +62,18 @@ window.setObjects = function(container, objects) {
         var prefix = params.prefix;
         var delimiter = params.delimiter;
         var results = [];
+        var subdirs = {};
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
             var name = object.name;
             if (name.indexOf(prefix) == 0) {
                 var idx = name.indexOf(delimiter, prefix.length);
                 if (idx > -1) {
-                    results.push({subdir: name.slice(0, idx + 1)});
+                    var subdir = name.slice(0, idx + 1);
+                    if (!subdirs[subdir]) {
+                        results.push({subdir: subdir});
+                        subdirs[subdir] = true;
+                    }
                 } else {
                     results.push(object);
                 }
