@@ -1,5 +1,9 @@
 'use strict';
 
+function escape(string) {
+    return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
+}
+
 function accountUrl() {
     var path = window.location.pathname;
     return path.split('/').slice(0, 3).join('/');
@@ -19,10 +23,6 @@ window.setContainers = function(containers) {
 };
 
 window.setObjects = function(container, objects) {
-    function escape(string) {
-        return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
-    }
-
     function parseQueryString(qs) {
         var params = {};
         var parts = qs.split('&');
