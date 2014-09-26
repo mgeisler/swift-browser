@@ -20,11 +20,13 @@ window.commit = function() {
         /* Configure 404s for non-existing containers. The connect
          * server would otherwise return 500. */
         var fixed = accountUrl() + '/';
-        var listRegex = new RegExp(escape(fixed) + '(.*)' + escape('?'));
-        $httpBackend.whenGET(listRegex).respond(function (method, url) {
-            var match = url.match(listRegex);
+        var regex = new RegExp(escape(fixed) + '(.*)[' + escape('?/') + ']');
+        function containerNotFound(method, url) {
+            var match = url.match(regex);
             return [404, 'Container "' + match[1] + '" not found'];
-        });
+        }
+        $httpBackend.whenGET(regex).respond(containerNotFound);
+        $httpBackend.whenDELETE(regex).respond(containerNotFound);
         $httpBackend.whenGET(/.*/).passThrough();
     });
 };

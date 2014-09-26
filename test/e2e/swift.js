@@ -112,4 +112,18 @@ describe('deleteObject', function () {
         });
         expect(data).toEqual(404);
     });
+
+    it('should return 404 for a non-existing container', function () {
+        SwiftMock.setContainers([]);
+        SwiftMock.commit();
+        browser.get('index.html#/');
+        var data = browser.driver.executeAsyncScript(function (callback) {
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.deleteObject('no-such-container', 'a.txt');
+            req.then(null, function (result) {
+                callback(result.status);
+            });
+        });
+        expect(data).toEqual(404);
+    });
 });
