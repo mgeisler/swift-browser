@@ -9,8 +9,22 @@ function accountUrl() {
     return path.split('/').slice(0, 3).join('/');
 }
 
+window.getFromInjector = function(service) {
+    var html = document.querySelector("html");
+    var injector = angular.element(html).injector();
+    return injector.get(service);
+};
+
 window.commit = function() {
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
+        /* Configure 404s for non-existing containers. The connect
+         * server would otherwise return 500. */
+        var fixed = accountUrl() + '/';
+        var listRegex = new RegExp(escape(fixed) + '(.*)' + escape('?'));
+        $httpBackend.whenGET(listRegex).respond(function (method, url) {
+            var match = url.match(listRegex);
+            return [404, 'Container "' + match[1] + '" not found'];
+        });
         $httpBackend.whenGET(/.*/).passThrough();
     });
 };

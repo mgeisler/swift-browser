@@ -36,3 +36,21 @@ describe('Test isolation', function() {
         expect($('td:nth-child(2)').getText()).toEqual('b.txt');
     });
 });
+
+describe('listObjects', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+
+    it('should return 404 for a non-existing container', function () {
+        SwiftMock.setContainers([]);
+        SwiftMock.commit();
+        browser.get('index.html#/');
+        var status = browser.driver.executeAsyncScript(function (callback) {
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.listObjects('no-such-container');
+            req.then(null, function (result) {
+                callback(result.status);
+            });
+        });
+        expect(status).toBe(404);
+    });
+});
