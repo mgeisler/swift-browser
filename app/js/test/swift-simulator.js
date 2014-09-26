@@ -1,5 +1,10 @@
 'use strict';
 
+function accountUrl() {
+    var path = window.location.pathname;
+    return path.split('/').slice(0, 3).join('/');
+}
+
 window.commit = function() {
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
         $httpBackend.whenGET(/.*/).passThrough();
@@ -8,10 +13,7 @@ window.commit = function() {
 
 window.setContainers = function(containers) {
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
-        var path = window.location.pathname;
-        var accountUrl = path.split('/').slice(0, 3).join('/');
-
-        $httpBackend.whenGET(accountUrl + '?format=json')
+        $httpBackend.whenGET(accountUrl() + '?format=json')
             .respond(containers);
     });
 };
@@ -33,9 +35,7 @@ window.setObjects = function(container, objects) {
         return params;
     }
 
-    var path = window.location.pathname;
-    var accountUrl = path.split('/').slice(0, 3).join('/');
-    var fixed = accountUrl + '/' + container;
+    var fixed = accountUrl() + '/' + container;
     var listRegex = new RegExp(escape(fixed + '?') + '(.*)');
     var deleteRegex = new RegExp(escape(fixed + '/') + '(.*)');
 
