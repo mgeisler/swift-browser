@@ -45,5 +45,10 @@ SwiftClient.prototype.deleteObject = function (container, object) {
     return this._$http.delete(url, {headers: this._headers});
 };
 
+SwiftClient.prototype.uploadObject = function (container, object, data) {
+    var url = this._swiftUrl + '/' + container + '/' + object;
+    return this._$http.put(url, data, {headers: this._headers});
+};
+
 angular.module('swiftBrowser.swift', [])
     .service('$swift', ['$http', SwiftClient]);

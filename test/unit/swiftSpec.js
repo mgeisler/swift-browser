@@ -78,4 +78,11 @@ describe('Swift', function() {
         this.$swift.deleteObject('cont', 'foo/bar');
         this.$httpBackend.flush();
     });
+
+    it('should send PUT request when uploading an objct', function() {
+        this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar', 'data')
+            .respond(201, null);
+        this.$swift.uploadObject('cont', 'foo/bar', 'data');
+        this.$httpBackend.flush();
+    });
 });

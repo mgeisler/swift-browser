@@ -37,7 +37,7 @@ window.setObjects = function(container, objects) {
     var accountUrl = path.split('/').slice(0, 3).join('/');
     var fixed = accountUrl + '/' + container;
     var listRegex = new RegExp(escape(fixed + '?') + '(.*)');
-    var deleteRegex = new RegExp(escape(fixed + '/') + '(.*)');
+    var objRegex = new RegExp(escape(fixed + '/') + '(.*)');
 
     function listObjects(method, url, data) {
         var match = url.match(listRegex);
@@ -59,7 +59,7 @@ window.setObjects = function(container, objects) {
     }
 
     function deleteObject(method, url, data) {
-        var match = url.match(deleteRegex);
+        var match = url.match(objRegex);
         var name = match[1];
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].name == name) {
@@ -70,8 +70,29 @@ window.setObjects = function(container, objects) {
         return [404, 'Not Found'];
     }
 
+    function putObject(method, url, data) {
+        var match = url.match(objRegex);
+        var name = match[1];
+
+        var lastModified = data.lastModifiedDate.toISOString();
+        var object = {name: name,
+                      bytes: data.size,
+                      'last_modified': lastModified,
+                      'content_type': 'application/octet-stream',
+                      hash: ''};
+        // Remove object if it's already there
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name == name) {
+                objects.splice(i, 1);
+            }
+        }
+        objects.push(object);
+        return [201, null];
+    }
+
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
         $httpBackend.whenGET(listRegex).respond(listObjects);
-        $httpBackend.whenDELETE(deleteRegex).respond(deleteObject);
+        $httpBackend.whenDELETE(objRegex).respond(deleteObject);
+        $httpBackend.whenPUT(objRegex).respond(putObject);
     });
 };
