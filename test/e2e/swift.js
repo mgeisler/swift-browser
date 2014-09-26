@@ -97,4 +97,19 @@ describe('deleteObject', function () {
         });
         expect(data).toEqual(204);
     });
+
+    it('should return 404 for a non-existing object', function () {
+        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
+        SwiftMock.setObjects('foo', []);
+        SwiftMock.commit();
+        browser.get('index.html#/');
+        var data = browser.driver.executeAsyncScript(function (callback) {
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.deleteObject('foo', 'no-such-object');
+            req.then(null, function (result) {
+                callback(result.status);
+            });
+        });
+        expect(data).toEqual(404);
+    });
 });
