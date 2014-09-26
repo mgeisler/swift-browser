@@ -1,26 +1,44 @@
 'use strict';
 
+function escape(string) {
+    return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
+}
+
+function accountUrl() {
+    var path = window.location.pathname;
+    return path.split('/').slice(0, 3).join('/');
+}
+
+window.getFromInjector = function(service) {
+    var html = document.querySelector("html");
+    var injector = angular.element(html).injector();
+    return injector.get(service);
+};
+
 window.commit = function() {
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
+        /* Configure 404s for non-existing containers. The connect
+         * server would otherwise return 500. */
+        var fixed = accountUrl() + '/';
+        var regex = new RegExp(escape(fixed) + '(.*)[' + escape('?/') + ']');
+        function containerNotFound(method, url) {
+            var match = url.match(regex);
+            return [404, 'Container "' + match[1] + '" not found'];
+        }
+        $httpBackend.whenGET(regex).respond(containerNotFound);
+        $httpBackend.whenDELETE(regex).respond(containerNotFound);
         $httpBackend.whenGET(/.*/).passThrough();
     });
 };
 
 window.setContainers = function(containers) {
     angular.module('swiftBrowserE2E').run(function($httpBackend) {
-        var path = window.location.pathname;
-        var accountUrl = path.split('/').slice(0, 3).join('/');
-
-        $httpBackend.whenGET(accountUrl + '?format=json')
+        $httpBackend.whenGET(accountUrl() + '?format=json')
             .respond(containers);
     });
 };
 
 window.setObjects = function(container, objects) {
-    function escape(string) {
-        return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
-    }
-
     function parseQueryString(qs) {
         var params = {};
         var parts = qs.split('&');
@@ -33,15 +51,14 @@ window.setObjects = function(container, objects) {
         return params;
     }
 
-    var path = window.location.pathname;
-    var accountUrl = path.split('/').slice(0, 3).join('/');
-    var fixed = accountUrl + '/' + container;
+    var fixed = accountUrl() + '/' + container;
     var listRegex = new RegExp(escape(fixed + '?') + '(.*)');
     var objRegex = new RegExp(escape(fixed + '/') + '(.*)');
 
     function listObjects(method, url, data) {
+        var defaults = {prefix: '', delimiter: null};
         var match = url.match(listRegex);
-        var params = parseQueryString(match[1]);
+        var params = angular.extend(defaults, parseQueryString(match[1]));
         var results = [];
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
