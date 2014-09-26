@@ -74,3 +74,27 @@ describe('listObjects', function () {
         expect(status).toBe(404);
     });
 });
+
+describe('deleteObject', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+
+    it('should return 204 for an existing object', function () {
+        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
+                        'last_modified': "2014-08-16T13:33:21.848400",
+                        bytes: 20,
+                        name: "a.txt",
+                        'content_type': "text/plain"}];
+        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
+        SwiftMock.setObjects('foo', objects);
+        SwiftMock.commit();
+        browser.get('index.html#/');
+        var data = browser.driver.executeAsyncScript(function (callback) {
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.deleteObject('foo', 'a.txt');
+            req.then(function (result) {
+                callback(result.status);
+            });
+        });
+        expect(data).toEqual(204);
+    });
+});
