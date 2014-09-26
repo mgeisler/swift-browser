@@ -54,8 +54,9 @@ window.setObjects = function(container, objects) {
     var deleteRegex = new RegExp(escape(fixed + '/') + '(.*)');
 
     function listObjects(method, url, data) {
+        var defaults = {prefix: '', delimiter: null};
         var match = url.match(listRegex);
-        var params = parseQueryString(match[1]);
+        var params = angular.extend(defaults, parseQueryString(match[1]));
         var results = [];
         for (var i = 0; i < objects.length; i++) {
             var object = objects[i];
