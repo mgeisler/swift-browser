@@ -1,6 +1,6 @@
 'use strict';
 
-var SwiftSimulator = require('../swift-simulator.js');
+var SwiftMock = require('../swift-mock.js');
 
 describe('my app', function() {
 
@@ -27,16 +27,16 @@ function mapIsSelected(locator) {
 
 describe('Container listing', function () {
 
-    beforeEach(SwiftSimulator.loadAngularMocks);
+    beforeEach(SwiftMock.loadAngularMocks);
 
     describe('should be sortable', function () {
 
         beforeEach(function () {
-            SwiftSimulator.setContainers([
+            SwiftMock.setContainers([
                 {name: "bar", count: 20, bytes: 1234},
                 {name: "foo", count: 10, bytes: 2345}
             ]);
-            SwiftSimulator.commit();
+            SwiftMock.commit();
             browser.get('index.html#/');
         });
 
@@ -83,11 +83,11 @@ describe('Container listing', function () {
     describe('selection', function () {
 
         beforeEach(function () {
-            SwiftSimulator.setContainers([
+            SwiftMock.setContainers([
                 {name: "bar", count: 20, bytes: 1234},
                 {name: "foo", count: 10, bytes: 2345}
             ]);
-            SwiftSimulator.commit();
+            SwiftMock.commit();
             browser.get('index.html#/');
         });
 
@@ -116,8 +116,8 @@ describe('Container listing', function () {
     describe('with no containers', function () {
 
         it('should not show all containers selected', function () {
-            SwiftSimulator.setContainers([]);
-            SwiftSimulator.commit();
+            SwiftMock.setContainers([]);
+            SwiftMock.commit();
             browser.get('index.html#/');
 
             var toggle = by.css('th.toggle input');
@@ -129,15 +129,15 @@ describe('Container listing', function () {
 
 describe('Object listing', function () {
 
-    beforeEach(SwiftSimulator.loadAngularMocks);
+    beforeEach(SwiftMock.loadAngularMocks);
 
     describe('should be sortable', function () {
 
         beforeEach(function () {
-            SwiftSimulator.setContainers([
+            SwiftMock.setContainers([
                 {name: "foo", count: 2, bytes: 20}
             ]);
-            SwiftSimulator.setObjects('foo', [
+            SwiftMock.setObjects('foo', [
                 {hash: "401b30e3b8b5d629635a5c613cdb7919",
                  'last_modified': "2014-08-16T13:33:21.848400",
                  bytes: 20,
@@ -149,7 +149,7 @@ describe('Object listing', function () {
                  name: "y.txt",
                  'content_type': "text/plain"}
             ]);
-            SwiftSimulator.commit();
+            SwiftMock.commit();
             browser.get('index.html#/foo/');
         });
 
@@ -177,10 +177,10 @@ describe('Object listing', function () {
     });
 
     it('should understand pseudo-directories', function () {
-        SwiftSimulator.setContainers([
+        SwiftMock.setContainers([
             {name: "foo", count: 2, bytes: 20}
         ]);
-        SwiftSimulator.setObjects('foo', [
+        SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.848400",
              bytes: 10,
@@ -192,7 +192,7 @@ describe('Object listing', function () {
              name: "dir/y.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftSimulator.commit();
+        SwiftMock.commit();
         browser.get('index.html#/foo/');
 
         var names = by.css('td:nth-child(2)');
@@ -202,10 +202,10 @@ describe('Object listing', function () {
     describe('selection', function () {
 
         beforeEach(function () {
-            SwiftSimulator.setContainers([
+            SwiftMock.setContainers([
                 {name: "foo", count: 2, bytes: 20}
             ]);
-            SwiftSimulator.setObjects('foo', [
+            SwiftMock.setObjects('foo', [
                 {hash: "401b30e3b8b5d629635a5c613cdb7919",
                  'last_modified': "2014-08-16T13:33:21.848400",
                  bytes: 20,
@@ -217,7 +217,7 @@ describe('Object listing', function () {
                  name: "y.txt",
                  'content_type': "text/plain"}
             ]);
-            SwiftSimulator.commit();
+            SwiftMock.commit();
             browser.get('index.html#/foo/');
         });
 
@@ -245,10 +245,10 @@ describe('Object listing', function () {
     describe('with no objects', function () {
 
         it('should not show all objects selected', function () {
-            SwiftSimulator.setContainers([
+            SwiftMock.setContainers([
                 {name: "foo", count: 0, bytes: 0}
             ]);
-            SwiftSimulator.commit();
+            SwiftMock.commit();
             browser.get('index.html#/foo/');
 
             var toggle = by.css('th.toggle input');
@@ -257,10 +257,10 @@ describe('Object listing', function () {
     });
 
     it('should allow deletion', function () {
-        SwiftSimulator.setContainers([
+        SwiftMock.setContainers([
             {name: "foo", count: 2, bytes: 20}
         ]);
-        SwiftSimulator.setObjects('foo', [
+        SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.848400",
              bytes: 20,
@@ -272,7 +272,7 @@ describe('Object listing', function () {
              name: "y.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftSimulator.commit();
+        SwiftMock.commit();
         browser.get('index.html#/foo/');
 
         var checkboxes = $$('td:nth-child(1) input');
