@@ -38,38 +38,12 @@ function SwiftSimulator($httpBackend) {
 
     $httpBackend.whenGET(accountUrl() + '?format=json')
         .respond(this.listContainers.bind(this));
-
-    function putObject(method, url, data) {
-        var match = url.match(this.objRegex);
-        var container = match[1];
-        var name = match[2];
-
-        var objects = this.objects[container];
-        if (objects == undefined) {
-            return [404, 'Container "' + container + '" not found'];
-        }
-
-        var lastModified = data.lastModifiedDate.toISOString();
-        var object = {name: name,
-                      bytes: data.size,
-                      'last_modified': lastModified,
-                      'content_type': 'application/octet-stream',
-                      hash: ''};
-        // Remove object if it's already there
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].name == name) {
-                objects.splice(i, 1);
-            }
-        }
-        objects.push(object);
-        return [201, null];
-    }
-
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
     $httpBackend.whenDELETE(this.objRegex)
         .respond(this.deleteObject.bind(this));
-    $httpBackend.whenPUT(this.objRegex).respond(putObject.bind(this));
+    $httpBackend.whenPUT(this.objRegex)
+        .respond(this.putObject.bind(this));
     $httpBackend.whenGET(/.*/).passThrough();
 }
 
@@ -129,6 +103,33 @@ SwiftSimulator.prototype.deleteObject = function(method, url, data) {
     }
     return [404, 'Not Found'];
 };
+
+SwiftSimulator.prototype.putObject = function(method, url, data) {
+    var match = url.match(this.objRegex);
+    var container = match[1];
+    var name = match[2];
+
+    var objects = this.objects[container];
+    if (objects == undefined) {
+        return [404, 'Container "' + container + '" not found'];
+    }
+
+    var lastModified = data.lastModifiedDate.toISOString();
+    var object = {name: name,
+                  bytes: data.size,
+                  'last_modified': lastModified,
+                  'content_type': 'application/octet-stream',
+                  hash: ''};
+    // Remove object if it's already there
+    for (var i = 0; i < objects.length; i++) {
+        if (objects[i].name == name) {
+            objects.splice(i, 1);
+        }
+    }
+    objects.push(object);
+    return [201, null];
+};
+
 
 SwiftSimulator.prototype.setContainers = function(containers) {
     this.containers = containers;
