@@ -12,13 +12,10 @@ exports.loadAngularMocks = function () {
 
             window.e2eAngularMocksLoaded = true;
         }
-        angular.module('swiftBrowserE2E', ['ngMockE2E']);
     });
 };
 
-exports.commit = function () {
-    browser.addMockModule('swiftBrowserE2E', 'window.commit()');
-};
+exports.commit = function () {};
 
 exports.setContainers = function(containers) {
     /* Testing with Firefox revealed that the array passed in
@@ -35,12 +32,16 @@ exports.setContainers = function(containers) {
        is a work-around for this.
     */
     browser.addMockModule('swiftBrowserE2E', function(jsonContainers) {
-        window.setContainers(JSON.parse(jsonContainers));
+        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+            swiftSim.setContainers(JSON.parse(jsonContainers));
+        });
     }, JSON.stringify(containers));
 };
 
 exports.setObjects = function(container, objects) {
     browser.addMockModule('swiftBrowserE2E', function(container, jsonObjects) {
-        window.setObjects(container, JSON.parse(jsonObjects));
+        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+            swiftSim.setObjects(container, JSON.parse(jsonObjects));
+        });
     }, container, JSON.stringify(objects));
 };

@@ -27,110 +27,115 @@ window.getFromInjector = function(service) {
     return injector.get(service);
 };
 
-var swiftContainers = [];
-var swiftObjects = [];
 
-window.commit = function() {
-    angular.module('swiftBrowserE2E').run(function($httpBackend) {
-        var prefix = escape(accountUrl() + '/');
-        var listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
-        var objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
+function SwiftSimulator($httpBackend) {
+    this.containers = [];
+    this.objects = {};
 
-        /* setContainers */
-        $httpBackend.whenGET(accountUrl() + '?format=json')
-            .respond(swiftContainers);
+    var prefix = escape(accountUrl() + '/');
+    var listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
+    var objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
 
-        /* setObjects */
-        function listObjects(method, url, data) {
-            var defaults = {prefix: '', delimiter: null};
-            var match = url.match(listRegex);
-            var container = match[1];
-            var qs = match[2];
-            var params = angular.extend(defaults, parseQueryString(qs));
-            var prefix = params.prefix;
-            var delimiter = params.delimiter;
-            var results = [];
-            var subdirs = {};
-            var objects = swiftObjects[container];
-            if (objects == undefined) {
-                return [404, 'Container "' + match[1] + '" not found'];
-            }
+    function listContainers(method, url, data) {
+        return [200, this.containers];
+    }
 
-            for (var i = 0; i < objects.length; i++) {
-                var object = objects[i];
-                var name = object.name;
-                if (name.indexOf(prefix) == 0) {
-                    var idx = name.indexOf(delimiter, prefix.length);
-                    if (idx > -1) {
+    $httpBackend.whenGET(accountUrl() + '?format=json')
+        .respond(listContainers.bind(this));
+
+    /* setObjects */
+    function listObjects(method, url, data) {
+        var defaults = {prefix: '', delimiter: null};
+        var match = url.match(listRegex);
+        var container = match[1];
+        var qs = match[2];
+        var params = angular.extend(defaults, parseQueryString(qs));
+        var prefix = params.prefix;
+        var delimiter = params.delimiter;
+        var results = [];
+        var subdirs = {};
+        var objects = this.objects[container];
+        if (objects == undefined) {
+            return [404, 'Container "' + match[1] + '" not found'];
+        }
+
+        for (var i = 0; i < objects.length; i++) {
+            var object = objects[i];
+            var name = object.name;
+            if (name.indexOf(prefix) == 0) {
+                var idx = name.indexOf(delimiter, prefix.length);
+                if (idx > -1) {
                     var subdir = name.slice(0, idx + 1);
                     if (!subdirs[subdir]) {
                         results.push({subdir: subdir});
                         subdirs[subdir] = true;
                     }
-                    } else {
-                        results.push(object);
-                    }
+                } else {
+                    results.push(object);
                 }
             }
-            return [200, results];
+        }
+        return [200, results];
+    }
+
+    function deleteObject(method, url, data) {
+        var match = url.match(objRegex);
+        var container = match[1];
+        var name = match[2];
+
+        var objects = this.objects[container];
+        if (objects == undefined) {
+            return [404, 'Container "' + container + '" not found'];
         }
 
-        function deleteObject(method, url, data) {
-            var match = url.match(objRegex);
-            var container = match[1];
-            var name = match[2];
-
-            var objects = swiftObjects[container];
-            if (objects == undefined) {
-                return [404, 'Container "' + container + '" not found'];
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name == name) {
+                objects.splice(i, 1);
+                return [204, null];
             }
+        }
+        return [404, 'Not Found'];
+    }
 
-            for (var i = 0; i < objects.length; i++) {
-                if (objects[i].name == name) {
-                    objects.splice(i, 1);
-                    return [204, null];
-                }
-            }
-            return [404, 'Not Found'];
+    function putObject(method, url, data) {
+        var match = url.match(objRegex);
+        var container = match[1];
+        var name = match[2];
+
+        var objects = this.objects[container];
+        if (objects == undefined) {
+            return [404, 'Container "' + container + '" not found'];
         }
 
-        function putObject(method, url, data) {
-            var match = url.match(objRegex);
-            var container = match[1];
-            var name = match[2];
-
-            var objects = swiftObjects[container];
-            if (objects == undefined) {
-                return [404, 'Container "' + container + '" not found'];
+        var lastModified = data.lastModifiedDate.toISOString();
+        var object = {name: name,
+                      bytes: data.size,
+                      'last_modified': lastModified,
+                      'content_type': 'application/octet-stream',
+                      hash: ''};
+        // Remove object if it's already there
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name == name) {
+                objects.splice(i, 1);
             }
-
-            var lastModified = data.lastModifiedDate.toISOString();
-            var object = {name: name,
-                          bytes: data.size,
-                          'last_modified': lastModified,
-                          'content_type': 'application/octet-stream',
-                          hash: ''};
-            // Remove object if it's already there
-            for (var i = 0; i < objects.length; i++) {
-                if (objects[i].name == name) {
-                    objects.splice(i, 1);
-                }
-            }
-            objects.push(object);
-            return [201, null];
         }
+        objects.push(object);
+        return [201, null];
+    }
 
-        $httpBackend.whenGET(listRegex).respond(listObjects);
-        $httpBackend.whenDELETE(objRegex).respond(deleteObject);
-        $httpBackend.whenPUT(objRegex).respond(putObject);
-        $httpBackend.whenGET(/.*/).passThrough();
-    });
+    $httpBackend.whenGET(listRegex).respond(listObjects.bind(this));
+    $httpBackend.whenDELETE(objRegex).respond(deleteObject.bind(this));
+    $httpBackend.whenPUT(objRegex).respond(putObject.bind(this));
+    $httpBackend.whenGET(/.*/).passThrough();
+}
+
+SwiftSimulator.prototype.setContainers = function(containers) {
+    this.containers = containers;
 };
 
-window.setContainers = function(containers) {
-    swiftContainers = containers;
+SwiftSimulator.prototype.setObjects = function(container, objects) {
+    this.objects[container] = objects;
 };
 
-window.setObjects = function(container, objects) {
-    swiftObjects[container] = objects;
-};
+angular.module('swiftBrowserE2E', ['ngMockE2E'])
+    .service('swiftSim', SwiftSimulator);
