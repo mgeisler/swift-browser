@@ -29,8 +29,7 @@ window.getFromInjector = function(service) {
 
 
 function SwiftSimulator($httpBackend) {
-    this.containers = [];
-    this.objects = {};
+    this.reset();
 
     var prefix = escape(accountUrl() + '/');
     this.listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
@@ -48,6 +47,11 @@ function SwiftSimulator($httpBackend) {
 
     $httpBackend.whenGET(/.*/).passThrough();
 }
+
+SwiftSimulator.prototype.reset = function() {
+    this.containers = [];
+    this.objects = {};
+};
 
 SwiftSimulator.prototype.listContainers = function(method, url, data) {
     return [200, this.containers];

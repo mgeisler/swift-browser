@@ -5,33 +5,19 @@ var SwiftMock = require('../swift-mock.js');
 describe('Test isolation', function() {
     beforeEach(function () {
         SwiftMock.loadAngularMocks();
+    });
+
+    it('should show foo container', function () {
         SwiftMock.setContainers([
-            {name: "foo", count: 1, bytes: 20}
+            {name: "foo", count: 0, bytes: 0}
         ]);
+        browser.get('index.html#/');
+        expect($('td:nth-child(2)').getText()).toEqual('foo');
     });
 
-    it('should just a.txt', function () {
-	SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "bar/a.txt",
-             'content_type': "text/plain"}
-	]);
-        browser.get('index.html#/foo/bar/');
-        expect($('td:nth-child(2)').getText()).toEqual('a.txt');
-    });
-
-    it('should should just b.txt', function () {
-	SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "bar/b.txt",
-             'content_type': "text/plain"}
-	]);
-        browser.get('index.html#/foo/bar/');
-        expect($('td:nth-child(2)').getText()).toEqual('b.txt');
+    it('should show no containers', function () {
+        browser.get('index.html#/');
+        expect($('td:nth-child(2)').isPresent()).toEqual(false);
     });
 });
 

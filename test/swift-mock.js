@@ -13,6 +13,11 @@ exports.loadAngularMocks = function () {
             window.e2eAngularMocksLoaded = true;
         }
     });
+    browser.addMockModule('swiftBrowserE2E', function() {
+        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+            swiftSim.reset();
+        });
+    });
 };
 
 exports.setContainers = function(containers) {
