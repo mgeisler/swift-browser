@@ -33,7 +33,7 @@ function SwiftSimulator($httpBackend) {
     this.objects = {};
 
     var prefix = escape(accountUrl() + '/');
-    var listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
+    this.listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
     var objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
 
     function listContainers(method, url, data) {
@@ -42,41 +42,6 @@ function SwiftSimulator($httpBackend) {
 
     $httpBackend.whenGET(accountUrl() + '?format=json')
         .respond(listContainers.bind(this));
-
-    /* setObjects */
-    function listObjects(method, url, data) {
-        var defaults = {prefix: '', delimiter: null};
-        var match = url.match(listRegex);
-        var container = match[1];
-        var qs = match[2];
-        var params = angular.extend(defaults, parseQueryString(qs));
-        var prefix = params.prefix;
-        var delimiter = params.delimiter;
-        var results = [];
-        var subdirs = {};
-        var objects = this.objects[container];
-        if (objects == undefined) {
-            return [404, 'Container "' + match[1] + '" not found'];
-        }
-
-        for (var i = 0; i < objects.length; i++) {
-            var object = objects[i];
-            var name = object.name;
-            if (name.indexOf(prefix) == 0) {
-                var idx = name.indexOf(delimiter, prefix.length);
-                if (idx > -1) {
-                    var subdir = name.slice(0, idx + 1);
-                    if (!subdirs[subdir]) {
-                        results.push({subdir: subdir});
-                        subdirs[subdir] = true;
-                    }
-                } else {
-                    results.push(object);
-                }
-            }
-        }
-        return [200, results];
-    }
 
     function deleteObject(method, url, data) {
         var match = url.match(objRegex);
@@ -123,11 +88,46 @@ function SwiftSimulator($httpBackend) {
         return [201, null];
     }
 
-    $httpBackend.whenGET(listRegex).respond(listObjects.bind(this));
+    $httpBackend.whenGET(this.listRegex)
+        .respond(this.listObjects.bind(this));
     $httpBackend.whenDELETE(objRegex).respond(deleteObject.bind(this));
     $httpBackend.whenPUT(objRegex).respond(putObject.bind(this));
     $httpBackend.whenGET(/.*/).passThrough();
 }
+
+SwiftSimulator.prototype.listObjects = function(method, url, data) {
+    var defaults = {prefix: '', delimiter: null};
+    var match = url.match(this.listRegex);
+    var container = match[1];
+    var qs = match[2];
+    var params = angular.extend(defaults, parseQueryString(qs));
+    var prefix = params.prefix;
+    var delimiter = params.delimiter;
+    var results = [];
+    var subdirs = {};
+    var objects = this.objects[container];
+    if (objects == undefined) {
+        return [404, 'Container "' + match[1] + '" not found'];
+    }
+
+    for (var i = 0; i < objects.length; i++) {
+        var object = objects[i];
+        var name = object.name;
+        if (name.indexOf(prefix) == 0) {
+            var idx = name.indexOf(delimiter, prefix.length);
+            if (idx > -1) {
+                var subdir = name.slice(0, idx + 1);
+                if (!subdirs[subdir]) {
+                    results.push({subdir: subdir});
+                    subdirs[subdir] = true;
+                }
+            } else {
+                results.push(object);
+            }
+        }
+    }
+    return [200, results];
+};
 
 SwiftSimulator.prototype.setContainers = function(containers) {
     this.containers = containers;
