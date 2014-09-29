@@ -36,12 +36,8 @@ function SwiftSimulator($httpBackend) {
     this.listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
     var objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
 
-    function listContainers(method, url, data) {
-        return [200, this.containers];
-    }
-
     $httpBackend.whenGET(accountUrl() + '?format=json')
-        .respond(listContainers.bind(this));
+        .respond(this.listContainers.bind(this));
 
     function deleteObject(method, url, data) {
         var match = url.match(objRegex);
@@ -94,6 +90,10 @@ function SwiftSimulator($httpBackend) {
     $httpBackend.whenPUT(objRegex).respond(putObject.bind(this));
     $httpBackend.whenGET(/.*/).passThrough();
 }
+
+SwiftSimulator.prototype.listContainers = function(method, url, data) {
+    return [200, this.containers];
+};
 
 SwiftSimulator.prototype.listObjects = function(method, url, data) {
     var defaults = {prefix: '', delimiter: null};
