@@ -37,7 +37,6 @@ describe('Container listing', function () {
                 {name: "bar", count: 20, bytes: 1234},
                 {name: "foo", count: 10, bytes: 2345}
             ]);
-            SwiftMock.commit();
             browser.get('index.html#/');
         });
 
@@ -88,7 +87,6 @@ describe('Container listing', function () {
                 {name: "bar", count: 20, bytes: 1234},
                 {name: "foo", count: 10, bytes: 2345}
             ]);
-            SwiftMock.commit();
             browser.get('index.html#/');
         });
 
@@ -118,7 +116,6 @@ describe('Container listing', function () {
 
         it('should not show all containers selected', function () {
             SwiftMock.setContainers([]);
-            SwiftMock.commit();
             browser.get('index.html#/');
 
             var toggle = by.css('th.toggle input');
@@ -150,7 +147,6 @@ describe('Object listing', function () {
                  name: "y.txt",
                  'content_type': "text/plain"}
             ]);
-            SwiftMock.commit();
             browser.get('index.html#/foo/');
         });
 
@@ -193,7 +189,6 @@ describe('Object listing', function () {
              name: "dir/y.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/');
 
         var names = by.css('td:nth-child(2)');
@@ -221,7 +216,6 @@ describe('Object listing', function () {
              name: "deeply/nested/z.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/');
 
         var links = by.css('td:nth-child(2) a');
@@ -252,7 +246,6 @@ describe('Object listing', function () {
                  name: "y.txt",
                  'content_type': "text/plain"}
             ]);
-            SwiftMock.commit();
             browser.get('index.html#/foo/');
         });
 
@@ -283,7 +276,6 @@ describe('Object listing', function () {
             SwiftMock.setContainers([
                 {name: "foo", count: 0, bytes: 0}
             ]);
-            SwiftMock.commit();
             browser.get('index.html#/foo/');
 
             var toggle = by.css('th.toggle input');
@@ -312,9 +304,7 @@ describe('Object listing', function () {
              name: "z.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/');
-
         var names = by.css('td:nth-child(2)');
         var checkboxes = by.css('td:nth-child(1) input');
         var deleteBtn = $('.btn[ng-click="delete()"]');
@@ -358,7 +348,6 @@ describe('Object listing', function () {
              name: "nested/x.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/nested/');
 
         var uploadBtn = $('.btn[ng-click="upload()"]');
@@ -390,7 +379,6 @@ describe('Listing a pseudo-directory', function () {
              name: "bar/baz.txt",
              'content_type': "text/plain"}
         ]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/bar');
 
         var url = browser.getLocationAbsUrl();

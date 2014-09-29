@@ -15,8 +15,6 @@ exports.loadAngularMocks = function () {
     });
 };
 
-exports.commit = function () {};
-
 exports.setContainers = function(containers) {
     /* Testing with Firefox revealed that the array passed in
        arguments[0] loses its "own properties" when passed into the

@@ -18,7 +18,6 @@ describe('Test isolation', function() {
              name: "bar/a.txt",
              'content_type': "text/plain"}
 	]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/bar/');
         expect($('td:nth-child(2)').getText()).toEqual('a.txt');
     });
@@ -31,7 +30,6 @@ describe('Test isolation', function() {
              name: "bar/b.txt",
              'content_type': "text/plain"}
 	]);
-        SwiftMock.commit();
         browser.get('index.html#/foo/bar/');
         expect($('td:nth-child(2)').getText()).toEqual('b.txt');
     });
@@ -48,7 +46,6 @@ describe('listObjects', function () {
                         'content_type': "text/plain"}];
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
-        SwiftMock.commit();
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
@@ -62,7 +59,6 @@ describe('listObjects', function () {
 
     it('should return 404 for a non-existing container', function () {
         SwiftMock.setContainers([]);
-        SwiftMock.commit();
         browser.get('index.html#/');
         var status = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
@@ -86,7 +82,6 @@ describe('deleteObject', function () {
                         'content_type': "text/plain"}];
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
-        SwiftMock.commit();
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
@@ -101,7 +96,6 @@ describe('deleteObject', function () {
     it('should return 404 for a non-existing object', function () {
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', []);
-        SwiftMock.commit();
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
@@ -115,7 +109,6 @@ describe('deleteObject', function () {
 
     it('should return 404 for a non-existing container', function () {
         SwiftMock.setContainers([]);
-        SwiftMock.commit();
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
@@ -144,7 +137,6 @@ describe('deleteDirectory', function () {
                         'content_type': "text/plain"}];
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
-        SwiftMock.commit();
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
