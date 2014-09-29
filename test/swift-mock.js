@@ -1,17 +1,15 @@
 'use strict';
 
 exports.loadAngularMocks = function () {
+    browser.clearMockModules();
     browser.addMockModule('swiftBrowserE2E', function () {
-        if (!window.e2eAngularMocksLoaded) {
-            var ngMocks = document.createElement('script');
-            ngMocks.src = 'bower_components/angular-mocks/angular-mocks.js';
-            document.body.appendChild(ngMocks);
-            var swiftSim = document.createElement('script');
-            swiftSim.src = 'js/test/swift-simulator.js';
-            document.body.appendChild(swiftSim);
+        var ngMocks = document.createElement('script');
+        ngMocks.src = 'bower_components/angular-mocks/angular-mocks.js';
+        document.body.appendChild(ngMocks);
 
-            window.e2eAngularMocksLoaded = true;
-        }
+        var swiftSim = document.createElement('script');
+        swiftSim.src = 'js/test/swift-simulator.js';
+        document.body.appendChild(swiftSim);
     });
     browser.addMockModule('swiftBrowserE2E', function() {
         angular.module('swiftBrowserE2E').run(function(swiftSim) {
