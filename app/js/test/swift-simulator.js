@@ -40,10 +40,12 @@ function SwiftSimulator($httpBackend) {
         .respond(this.listContainers.bind(this));
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
+
     $httpBackend.whenDELETE(this.objRegex)
         .respond(this.deleteObject.bind(this));
     $httpBackend.whenPUT(this.objRegex)
         .respond(this.putObject.bind(this));
+
     $httpBackend.whenGET(/.*/).passThrough();
 }
 
