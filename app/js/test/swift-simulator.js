@@ -34,32 +34,13 @@ function SwiftSimulator($httpBackend) {
 
     var prefix = escape(accountUrl() + '/');
     this.listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
-    var objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
+    this.objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
 
     $httpBackend.whenGET(accountUrl() + '?format=json')
         .respond(this.listContainers.bind(this));
 
-    function deleteObject(method, url, data) {
-        var match = url.match(objRegex);
-        var container = match[1];
-        var name = match[2];
-
-        var objects = this.objects[container];
-        if (objects == undefined) {
-            return [404, 'Container "' + container + '" not found'];
-        }
-
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].name == name) {
-                objects.splice(i, 1);
-                return [204, null];
-            }
-        }
-        return [404, 'Not Found'];
-    }
-
     function putObject(method, url, data) {
-        var match = url.match(objRegex);
+        var match = url.match(this.objRegex);
         var container = match[1];
         var name = match[2];
 
@@ -86,8 +67,9 @@ function SwiftSimulator($httpBackend) {
 
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
-    $httpBackend.whenDELETE(objRegex).respond(deleteObject.bind(this));
-    $httpBackend.whenPUT(objRegex).respond(putObject.bind(this));
+    $httpBackend.whenDELETE(this.objRegex)
+        .respond(this.deleteObject.bind(this));
+    $httpBackend.whenPUT(this.objRegex).respond(putObject.bind(this));
     $httpBackend.whenGET(/.*/).passThrough();
 }
 
@@ -127,6 +109,25 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
         }
     }
     return [200, results];
+};
+
+SwiftSimulator.prototype.deleteObject = function(method, url, data) {
+    var match = url.match(this.objRegex);
+    var container = match[1];
+    var name = match[2];
+
+    var objects = this.objects[container];
+    if (objects == undefined) {
+        return [404, 'Container "' + container + '" not found'];
+    }
+
+    for (var i = 0; i < objects.length; i++) {
+        if (objects[i].name == name) {
+            objects.splice(i, 1);
+            return [204, null];
+        }
+    }
+    return [404, 'Not Found'];
 };
 
 SwiftSimulator.prototype.setContainers = function(containers) {
