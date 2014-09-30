@@ -134,7 +134,13 @@ angular.module('swiftBrowser.controllers',
                 scope.files = [];
                 scope.path = container + '/' + path;
                 scope.fileSelected = function(elm) {
-                    scope.files.push(elm.files[0]);
+                    // Since fileSelected is called from a non-Angular
+                    // event handler, we need to inform the scope
+                    // about the update. Otherwise the update won't be
+                    // noticed until the next digest cycle.
+                    scope.$apply(function () {
+                        scope.files.push(elm.files[0]);
+                    });
                 };
 
                 var opt = {templateUrl: 'partials/upload-modal.html',
