@@ -350,6 +350,14 @@ describe('Object listing', function () {
         ]);
         browser.get('index.html#/foo/nested/');
 
+        function uploadFile(path) {
+            browser.executeScript(function () {
+                $('#file-1').removeClass('hidden');
+            }).then(function () {
+                $('#file-1').sendKeys(path);
+            });
+        }
+
         var uploadBtn = $('.btn[ng-click="upload()"]');
         var names = by.css('td:nth-child(2)');
         expect(mapGetText(names)).toEqual(['x.txt']);
@@ -357,11 +365,7 @@ describe('Object listing', function () {
         uploadBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
 
-        browser.executeScript(function () {
-            $('#file-1').removeClass('hidden');
-        }).then(function () {
-            $('#file-1').sendKeys(__filename);
-        });
+        uploadFile(__filename);
         $('.btn[ng-click="$close()"]').click();
 
         var expected = ['x.txt', path.basename(__filename)].sort();
