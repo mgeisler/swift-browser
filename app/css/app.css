@@ -12,6 +12,10 @@ th.count {
     width: 8em;
 }
 
+th.type {
+    width: 8em;
+}
+
 span.unit {
     display: inline-block;
     min-width: 1.5em;

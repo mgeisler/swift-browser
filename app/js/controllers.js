@@ -131,24 +131,26 @@ angular.module('swiftBrowser.controllers',
 
             $scope.upload = function () {
                 var scope = $scope.$new(true);
-                scope.selectedFile = null;
+                scope.files = [];
                 scope.path = container + '/' + path;
                 scope.fileSelected = function(elm) {
-                    scope.selectedFile = elm.files[0];
+                    scope.files.push(elm.files[0]);
                 };
 
                 var opt = {templateUrl: 'partials/upload-modal.html',
                            scope: scope};
                 var inst = $modal.open(opt);
                 inst.result.then(function () {
-                    var file = scope.selectedFile;
-                    var name = path + file.name;
-                    var item = {name: name,
-                                title: file.name,
-                                bytes: file.size};
-                    var upload = $swift.uploadObject(container, name, file);
-                    upload.success(function () {
-                        $scope.items.push(item);
+                    scope.files.forEach(function (file) {
+                        var name = path + file.name;
+                        var item = {name: name,
+                                    title: file.name,
+                                    bytes: file.size};
+                        var upload = $swift.uploadObject(container, name,
+                                                         file);
+                        upload.success(function() {
+                            $scope.items.push(item);
+                        });
                     });
                 });
             };
