@@ -139,7 +139,7 @@ angular.module('swiftBrowser.controllers',
                     // about the update. Otherwise the update won't be
                     // noticed until the next digest cycle.
                     scope.$apply(function () {
-                        scope.files.push(elm.files[0]);
+                        scope.files.push.apply(scope.files, elm.files);
                     });
                 };
 
