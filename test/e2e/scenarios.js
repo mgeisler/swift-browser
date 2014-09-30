@@ -357,7 +357,11 @@ describe('Object listing', function () {
         uploadBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
 
-        $('#file-1').sendKeys(__filename);
+        browser.executeScript(function () {
+            $('#file-1').removeClass('hidden');
+        }).then(function () {
+            $('#file-1').sendKeys(__filename);
+        });
         $('.btn[ng-click="$close()"]').click();
 
         var expected = ['x.txt', path.basename(__filename)].sort();

@@ -7,10 +7,17 @@
     <div class="form-group">
       <label class="col-sm-2 control-label" for="file-1">File</label>
       <div class="col-sm-10">
-        <input type="file" id="file-1">
+        <button class="btn btn-default pull-right"
+                onclick="$('#file-1').click()">Select File</button>
+        <p class="form-control-static" ng-if="selectedFile">
+          {{ selectedFile.name }}: {{ selectedFile.type }},
+          {{ selectedFile.size | bytes }}
+        </p>
       </div>
     </div>
   </form>
+  <input class="hidden" type="file" id="file-1"
+         onchange="angular.element(this).scope().fileSelected(this)" >
 </div>
 
 <div class="modal-footer">
