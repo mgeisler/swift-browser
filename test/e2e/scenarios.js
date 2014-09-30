@@ -372,6 +372,12 @@ describe('Object listing', function () {
         Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
             var paths = [res1[0], res2[0]];
             paths.forEach(uploadFile);
+
+            var rows = by.repeater('file in files');
+            var uploads = rows.column('{{ file.name }}');
+            var newNames = paths.map(path.basename);
+            expect(mapGetText(uploads)).toEqual(newNames);
+
             $('.btn[ng-click="$close()"]').click();
             var expected = paths.map(path.basename);
             expected.push('x.txt');
