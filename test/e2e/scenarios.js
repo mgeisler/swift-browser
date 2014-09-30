@@ -2,6 +2,10 @@
 
 var SwiftMock = require('../swift-mock.js');
 var path = require('path');
+var tmp = require('tmp');
+var Q = require('q');
+
+var mktemp = Q.nfbind(tmp.file);
 
 describe('my app', function() {
 
@@ -337,7 +341,7 @@ describe('Object listing', function () {
         expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
     });
 
-    it('should allow upload', function () {
+    it('should allow uploading files', function () {
         SwiftMock.setContainers([
             {name: "foo", count: 1, bytes: 20}
         ]);
@@ -365,11 +369,15 @@ describe('Object listing', function () {
         uploadBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
 
-        uploadFile(__filename);
-        $('.btn[ng-click="$close()"]').click();
-
-        var expected = ['x.txt', path.basename(__filename)].sort();
-        expect(mapGetText(names)).toEqual(expected);
+        Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
+            var paths = [res1[0], res2[0]];
+            paths.forEach(uploadFile);
+            $('.btn[ng-click="$close()"]').click();
+            var expected = paths.map(path.basename);
+            expected.push('x.txt');
+            expected.sort();
+            expect(mapGetText(names)).toEqual(expected);
+        });
     });
 
 });
