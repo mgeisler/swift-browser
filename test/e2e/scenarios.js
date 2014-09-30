@@ -369,7 +369,10 @@ describe('Object listing', function () {
         uploadBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
 
-        Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
+        // Test with two paths where the first sort after the second
+        var p1 = mktemp({prefix: 'b'});
+        var p2 = mktemp({prefix: 'a'});
+        Q.all([p1, p2]).spread(function (res1, res2) {
             var paths = [res1[0], res2[0]];
             paths.forEach(uploadFile);
 
