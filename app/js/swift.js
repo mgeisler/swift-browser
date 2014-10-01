@@ -1,8 +1,9 @@
 'use strict';
 
-function SwiftClient($http, $q) {
+function SwiftClient($http, $q, $upload) {
     this._$http = $http;
     this._$q = $q;
+    this._$upload = $upload;
     this._swiftUrl = this.defaultSwiftUrl();
     this._headers = {};
 }
@@ -90,8 +91,12 @@ SwiftClient.prototype.deleteDirectory = function (container, subdir) {
 
 SwiftClient.prototype.uploadObject = function (container, object, data) {
     var url = this._swiftUrl + '/' + container + '/' + object;
-    return this._$http.put(url, data, {headers: this._headers});
+    var config = {method: 'put',
+                  url: url,
+                  data: data,
+                  headers: this._headers};
+    return this._$upload.http(config);
 };
 
-angular.module('swiftBrowser.swift', [])
-    .service('$swift', ['$http', '$q', SwiftClient]);
+angular.module('swiftBrowser.swift', ['angularFileUpload'])
+    .service('$swift', ['$http', '$q', '$upload', SwiftClient]);
