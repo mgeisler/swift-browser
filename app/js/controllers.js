@@ -141,7 +141,7 @@ angular.module('swiftBrowser.controllers',
                     scope.$apply(function () {
                         for (var i = 0; i < elm.files.length; i++) {
                             var file = elm.files[i];
-                            file.uploadPct = 0;
+                            file.uploadPct = null;
                             scope.files.push(file);
                         }
                     });
@@ -173,6 +173,12 @@ angular.module('swiftBrowser.controllers',
                             $scope.items.push(item);
                             file.uploadPct = 100;
                         });
+                    });
+                };
+
+                scope.disableUpload = function() {
+                    return scope.files.every(function (file) {
+                        return file.uploadPct != null;
                     });
                 };
             };

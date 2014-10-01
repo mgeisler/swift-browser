@@ -376,14 +376,17 @@ describe('Object listing', function () {
             var paths = [res1[0], res2[0]];
             paths.forEach(uploadFile);
 
+            var uploadBtn = $('.btn[ng-click="uploadFiles()"]');
             var rows = by.repeater('file in files');
             var uploads = rows.column('{{ file.name }}');
             var newNames = paths.map(path.basename);
             expect(mapGetText(uploads)).toEqual(newNames);
 
-            $('.btn[ng-click="uploadFiles()"]').click();
+            expect(uploadBtn.isEnabled()).toBe(true);
+            uploadBtn.click();
             var progBar = $$('div.progress-bar').first();
             expect(progBar.getAttribute('aria-valuenow')).toBe('100');
+            expect(uploadBtn.isEnabled()).toBe(false);
 
             $('.btn[ng-click="$dismiss()"]').click();
             expect($('div.modal h3').isPresent()).toBe(false);
