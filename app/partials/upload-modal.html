@@ -6,16 +6,27 @@
   <table class="table table-condensed">
     <tr>
       <th>Name</th>
+      <th></th>
       <th class="type">Type</th>
       <th class="size">Size</th>
     </tr>
     <tr ng-repeat="file in files">
       <td>{{ file.name }}</td>
+      <td>
+        <div class="upload progress" ng-hide="!file.uploadPct">
+          <div class="progress-bar" role="progressbar"
+               aria-valuenow="{{ file.uploadPct }}"
+               aria-valuemin="0" aria-valuemax="100"
+               ng-style="{width: file.uploadPct + '%'}">
+            {{ file.uploadPct }}%
+          </div>
+        </div>
+      </td>
       <td>{{ file.type }}</td>
       <td class="text-right" sb-format-bytes count="file.size" />
     </tr>
     <tr ng-hide="files.length > 0">
-      <td colspan="3">
+      <td colspan="4">
         <i>No files selected…</i>
       </td>
     </tr>
@@ -27,6 +38,6 @@
 <div class="modal-footer">
   <button class="btn btn-default pull-left"
           onclick="$('#file-1').click()">Select File</button>
-  <button class="btn btn-primary" ng-click="$close()">Upload</button>
+  <button class="btn btn-primary" ng-click="uploadFiles()">Upload</button>
   <button class="btn btn-default" ng-click="$dismiss()">Close</button>
 </div>

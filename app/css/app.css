@@ -16,6 +16,11 @@ th.type {
     width: 8em;
 }
 
+div.upload {
+    width: 12em;
+    margin-bottom: 0px;
+};
+
 span.unit {
     display: inline-block;
     min-width: 1.5em;

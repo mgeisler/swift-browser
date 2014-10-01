@@ -381,7 +381,13 @@ describe('Object listing', function () {
             var newNames = paths.map(path.basename);
             expect(mapGetText(uploads)).toEqual(newNames);
 
-            $('.btn[ng-click="$close()"]').click();
+            $('.btn[ng-click="uploadFiles()"]').click();
+            var progBar = $$('div.progress-bar').first();
+            expect(progBar.getAttribute('aria-valuenow')).toBe('100');
+
+            $('.btn[ng-click="$dismiss()"]').click();
+            expect($('div.modal h3').isPresent()).toBe(false);
+
             var expected = paths.map(path.basename);
             expected.push('x.txt');
             expected.sort();

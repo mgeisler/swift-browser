@@ -139,26 +139,39 @@ angular.module('swiftBrowser.controllers',
                     // about the update. Otherwise the update won't be
                     // noticed until the next digest cycle.
                     scope.$apply(function () {
-                        scope.files.push.apply(scope.files, elm.files);
+                        for (var i = 0; i < elm.files.length; i++) {
+                            var file = elm.files[i];
+                            file.uploadPct = 0;
+                            scope.files.push(file);
+                        }
                     });
                 };
 
                 var opt = {templateUrl: 'partials/upload-modal.html',
                            scope: scope};
-                var inst = $modal.open(opt);
-                inst.result.then(function () {
+                $modal.open(opt);
+
+                scope.uploadFiles = function() {
                     scope.files.forEach(function (file) {
                         var name = path + file.name;
                         var item = {name: name,
                                     title: file.name,
                                     bytes: file.size};
+                        file.uploadPct = 0;
                         var upload = $swift.uploadObject(container, name,
                                                          file);
+                        upload.progress(function (evt) {
+                            if (evt.lengthComputable) {
+                                var frac = evt.loaded / evt.total;
+                                file.uploadPct = parseInt(100.0 * frac);
+                            }
+                        });
                         upload.success(function() {
                             $scope.items.push(item);
+                            file.uploadPct = 100;
                         });
                     });
-                });
+                };
             };
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
