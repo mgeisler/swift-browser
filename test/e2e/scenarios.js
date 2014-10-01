@@ -30,6 +30,14 @@ function mapIsSelected(locator) {
     });
 }
 
+function uploadFile(path) {
+    browser.executeScript(function () {
+        $('#file-1').removeClass('hidden');
+    }).then(function () {
+        $('#file-1').sendKeys(path);
+    });
+}
+
 describe('Container listing', function () {
 
     beforeEach(SwiftMock.loadAngularMocks);
@@ -354,14 +362,6 @@ describe('Object listing', function () {
         ]);
         browser.get('index.html#/foo/nested/');
 
-        function uploadFile(path) {
-            browser.executeScript(function () {
-                $('#file-1').removeClass('hidden');
-            }).then(function () {
-                $('#file-1').sendKeys(path);
-            });
-        }
-
         var uploadBtn = $('.btn[ng-click="upload()"]');
         var names = by.css('td:nth-child(2)');
         expect(mapGetText(names)).toEqual(['x.txt']);
@@ -395,6 +395,35 @@ describe('Object listing', function () {
             expected.push('x.txt');
             expected.sort();
             expect(mapGetText(names)).toEqual(expected);
+        });
+    });
+
+    it('should allow unscheduling files for upload', function () {
+        SwiftMock.setContainers([
+            {name: "foo", count: 0, bytes: 0}
+        ]);
+        SwiftMock.setObjects('foo', []);
+        browser.get('index.html#/foo/');
+
+        var names = by.css('td:nth-child(2)');
+
+        $('.btn[ng-click="upload()"]').click();
+
+        Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
+            var paths = [res1[0], res2[0]];
+            var rows = by.repeater('file in files');
+            var uploads = rows.column('{{ file.name }}');
+            var base = path.basename(paths[1]);
+            paths.forEach(uploadFile);
+
+            // Remove the first file, expect that the second is still
+            // there and that it's the only one.
+            $$('a[ng-click="remove($index)"]').first().click();
+            expect(mapGetText(uploads)).toEqual([base]);
+
+            $('.btn[ng-click="uploadFiles()"]').click();
+            $('.btn[ng-click="$dismiss()"]').click();
+            expect(mapGetText(names)).toEqual([base]);
         });
     });
 

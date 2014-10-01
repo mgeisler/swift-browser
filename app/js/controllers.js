@@ -146,6 +146,9 @@ angular.module('swiftBrowser.controllers',
                         }
                     });
                 };
+                scope.remove = function(idx) {
+                    scope.files.splice(idx, 1);
+                };
 
                 var opt = {templateUrl: 'partials/upload-modal.html',
                            scope: scope};

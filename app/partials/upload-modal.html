@@ -9,6 +9,7 @@
       <th></th>
       <th class="type">Type</th>
       <th class="size">Size</th>
+      <th class="remove"></th>
     </tr>
     <tr ng-repeat="file in files">
       <td>{{ file.name }}</td>
@@ -24,9 +25,14 @@
       </td>
       <td>{{ file.type }}</td>
       <td class="text-right" sb-format-bytes count="file.size" />
+      <td>
+        <a class="text-danger" href ng-click="remove($index)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </a>
+      </td>
     </tr>
     <tr ng-hide="files.length > 0">
-      <td colspan="4">
+      <td colspan="5">
         <i>No files selected…</i>
       </td>
     </tr>
