@@ -153,6 +153,9 @@ angular.module('swiftBrowser.controllers',
 
                 scope.uploadFiles = function() {
                     scope.files.forEach(function (file) {
+                        if (file.uploadPct == 100) {
+                            return;
+                        }
                         var name = path + file.name;
                         var item = {name: name,
                                     title: file.name,
