@@ -36,4 +36,28 @@ describe('filter', function() {
         expect(notUndefinedFilter([10, null])).toEqual([10, null]);
     }));
   });
+
+  describe('selected', function() {
+    it('should return selected items', inject(function(selectedFilter) {
+        var items = [
+            {name: 'a', selected: false},
+            {name: 'b', selected: true},
+        ];
+        expect(selectedFilter(items)).toEqual([{name: 'b', selected: true}]);
+    }));
+
+    it('should reject undefined items', inject(function(selectedFilter) {
+        expect(selectedFilter([undefined])).toEqual([]);
+    }));
+
+    it('should handle missing .selected', inject(function(selectedFilter) {
+        expect(selectedFilter([{name: 'a'}])).toEqual([]);
+    }));
+  });
+
+  describe('length', function() {
+    it('should return array length', inject(function(lengthFilter) {
+        expect(lengthFilter([1, 2, 3])).toEqual(3);
+    }));
+  });
 });
