@@ -84,7 +84,8 @@ describe('ContainerCtrl', function(){
              'content_type': "text/plain"},
             {name: "foo/bar/",
              title: "bar/",
-             bytes: "\u2014"},
+             bytes: "\u2014",
+             subdir: true},
         ];
 
         var url = '/v1/AUTH_abc/cont?prefix=foo%2F&delimiter=%2F&format=json';

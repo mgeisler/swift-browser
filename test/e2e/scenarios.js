@@ -271,19 +271,46 @@ describe('Object listing', function () {
              'last_modified': "2014-08-16T13:33:21.848400",
              bytes: 10,
              name: "y.txt",
+             'content_type': "text/plain"},
+            {hash: "009520053b00386d1173f3988c55d192",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "z.txt",
              'content_type': "text/plain"}
         ]);
         SwiftMock.commit();
         browser.get('index.html#/foo/');
 
-        var checkboxes = $$('td:nth-child(1) input');
+        var names = by.css('td:nth-child(2)');
+        var checkboxes = by.css('td:nth-child(1) input');
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
-        checkboxes.get(1).click();
-        expect(checkboxes.count()).toEqual(2);
+        element.all(checkboxes).get(0).click();
+        element.all(checkboxes).get(2).click();
 
         deleteBtn.click();
-        expect(checkboxes.count()).toEqual(1);
+
+        var modalNames = by.css('div.modal td:nth-child(2)');
+        var modalCheckboxes = by.css('div.modal td:nth-child(1) input');
+        var modalTitle = $('div.modal h3');
+        var closeBtn = $('div.modal .btn[ng-click="$close()"]');
+
+        expect(modalTitle.getText()).toMatch('Deleting 2 objects');
+        expect(mapGetText(modalNames)).toEqual(['x.txt', 'z.txt']);
+        expect(mapIsSelected(modalCheckboxes)).toEqual([true, true]);
+
+        $('div.modal th:nth-child(1) input').click();
+        expect(mapIsSelected(modalCheckboxes)).toEqual([false, false]);
+        expect(closeBtn.isEnabled()).toBe(false);
+
+        element.all(modalCheckboxes).last().click();
+        expect(modalTitle.getText()).toMatch('Deleting 1 objects');
+
+        closeBtn.click();
+        expect(modalTitle.isPresent()).toBe(false);
+
+        expect(mapIsSelected(checkboxes)).toEqual([true, false]);
+        expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
     });
 
     it('should allow upload', function () {

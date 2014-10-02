@@ -26,4 +26,17 @@ angular.module('swiftBrowser.filters', []).
               return item !== undefined;
           });
       };
+  }).
+  filter('selected', function() {
+      return function(items) {
+          return items.filter(function(item) {
+              // item can be undefined if it is deleted
+              return item && item.selected;
+          });
+      };
+  }).
+  filter('length', function() {
+      return function(items) {
+          return items.length;
+      };
   });
