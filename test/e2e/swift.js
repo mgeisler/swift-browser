@@ -127,3 +127,35 @@ describe('deleteObject', function () {
         expect(data).toEqual(404);
     });
 });
+
+describe('deleteDirectory', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+
+    it('should return an array with deletion results', function () {
+        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
+                        'last_modified': "2014-08-16T13:33:21.848400",
+                        bytes: 20,
+                        name: "bar/a.txt",
+                        'content_type': "text/plain"},
+                       {hash: "401b30e3b8b5d629635a5c613cdb7919",
+                        'last_modified': "2014-08-16T13:33:21.848400",
+                        bytes: 20,
+                        name: "bar/b.txt",
+                        'content_type': "text/plain"}];
+        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
+        SwiftMock.setObjects('foo', objects);
+        SwiftMock.commit();
+        browser.get('index.html#/');
+        var data = browser.driver.executeAsyncScript(function (callback) {
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.deleteDirectory('foo', 'bar/');
+            req.then(function (results) {
+                var statuses = results.map(function (result) {
+                    return result.status;
+                });
+                callback(statuses);
+            });
+        });
+        expect(data).toEqual([204, 204]);
+    });
+});

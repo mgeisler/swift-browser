@@ -1,7 +1,8 @@
 'use strict';
 
-function SwiftClient($http) {
+function SwiftClient($http, $q) {
     this._$http = $http;
+    this._$q = $q;
     this._swiftUrl = this.defaultSwiftUrl();
     this._headers = {};
 }
@@ -45,10 +46,22 @@ SwiftClient.prototype.deleteObject = function (container, object) {
     return this._$http.delete(url, {headers: this._headers});
 };
 
+SwiftClient.prototype.deleteDirectory = function (container, subdir) {
+    var $q = this._$q;
+    var deleteObject = this.deleteObject.bind(this, container);
+    var result = this.listObjects(container, {prefix: subdir});
+    return result.then(function (result) {
+        var deletions = result.data.map(function (object) {
+            return deleteObject(object.name);
+        });
+        return $q.all(deletions);
+    });
+};
+
 SwiftClient.prototype.uploadObject = function (container, object, data) {
     var url = this._swiftUrl + '/' + container + '/' + object;
     return this._$http.put(url, data, {headers: this._headers});
 };
 
 angular.module('swiftBrowser.swift', [])
-    .service('$swift', ['$http', SwiftClient]);
+    .service('$swift', ['$http', '$q', SwiftClient]);
