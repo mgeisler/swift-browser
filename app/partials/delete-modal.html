@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h3 class="modal-title">Deleting {{ items | selected | length }} objects</h3>
+</div>
+
+<div class="modal-body">
+  <p>Are you use you want to delete these objects?</p>
+
+  <table class="table table-condensed">
+    <tr>
+      <th class="toggle">
+        <input type="checkbox" ng-checked="allSelected()"
+               ng-click="toggleAll()" />
+      </th>
+      <th ng-click="updateOrderBy('name')">
+        Name <span ng-class="sortCls.name"></span>
+      </th>
+      <th ng-click="updateOrderBy('bytes')" class="size">
+        Size <span ng-class="sortCls.bytes"></span>
+      </th>
+    </tr>
+    <tr ng-repeat="item in items | orderBy:orderProp">
+      <td><input type="checkbox" ng-model="item.selected" /></td>
+      <td>{{ item.title }}</td>
+      <td class="text-right" sb-format-bytes count="item.bytes" />
+    </tr>
+  </table>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="$close()"
+          ng-disabled="nothingSelected()">
+    Delete {{ items | selected | length }} objects
+  </button>
+  <button class="btn btn-primary" ng-click="$dismiss()">Cancel</button>
+</div>

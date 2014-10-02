@@ -91,13 +91,35 @@ angular.module('swiftBrowser.controllers',
             $scope.downloadLink = mkDownloadLink($scope, 'items');
 
             $scope.delete = function () {
+                var scope = $scope.$new(true);
+                scope.items = [];
                 $scope.items.forEach(function (item, idx) {
                     if (item.selected) {
-                        var req = $swift.deleteObject(container, item.name);
-                        req.success(function (result) {
-                            delete $scope.items[idx];
-                        });
+                        var copy = angular.copy(item);
+                        copy.idx = idx;
+                        scope.items.push(copy);
                     }
+                });
+                scope.updateOrderBy = mkUpdateOrderBy(scope);
+                scope.updateOrderBy('name');
+                scope.allSelected = mkAllSelected(scope, 'items');
+                scope.toggleAll = mkToggleAll(scope, 'items',
+                                              scope.allSelected);
+                scope.nothingSelected = mkNothingSelected(scope, 'items');
+
+                var opt = {templateUrl: 'partials/delete-modal.html',
+                           scope: scope};
+                var inst = $modal.open(opt);
+                inst.result.then(function () {
+                    scope.items.forEach(function (item) {
+                        if (item.selected) {
+                            var req = $swift.deleteObject(container,
+                                                          item.name);
+                            req.success(function (result) {
+                                delete $scope.items[item.idx];
+                            });
+                        }
+                    });
                 });
             };
 
