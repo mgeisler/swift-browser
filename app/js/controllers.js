@@ -113,8 +113,14 @@ angular.module('swiftBrowser.controllers',
                 inst.result.then(function () {
                     scope.items.forEach(function (item) {
                         if (item.selected) {
-                            var req = $swift.deleteObject(container,
+                            var req;
+                            if (item.subdir) {
+                                req = $swift.deleteDirectory(container,
+                                                             item.name);
+                            } else {
+                                req = $swift.deleteObject(container,
                                                           item.name);
+                            }
                             req.success(function (result) {
                                 delete $scope.items[item.idx];
                             });
@@ -169,7 +175,8 @@ angular.module('swiftBrowser.controllers',
                     if (item.subdir) {
                         return {name: item.subdir,
                                 title: parts[parts.length - 2] + '/',
-                                bytes: '\u2014'}; // em dash
+                                bytes: '\u2014', // em dash
+                                subdir: true};
                     } else {
                         item.title = parts[parts.length - 1];
                         return item;
