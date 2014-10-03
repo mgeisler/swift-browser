@@ -200,6 +200,40 @@ describe('Object listing', function () {
         expect(mapGetText(names)).toEqual(['dir/', 'x.txt']);
     });
 
+    it('should understand deep pseudo-directories', function () {
+        SwiftMock.setContainers([
+            {name: "foo", count: 3, bytes: 30}
+        ]);
+        SwiftMock.setObjects('foo', [
+            {hash: "401b30e3b8b5d629635a5c613cdb7919",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 13,
+             name: "x.txt",
+             'content_type': "text/plain"},
+            {hash: "009520053b00386d1173f3988c55d192",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "deeply/y.txt",
+             'content_type': "text/plain"},
+            {hash: "009520053b00386d1173f3988c55d192",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "deeply/nested/z.txt",
+             'content_type': "text/plain"}
+        ]);
+        SwiftMock.commit();
+        browser.get('index.html#/foo/');
+
+        var links = by.css('td:nth-child(2) a');
+        expect(mapGetText(links)).toEqual(['deeply/', 'x.txt']);
+        element.all(links).first().click();
+
+        expect(mapGetText(links)).toEqual(['nested/', 'y.txt']);
+        element.all(links).first().click();
+
+        expect(mapGetText(links)).toEqual(['z.txt']);
+    });
+
     describe('selection', function () {
 
         beforeEach(function () {
@@ -341,4 +375,25 @@ describe('Object listing', function () {
         expect(mapGetText(names)).toEqual(expected);
     });
 
+});
+
+describe('Listing a pseudo-directory', function () {
+    it('should add traling slash', function() {
+        SwiftMock.loadAngularMocks();
+        SwiftMock.setContainers([
+            {name: "foo", count: 2, bytes: 20}
+        ]);
+        SwiftMock.setObjects('foo', [
+            {hash: "401b30e3b8b5d629635a5c613cdb7919",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 20,
+             name: "bar/baz.txt",
+             'content_type': "text/plain"}
+        ]);
+        SwiftMock.commit();
+        browser.get('index.html#/foo/bar');
+
+        var url = browser.getLocationAbsUrl();
+        expect(url).toMatch("index.html#/foo/bar/$");
+    });
 });
