@@ -40,10 +40,11 @@ AuthService.prototype.authenticate = function(credentials) {
     this.state = 'auth-started';
     var that = this;
     var authPromise = this.$swift.auth(credentials);
-    authPromise.then(function () {
+    authPromise.then(function (extraHeaders) {
         while (that.deferreds.length > 0) {
             var deferred = that.deferreds.pop();
             var config = that.configs.pop();
+            angular.extend(config.headers, extraHeaders);
             deferred.resolve(that.$http(config));
         }
         that.state = 'auth-done';

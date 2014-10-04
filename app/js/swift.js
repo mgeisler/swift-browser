@@ -20,11 +20,12 @@ SwiftClient.prototype.auth = function (swiftAuth) {
     };
     var req = this._$http({method: 'GET',
                            url: swiftAuth.authURL, headers: headers});
-    req.success(function (data, status, headers, config) {
+    return req.then(function (result) {
+        var headers = result.headers;
         self._headers['X-Auth-Token'] = headers('X-Auth-Token');
         self._swiftUrl = headers('X-Storage-Url');
+        return self._headers;
     });
-    return req;
 };
 
 SwiftClient.prototype.listContainers = function () {
