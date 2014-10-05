@@ -4,6 +4,13 @@
 <div class="modal-body">
   <form class="form-horizontal" role="form">
     <div class="form-group">
+      <label class="col-sm-1 control-label" for="authUrl">Url</label>
+      <div class="col-sm-11">
+        <input class="form-control" type="text"
+               name="url" id="authUrl" ng-model="credentials.authUrl" />
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-sm-1 control-label" for="authUser">
         User
       </label>
