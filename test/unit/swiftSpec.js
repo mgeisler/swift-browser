@@ -30,7 +30,7 @@ describe('Swift', function() {
 
             this.$httpBackend.expectGET('/auth/url', check)
                 .respond(200);
-            this.$swift.auth(credentials);
+            this.$swift.auth('liteauth', credentials);
         });
 
         it('should set X-Auth-Token', function() {
@@ -39,7 +39,7 @@ describe('Swift', function() {
 
             this.$httpBackend.expectGET('/auth/url')
                 .respond(200, null, headers);
-            this.$swift.auth(credentials);
+            this.$swift.auth('liteauth', credentials);
             this.$httpBackend.flush();
 
             expect(this.$swift._headers['X-Auth-Token']).toEqual('a token');
@@ -57,7 +57,7 @@ describe('Swift', function() {
 
         this.$httpBackend.expectGET('/auth/url')
             .respond(200, null, headers);
-        this.$swift.auth(credentials);
+        this.$swift.auth('liteauth', credentials);
         this.$httpBackend.flush();
 
         this.$httpBackend.expectGET('http://swift?format=json', check)

@@ -36,10 +36,10 @@ AuthService.prototype.requestAuth = function (config) {
  * Changes state to 'auth-started' immediately and to 'auth-done' when
  * successfully authenticated.
  */
-AuthService.prototype.authenticate = function(credentials) {
+AuthService.prototype.authenticate = function(type, credentials) {
     this.state = 'auth-started';
     var that = this;
-    var authPromise = this.$swift.auth(credentials);
+    var authPromise = this.$swift.auth(type, credentials);
     authPromise.then(function (extraHeaders) {
         while (that.deferreds.length > 0) {
             var deferred = that.deferreds.pop();

@@ -12,7 +12,15 @@ SwiftClient.prototype.defaultSwiftUrl = function () {
     return path.split('/').slice(0, 3).join('/');
 };
 
-SwiftClient.prototype.auth = function (swiftAuth) {
+SwiftClient.prototype.auth = function (type, credentials) {
+    switch (type) {
+    case 'liteauth':
+    default:
+        return this.liteauth(credentials);
+    }
+};
+
+SwiftClient.prototype.liteauth = function (swiftAuth) {
     var self = this;
     var headers = {
         'X-Auth-User': swiftAuth.authUser,
