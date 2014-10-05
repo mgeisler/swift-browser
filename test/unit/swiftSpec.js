@@ -10,6 +10,7 @@ describe('Swift LiteAuth authentication', function() {
 
     beforeEach(module('swiftBrowser.swift'));
     beforeEach(inject(function ($httpBackend, $swift) {
+        $httpBackend.whenGET('config.json').respond(404);
         this.$httpBackend = $httpBackend;
         this.$swift = $swift;
     }));

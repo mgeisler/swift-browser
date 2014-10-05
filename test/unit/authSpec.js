@@ -12,6 +12,7 @@ describe('Authentication state', function() {
     beforeEach(module('swiftBrowser.auth'));
     beforeEach(inject(function (_$httpBackend_, _$auth_) {
         $httpBackend = _$httpBackend_;
+        $httpBackend.expectGET('config.json').respond(404);
         $auth = _$auth_;
     }));
 
@@ -42,6 +43,7 @@ describe('Request headers', function() {
     beforeEach(module('swiftBrowser.auth'));
     beforeEach(inject(function (_$httpBackend_, _$auth_, _$q_) {
         $httpBackend = _$httpBackend_;
+        $httpBackend.expectGET('config.json').respond(404);
         $auth = _$auth_;
         $q = _$q_;
     }));
