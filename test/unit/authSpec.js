@@ -1,7 +1,7 @@
 'use strict';
 
 var credentials = {
-    authURL: '/auth/url',
+    authUrl: '/auth/url',
     authUser: 'user',
     authKey: 'key'
 };
