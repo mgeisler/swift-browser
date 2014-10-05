@@ -1,7 +1,7 @@
 'use strict';
 
 
-describe('Swift', function() {
+describe('Swift LiteAuth authentication', function() {
     var credentials = {
         authUrl: '/auth/url',
         authUser: 'user',
@@ -63,6 +63,17 @@ describe('Swift', function() {
         this.$httpBackend.expectGET('http://swift?format=json', check)
             .respond(200, []);
         this.$swift.listContainers();
+    });
+});
+
+describe('Swift request types', function() {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
     it('should send GET request when listing objects', function() {
