@@ -25,6 +25,30 @@ page in your browser. Provided you have read access to Swift, you
 should see a container listing and be able to browse the containers
 and pseudo-directories.
 
+Configuration
+-------------
+
+You can add a configuration file named `config.json` to configure the
+authentication type and URL endpoint. The default is to authenticate
+using LiteAuth:
+
+    {
+        "auth": {
+            "type": "liteauth",
+            "url": "/auth/v1.0"
+        }
+    }
+
+For authentication against Keystone, you should configure Swift
+Browser like this:
+
+    {
+        "auth": {
+            "type": "keystone",
+            "url": "http://localhost:5000/v2.0/tokens"
+        }
+    }
+
 Supported Browsers
 ------------------
 
