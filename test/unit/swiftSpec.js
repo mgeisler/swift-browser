@@ -66,6 +66,57 @@ describe('Swift LiteAuth authentication', function() {
     });
 });
 
+describe('Swift Keystone authentication', function() {
+    var credentials = {
+        authUrl: '/tokens',
+        authTenant: 'tenant',
+        authUsername: 'user',
+        authPassword: 'pass'
+    };
+
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    describe('when logging in', function () {
+        var loginResponse = {
+            access: {
+                token: {id: 'a token'},
+                serviceCatalog: [
+                    {name: 'swift',
+                     endpoints: [{publicURL: 'http://swift'}]}
+                ]
+            }
+        };
+
+        it('should POST tenant, username, and password', function() {
+            var loginRequest = {auth: {tenantName: 'tenant',
+                                       passwordCredentials:
+                                       {username: 'user',
+                                        password: 'pass'}}};
+            this.$httpBackend.expectPOST('/tokens', loginRequest)
+                .respond(200, loginResponse);
+            this.$swift.auth('keystone', credentials);
+        });
+
+        it('should set X-Auth-Token', function() {
+            this.$httpBackend.expectPOST('/tokens')
+                .respond(200, loginResponse);
+            this.$swift.auth('keystone', credentials);
+            this.$httpBackend.flush();
+
+            expect(this.$swift._headers['X-Auth-Token']).toEqual('a token');
+            expect(this.$swift._swiftUrl).toEqual('http://swift');
+        });
+    });
+});
+
+
 describe('Swift request types', function() {
     beforeEach(module('swiftBrowser.swift'));
     beforeEach(inject(function ($httpBackend, $swift) {

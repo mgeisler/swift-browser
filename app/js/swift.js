@@ -14,6 +14,8 @@ SwiftClient.prototype.defaultSwiftUrl = function () {
 
 SwiftClient.prototype.auth = function (type, credentials) {
     switch (type) {
+    case 'keystone':
+        return this.keystone(credentials);
     case 'liteauth':
     default:
         return this.liteauth(credentials);
@@ -31,6 +33,26 @@ SwiftClient.prototype.liteauth = function (swiftAuth) {
         var headers = result.headers;
         self._headers['X-Auth-Token'] = headers('X-Auth-Token');
         self._swiftUrl = headers('X-Storage-Url');
+        return self._headers;
+    });
+};
+
+SwiftClient.prototype.keystone = function (swiftAuth) {
+    var self = this;
+    var payload = {'auth':
+                   {'tenantName': swiftAuth.authTenant,
+                    'passwordCredentials':
+                    {'username': swiftAuth.authUsername,
+                     'password': swiftAuth.authPassword}}};
+    var req = this._$http.post(swiftAuth.authUrl, payload);
+    return req.then(function (result) {
+        self._headers['X-Auth-Token'] = result.data.access.token.id;
+        result.data.access.serviceCatalog.some(function (service) {
+            if (service.name == 'swift') {
+                self._swiftUrl = service.endpoints[0].publicURL;
+                return true;  // break loop
+            }
+        });
         return self._headers;
     });
 };
