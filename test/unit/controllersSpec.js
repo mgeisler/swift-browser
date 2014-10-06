@@ -88,7 +88,7 @@ describe('ContainerCtrl', function(){
              subdir: true},
         ];
 
-        var url = '/v1/AUTH_abc/cont?prefix=foo%2F&delimiter=%2F';
+        var url = '/v1/AUTH_abc/cont?delimiter=%2F&prefix=foo%2F';
         $httpBackend.whenGET(url).respond(200, reply);
 
         expect(this.scope.items).toEqual([]);

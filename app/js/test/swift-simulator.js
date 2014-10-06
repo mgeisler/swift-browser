@@ -32,7 +32,7 @@ function SwiftSimulator($httpBackend) {
     this.reset();
 
     var prefix = escape(accountUrl() + '/');
-    this.listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
+    this.listRegex = new RegExp(prefix + '(.*?)(?:' + escape('?') + '(.*)|$)');
     this.objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
 
     $httpBackend.whenGET(accountUrl())
@@ -58,11 +58,13 @@ SwiftSimulator.prototype.listContainers = function(method, url, data) {
 };
 
 SwiftSimulator.prototype.listObjects = function(method, url, data) {
-    var defaults = {prefix: '', delimiter: null};
+    var params = {prefix: '', delimiter: null};
     var match = url.match(this.listRegex);
     var container = match[1];
     var qs = match[2];
-    var params = angular.extend(defaults, parseQueryString(qs));
+    if (qs) {
+        angular.extend(params, parseQueryString(qs));
+    }
     var prefix = params.prefix;
     var delimiter = params.delimiter;
     var results = [];

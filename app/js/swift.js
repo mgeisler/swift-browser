@@ -63,11 +63,8 @@ SwiftClient.prototype.listContainers = function () {
 };
 
 SwiftClient.prototype.listObjects = function (container, params) {
-    if (!params) {
-        params = {};
-    }
-    var url = this._swiftUrl + '/' + container + '?' + $.param(params);
-    return this._$http.get(url, {headers: this._headers});
+    var url = this._swiftUrl + '/' + container;
+    return this._$http.get(url, {params: params, headers: this._headers});
 };
 
 SwiftClient.prototype.deleteObject = function (container, object) {

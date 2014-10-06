@@ -129,7 +129,7 @@ describe('Swift request types', function() {
     });
 
     it('should send GET request when listing objects', function() {
-        this.$httpBackend.expectGET('/v1/AUTH_abc/cont?')
+        this.$httpBackend.expectGET('/v1/AUTH_abc/cont')
             .respond(200, []);
         this.$swift.listObjects('cont');
         this.$httpBackend.flush();
