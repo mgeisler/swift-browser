@@ -15,7 +15,7 @@ describe('RootCtrl', function(){
             {"count": 10, "bytes": 1234, "name": "foo"},
             {"count": 20, "bytes": 2345, "name": "bar"},
         ];
-        $httpBackend.whenGET('/v1/AUTH_abc?format=json')
+        $httpBackend.whenGET('/v1/AUTH_abc')
             .respond(200, containers);
 
         expect(this.scope.containers).toEqual([]);
@@ -88,7 +88,7 @@ describe('ContainerCtrl', function(){
              subdir: true},
         ];
 
-        var url = '/v1/AUTH_abc/cont?prefix=foo%2F&delimiter=%2F&format=json';
+        var url = '/v1/AUTH_abc/cont?prefix=foo%2F&delimiter=%2F';
         $httpBackend.whenGET(url).respond(200, reply);
 
         expect(this.scope.items).toEqual([]);

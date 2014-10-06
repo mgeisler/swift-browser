@@ -35,7 +35,7 @@ function SwiftSimulator($httpBackend) {
     this.listRegex = new RegExp(prefix + '(.*?)' + escape('?') + '(.*)');
     this.objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
 
-    $httpBackend.whenGET(accountUrl() + '?format=json')
+    $httpBackend.whenGET(accountUrl())
         .respond(this.listContainers.bind(this));
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));

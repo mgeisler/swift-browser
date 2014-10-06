@@ -61,7 +61,7 @@ describe('Swift LiteAuth authentication', function() {
         this.$swift.auth('liteauth', credentials);
         this.$httpBackend.flush();
 
-        this.$httpBackend.expectGET('http://swift?format=json', check)
+        this.$httpBackend.expectGET('http://swift', check)
             .respond(200, []);
         this.$swift.listContainers();
     });
@@ -129,7 +129,7 @@ describe('Swift request types', function() {
     });
 
     it('should send GET request when listing objects', function() {
-        this.$httpBackend.expectGET('/v1/AUTH_abc/cont?format=json')
+        this.$httpBackend.expectGET('/v1/AUTH_abc/cont?')
             .respond(200, []);
         this.$swift.listObjects('cont');
         this.$httpBackend.flush();

@@ -59,15 +59,13 @@ SwiftClient.prototype.keystone = function (swiftAuth) {
 };
 
 SwiftClient.prototype.listContainers = function () {
-    return this._$http.get(this._swiftUrl + '?format=json',
-                           {headers: this._headers});
+    return this._$http.get(this._swiftUrl, {headers: this._headers});
 };
 
 SwiftClient.prototype.listObjects = function (container, params) {
     if (!params) {
         params = {};
     }
-    params.format = 'json';
     var url = this._swiftUrl + '/' + container + '?' + $.param(params);
     return this._$http.get(url, {headers: this._headers});
 };
