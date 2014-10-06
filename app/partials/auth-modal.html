@@ -2,23 +2,59 @@
   <h3 class="modal-title">Authorization Needed</h3>
 </div>
 <div class="modal-body">
-  <form class="form-horizontal" role="form">
+  <form class="form-horizontal" role="form" ng-switch="authType">
     <div class="form-group">
-      <label class="col-sm-1 control-label" for="authUser">
+      <label class="col-sm-2 control-label" for="authUrl">Url</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text"
+               name="url" id="authUrl" ng-model="credentials.authUrl" />
+      </div>
+    </div>
+    <div class="form-group" ng-switch-when="liteauth">
+      <label class="col-sm-2 control-label" for="authUser">
         User
       </label>
-      <div class="col-sm-11">
+      <div class="col-sm-10">
         <input class="form-control" type="text"
                name="user" id="authUser" ng-model="credentials.authUser" />
       </div>
     </div>
-    <div class="form-group">
-      <label class="col-sm-1 control-label" for="authKey">Key</label>
-      <div class="col-sm-11">
+    <div class="form-group" ng-switch-when="liteauth">
+      <label class="col-sm-2 control-label" for="authKey">Key</label>
+      <div class="col-sm-10">
         <input class="form-control" type="text"
                name="key" id="authKey" ng-model="credentials.authKey" />
       </div>
     </div>
+
+    <div class="form-group" ng-switch-when="keystone">
+      <label class="col-sm-2 control-label"
+             for="authTenant">Tenant</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text"
+               name="tenant" id="authTenant"
+               ng-model="credentials.authTenant" />
+      </div>
+    </div>
+    <div class="form-group"  ng-switch-when="keystone">
+      <label class="col-sm-2 control-label"
+             for="authUsername">Username</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text"
+               name="username" id="authUsername"
+               ng-model="credentials.authUsername" />
+      </div>
+    </div>
+    <div class="form-group" ng-switch-when="keystone">
+      <label class="col-sm-2 control-label"
+             for="authPassword">Password</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text"
+               name="password" id="authPassword"
+               ng-model="credentials.authPassword" />
+      </div>
+    </div>
+
   </form>
 </div>
 

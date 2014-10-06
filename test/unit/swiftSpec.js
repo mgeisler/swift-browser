@@ -1,15 +1,16 @@
 'use strict';
 
 
-describe('Swift', function() {
+describe('Swift LiteAuth authentication', function() {
     var credentials = {
-        authURL: '/auth/url',
+        authUrl: '/auth/url',
         authUser: 'user',
         authKey: 'key'
     };
 
     beforeEach(module('swiftBrowser.swift'));
     beforeEach(inject(function ($httpBackend, $swift) {
+        $httpBackend.whenGET('config.json').respond(404);
         this.$httpBackend = $httpBackend;
         this.$swift = $swift;
     }));
@@ -30,7 +31,7 @@ describe('Swift', function() {
 
             this.$httpBackend.expectGET('/auth/url', check)
                 .respond(200);
-            this.$swift.auth(credentials);
+            this.$swift.auth('liteauth', credentials);
         });
 
         it('should set X-Auth-Token', function() {
@@ -39,7 +40,7 @@ describe('Swift', function() {
 
             this.$httpBackend.expectGET('/auth/url')
                 .respond(200, null, headers);
-            this.$swift.auth(credentials);
+            this.$swift.auth('liteauth', credentials);
             this.$httpBackend.flush();
 
             expect(this.$swift._headers['X-Auth-Token']).toEqual('a token');
@@ -57,12 +58,74 @@ describe('Swift', function() {
 
         this.$httpBackend.expectGET('/auth/url')
             .respond(200, null, headers);
-        this.$swift.auth(credentials);
+        this.$swift.auth('liteauth', credentials);
         this.$httpBackend.flush();
 
         this.$httpBackend.expectGET('http://swift?format=json', check)
             .respond(200, []);
         this.$swift.listContainers();
+    });
+});
+
+describe('Swift Keystone authentication', function() {
+    var credentials = {
+        authUrl: '/tokens',
+        authTenant: 'tenant',
+        authUsername: 'user',
+        authPassword: 'pass'
+    };
+
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    describe('when logging in', function () {
+        var loginResponse = {
+            access: {
+                token: {id: 'a token'},
+                serviceCatalog: [
+                    {name: 'swift',
+                     endpoints: [{publicURL: 'http://swift'}]}
+                ]
+            }
+        };
+
+        it('should POST tenant, username, and password', function() {
+            var loginRequest = {auth: {tenantName: 'tenant',
+                                       passwordCredentials:
+                                       {username: 'user',
+                                        password: 'pass'}}};
+            this.$httpBackend.expectPOST('/tokens', loginRequest)
+                .respond(200, loginResponse);
+            this.$swift.auth('keystone', credentials);
+        });
+
+        it('should set X-Auth-Token', function() {
+            this.$httpBackend.expectPOST('/tokens')
+                .respond(200, loginResponse);
+            this.$swift.auth('keystone', credentials);
+            this.$httpBackend.flush();
+
+            expect(this.$swift._headers['X-Auth-Token']).toEqual('a token');
+            expect(this.$swift._swiftUrl).toEqual('http://swift');
+        });
+    });
+});
+
+
+describe('Swift request types', function() {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
     it('should send GET request when listing objects', function() {

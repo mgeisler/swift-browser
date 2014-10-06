@@ -5,12 +5,13 @@
  *
  * Initial status is 'auth-done'.
  */
-function AuthService($q, $swift, $http, $modal, $rootScope) {
+function AuthService($q, $swift, $http, $modal, $rootScope, $config) {
     this.$q = $q;
     this.$swift = $swift;
     this.$http = $http;
     this.$modal = $modal;
     this.$rootScope = $rootScope;
+    this.$config = $config;
     this.state = 'auth-done';
     this.deferreds = [];
     this.configs = [];
@@ -36,14 +37,15 @@ AuthService.prototype.requestAuth = function (config) {
  * Changes state to 'auth-started' immediately and to 'auth-done' when
  * successfully authenticated.
  */
-AuthService.prototype.authenticate = function(credentials) {
+AuthService.prototype.authenticate = function(type, credentials) {
     this.state = 'auth-started';
     var that = this;
-    var authPromise = this.$swift.auth(credentials);
-    authPromise.then(function () {
+    var authPromise = this.$swift.auth(type, credentials);
+    authPromise.then(function (extraHeaders) {
         while (that.deferreds.length > 0) {
             var deferred = that.deferreds.pop();
             var config = that.configs.pop();
+            angular.extend(config.headers, extraHeaders);
             deferred.resolve(that.$http(config));
         }
         that.state = 'auth-done';
@@ -56,16 +58,21 @@ AuthService.prototype.authenticate = function(credentials) {
  * attempted.
  */
 AuthService.prototype.openModal = function() {
-    var scope = this.$rootScope.$new();
-    scope.credentials = {authURL: '/auth/v1.0'};
-    var opts = {templateUrl: 'partials/auth-modal.html',
-                scope: scope};
     var that = this;
-    this.$modal.open(opts).result.then(function () {
-        that.authenticate(scope.credentials);
+    this.$config.get(function (conf) {
+        var scope = that.$rootScope.$new();
+        scope.authType = conf.auth.type;
+        scope.credentials = {authUrl: conf.auth.url};
+        var opts = {templateUrl: 'partials/auth-modal.html',
+                    scope: scope};
+        that.$modal.open(opts).result.then(function () {
+            that.authenticate(scope.authType, scope.credentials);
+        });
     });
 };
 
-angular.module('swiftBrowser.auth', ['swiftBrowser.swift', 'ui.bootstrap'])
+angular.module('swiftBrowser.auth', ['swiftBrowser.swift',
+                                     'swiftBrowser.config',
+                                     'ui.bootstrap'])
     .service('$auth', ['$q', '$swift', '$http', '$modal', '$rootScope',
-                       AuthService]);
+                       '$config', AuthService]);
