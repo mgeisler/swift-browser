@@ -4,7 +4,7 @@
   "dependencies": {
     "angular": "1.2.x",
     "angular-bootstrap": "~0.11.0",
-    "angular-route": "1.2.x",
+    "angular-ui-router": "~0.2.11",
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
     "jquery": "~2.1.1",

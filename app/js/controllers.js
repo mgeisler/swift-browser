@@ -76,10 +76,10 @@ angular.module('swiftBrowser.controllers',
         });
     }])
     .controller('ContainerCtrl', [
-        '$scope', '$swift', '$routeParams', '$location', '$modal',
-        function($scope, $swift, $routeParams, $location, $modal) {
-            var container = $routeParams.container;
-            var path = $routeParams.path || '';
+        '$scope', '$swift', '$stateParams', '$location', '$modal',
+        function($scope, $swift, $stateParams, $location, $modal) {
+            var container = $stateParams.container;
+            var path = $stateParams.path || '';
             $scope.container = container;
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');

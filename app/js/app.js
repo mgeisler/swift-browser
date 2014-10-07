@@ -3,27 +3,31 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('swiftBrowser', [
-  'ngRoute',
+  'ui.router',
   'swiftBrowser.filters',
   'swiftBrowser.services',
   'swiftBrowser.directives',
   'swiftBrowser.controllers',
   'swiftBrowser.auth'
 ]).
-config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/', {
+config(['$stateProvider', '$urlRouterProvider',
+    function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root', {
+        url: '/',
         templateUrl: 'partials/root.html',
         controller: 'RootCtrl'
     });
-    $routeProvider.when('/:container/', {
+    $stateProvider.state('container', {
+        url: '/:container/',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });
-    $routeProvider.when('/:container/:path*', {
+    $stateProvider.state('pseudo-dir', {
+        url: '/:container/{path:.*}',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });
-    $routeProvider.otherwise({redirectTo: '/'});
+    $urlRouterProvider.otherwise('/');
 }])
 .factory('sessionRecoverer', ['$injector', function($injector) {
     return {

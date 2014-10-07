@@ -37,7 +37,7 @@ describe('ContainerCtrl', function(){
         inject(function($controller) {
             this.scope = {};
             $controller('ContainerCtrl',
-                        {$scope: this.scope, $routeParams: params});
+                        {$scope: this.scope, $stateParams: params});
         });
     }
 
