@@ -2,6 +2,10 @@
 
 var SwiftMock = require('../swift-mock.js');
 var path = require('path');
+var tmp = require('tmp');
+var Q = require('q');
+
+var mktemp = Q.nfbind(tmp.file);
 
 describe('my app', function() {
 
@@ -23,6 +27,14 @@ function mapGetText(locator) {
 function mapIsSelected(locator) {
     return element.all(locator).map(function (el) {
         return el.isSelected();
+    });
+}
+
+function uploadFile(path) {
+    browser.executeScript(function () {
+        $('#file-1').removeClass('hidden');
+    }).then(function () {
+        $('#file-1').sendKeys(path);
     });
 }
 
@@ -337,7 +349,7 @@ describe('Object listing', function () {
         expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
     });
 
-    it('should allow upload', function () {
+    it('should allow uploading files', function () {
         SwiftMock.setContainers([
             {name: "foo", count: 1, bytes: 20}
         ]);
@@ -357,11 +369,62 @@ describe('Object listing', function () {
         uploadBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
 
-        $('#file-1').sendKeys(__filename);
-        $('.btn[ng-click="$close()"]').click();
+        // Test with two paths where the first sort after the second
+        var p1 = mktemp({prefix: 'b'});
+        var p2 = mktemp({prefix: 'a'});
+        Q.all([p1, p2]).spread(function (res1, res2) {
+            var paths = [res1[0], res2[0]];
+            paths.forEach(uploadFile);
 
-        var expected = ['x.txt', path.basename(__filename)].sort();
-        expect(mapGetText(names)).toEqual(expected);
+            var uploadBtn = $('.btn[ng-click="uploadFiles()"]');
+            var rows = by.repeater('file in files');
+            var uploads = rows.column('{{ file.name }}');
+            var newNames = paths.map(path.basename);
+            expect(mapGetText(uploads)).toEqual(newNames);
+
+            expect(uploadBtn.isEnabled()).toBe(true);
+            uploadBtn.click();
+            var progBar = $$('div.progress-bar').first();
+            expect(progBar.getAttribute('aria-valuenow')).toBe('100');
+            expect(uploadBtn.isEnabled()).toBe(false);
+
+            $('.btn[ng-click="$dismiss()"]').click();
+            expect($('div.modal h3').isPresent()).toBe(false);
+
+            var expected = paths.map(path.basename);
+            expected.push('x.txt');
+            expected.sort();
+            expect(mapGetText(names)).toEqual(expected);
+        });
+    });
+
+    it('should allow unscheduling files for upload', function () {
+        SwiftMock.setContainers([
+            {name: "foo", count: 0, bytes: 0}
+        ]);
+        SwiftMock.setObjects('foo', []);
+        browser.get('index.html#/foo/');
+
+        var names = by.css('td:nth-child(2)');
+
+        $('.btn[ng-click="upload()"]').click();
+
+        Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
+            var paths = [res1[0], res2[0]];
+            var rows = by.repeater('file in files');
+            var uploads = rows.column('{{ file.name }}');
+            var base = path.basename(paths[1]);
+            paths.forEach(uploadFile);
+
+            // Remove the first file, expect that the second is still
+            // there and that it's the only one.
+            $$('a[ng-click="remove($index)"]').first().click();
+            expect(mapGetText(uploads)).toEqual([base]);
+
+            $('.btn[ng-click="uploadFiles()"]').click();
+            $('.btn[ng-click="$dismiss()"]').click();
+            expect(mapGetText(names)).toEqual([base]);
+        });
     });
 
 });

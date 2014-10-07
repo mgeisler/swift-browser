@@ -131,21 +131,59 @@ angular.module('swiftBrowser.controllers',
 
             $scope.upload = function () {
                 var scope = $scope.$new(true);
+                scope.files = [];
                 scope.path = container + '/' + path;
+                scope.fileSelected = function(elm) {
+                    // Since fileSelected is called from a non-Angular
+                    // event handler, we need to inform the scope
+                    // about the update. Otherwise the update won't be
+                    // noticed until the next digest cycle.
+                    scope.$apply(function () {
+                        for (var i = 0; i < elm.files.length; i++) {
+                            var file = elm.files[i];
+                            file.uploadPct = null;
+                            scope.files.push(file);
+                        }
+                    });
+                };
+                scope.remove = function(idx) {
+                    scope.files.splice(idx, 1);
+                };
+
                 var opt = {templateUrl: 'partials/upload-modal.html',
                            scope: scope};
-                var inst = $modal.open(opt);
-                inst.result.then(function () {
-                    var file = $('#file-1').get(0).files[0];
-                    var name = path + file.name;
-                    var item = {name: name,
-                                title: file.name,
-                                bytes: file.size};
-                    var upload = $swift.uploadObject(container, name, file);
-                    upload.success(function () {
-                        $scope.items.push(item);
+                $modal.open(opt);
+
+                scope.uploadFiles = function() {
+                    scope.files.forEach(function (file) {
+                        if (file.uploadPct == 100) {
+                            return;
+                        }
+                        var name = path + file.name;
+                        var item = {name: name,
+                                    title: file.name,
+                                    bytes: file.size};
+                        file.uploadPct = 0;
+                        var upload = $swift.uploadObject(container, name,
+                                                         file);
+                        upload.progress(function (evt) {
+                            if (evt.lengthComputable) {
+                                var frac = evt.loaded / evt.total;
+                                file.uploadPct = parseInt(100.0 * frac);
+                            }
+                        });
+                        upload.success(function() {
+                            $scope.items.push(item);
+                            file.uploadPct = 100;
+                        });
                     });
-                });
+                };
+
+                scope.disableUpload = function() {
+                    return scope.files.every(function (file) {
+                        return file.uploadPct != null;
+                    });
+                };
             };
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
