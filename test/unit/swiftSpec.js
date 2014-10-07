@@ -135,6 +135,13 @@ describe('Swift request types', function() {
         this.$httpBackend.flush();
     });
 
+    it('should send HEAD request when getting metadata', function() {
+        this.$httpBackend.expect('HEAD', '/v1/AUTH_abc/cont/foo/bar')
+            .respond(202, null);
+        this.$swift.headObject('cont', 'foo/bar');
+        this.$httpBackend.flush();
+    });
+
     it('should send DELETE request when deleting an objct', function() {
         this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo/bar')
             .respond(204, null);
