@@ -7,10 +7,8 @@ globals:
   afterEach: false
   beforeEach: false
   describe: false
-  ddescribe: false
   expect: false
   it: false
-  iit: false
   jasmine: false
   pending: false
   spyOn: false
