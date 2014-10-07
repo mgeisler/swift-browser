@@ -198,16 +198,7 @@ angular.module('swiftBrowser.controllers',
 
             var params = {prefix: path, delimiter: '/'};
             $swift.listObjects(container, params).then(function (result) {
-                var items = result.data;
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].subdir == path + '/') {
-                        // Add trailing slash for pseudo-directory
-                        $location.path($location.path() + '/');
-                        return;
-                    }
-                }
-
-                $scope.items = $.map(items, function (item) {
+                $scope.items = $.map(result.data, function (item) {
                     var parts = (item.subdir || item.name).split('/');
 
                     if (item.subdir) {
@@ -222,4 +213,19 @@ angular.module('swiftBrowser.controllers',
                 });
             });
         }
-    ]);
+    ])
+    .controller('ObjectCtrl', ['$stateParams', '$swift', '$location',
+        function ($stateParams, $swift, $location) {
+            var container = $stateParams.container;
+            var name = $stateParams.name;
+            var params = {prefix: name, delimiter: '/'};
+            $swift.listObjects(container, params).then(function (result) {
+                result.data.some(function (item) {
+                    if (item.subdir == name + '/') {
+                        // Add trailing slash for pseudo-directory
+                        $location.path($location.path() + '/');
+                        return true;
+                    }
+                });
+            });
+        }]);

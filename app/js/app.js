@@ -22,10 +22,14 @@ config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });
-    $stateProvider.state('pseudo-dir', {
-        url: '/{container}/{path:.*}',
+    $stateProvider.state('directory', {
+        url: '/{container}/{path:.*/}',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
+    });
+    $stateProvider.state('object', {
+        url: '/{container}/{name:.*}',
+        controller: 'ObjectCtrl'
     });
     $urlRouterProvider.otherwise('/');
 }])
