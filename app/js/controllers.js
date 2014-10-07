@@ -214,18 +214,59 @@ angular.module('swiftBrowser.controllers',
             });
         }
     ])
-    .controller('ObjectCtrl', ['$stateParams', '$swift', '$location',
-        function ($stateParams, $swift, $location) {
+    .controller('ObjectCtrl', ['$scope', '$stateParams', '$swift', '$location',
+        function ($scope, $stateParams, $swift, $location) {
             var container = $stateParams.container;
             var name = $stateParams.name;
+
+            $scope.breadcrumbs = [{name: '', title: 'Root'}];
+            var parts = name.split('/');
+            parts.unshift(container);
+            for (var i = 0; i < parts.length; i++) {
+                var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
+                             title: parts[i]};
+                $scope.breadcrumbs.push(crumb);
+            }
+
             var params = {prefix: name, delimiter: '/'};
             $swift.listObjects(container, params).then(function (result) {
-                result.data.some(function (item) {
+                var redirect = result.data.some(function (item) {
                     if (item.subdir == name + '/') {
                         // Add trailing slash for pseudo-directory
                         $location.path($location.path() + '/');
                         return true;
                     }
+                });
+                if (redirect) {
+                    return;
+                }
+                $scope.container = container;
+                $scope.name = name;
+                $swift.headObject(container, name).then(function (result) {
+                    var headers = result.headers();
+                    var sysHeaders = [
+                        'last-modified',
+                        'content-length',
+                        'content-type',
+                        'etag',
+                        'content-encoding',
+                        'content-disposition',
+                        'x-delete-at',
+                        'x-object-manifest',
+                        'x-static-large-object'
+                    ];
+                    var systemHeaders = [];
+                    var customHeaders = [];
+                    angular.forEach(headers, function (value, name) {
+                        var header = {name: name, value: value};
+                        if (name.indexOf('x-object-meta-') == 0) {
+                            customHeaders.push(header);
+                        } else if (sysHeaders.indexOf(name) > -1) {
+                            systemHeaders.push(header);
+                        }
+                    });
+                    $scope.systemHeaders = systemHeaders.sort();
+                    $scope.customHeaders = customHeaders.sort();
                 });
             });
         }]);

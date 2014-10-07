@@ -29,6 +29,7 @@ config(['$stateProvider', '$urlRouterProvider',
     });
     $stateProvider.state('object', {
         url: '/{container}/{name:.*}',
+        templateUrl: 'partials/object.html',
         controller: 'ObjectCtrl'
     });
     $urlRouterProvider.otherwise('/');

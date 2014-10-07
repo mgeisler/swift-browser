@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h1>{{ name }}</h1>
+</div>
+
+<ol class="breadcrumb">
+  <li ng-repeat="crumb in breadcrumbs" ng-class="{active: $last}">
+    <a ng-if="!$last" href="#/{{ crumb.name }}">{{ crumb.title }}</a>
+    <span ng-if="$last">{{ crumb.title }}</span>
+  </li>
+</ol>
+
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group">
+    <a class="btn btn-default"
+       ng-href="../{{ container }}/{{ name }}">Open</a>
+    <a class="btn btn-default" download
+       ng-href="../{{ container }}/{{ name }}">Download</a>
+  </div>
+</div>
+
+<h2>System Headers</h2>
+
+<table class="table table-striped">
+  <tr>
+    <th class="header-name">Name</th>
+    <th>Value</th>
+  </tr>
+  <tr ng-repeat="header in systemHeaders">
+    <td>{{ header.name }}</td>
+    <td>{{ header.value }}</td>
+  </tr>
+</table>
+
+</table>
+
+<h2>Custom Metadata</h2>
+
+<table class="table table-striped">
+  <tr>
+    <th class="header-name">Name</th>
+    <th>Value</th>
+  </tr>
+  <tr ng-repeat="header in customHeaders">
+    <td>{{ header.name }}</td>
+    <td>{{ header.value }}</td>
+  </tr>
+</table>
