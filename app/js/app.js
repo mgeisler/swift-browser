@@ -18,12 +18,12 @@ config(['$stateProvider', '$urlRouterProvider',
         controller: 'RootCtrl'
     });
     $stateProvider.state('container', {
-        url: '/:container/',
+        url: '/{container}/',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });
     $stateProvider.state('pseudo-dir', {
-        url: '/:container/{path:.*}',
+        url: '/{container}/{path:.*}',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });
