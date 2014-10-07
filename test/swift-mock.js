@@ -1,23 +1,21 @@
 'use strict';
 
 exports.loadAngularMocks = function () {
+    browser.clearMockModules();
     browser.addMockModule('swiftBrowserE2E', function () {
-        if (!window.e2eAngularMocksLoaded) {
-            var ngMocks = document.createElement('script');
-            ngMocks.src = 'bower_components/angular-mocks/angular-mocks.js';
-            document.body.appendChild(ngMocks);
-            var swiftSim = document.createElement('script');
-            swiftSim.src = 'js/test/swift-simulator.js';
-            document.body.appendChild(swiftSim);
+        var ngMocks = document.createElement('script');
+        ngMocks.src = 'bower_components/angular-mocks/angular-mocks.js';
+        document.body.appendChild(ngMocks);
 
-            window.e2eAngularMocksLoaded = true;
-        }
-        angular.module('swiftBrowserE2E', ['ngMockE2E']);
+        var swiftSim = document.createElement('script');
+        swiftSim.src = 'js/test/swift-simulator.js';
+        document.body.appendChild(swiftSim);
     });
-};
-
-exports.commit = function () {
-    browser.addMockModule('swiftBrowserE2E', 'window.commit()');
+    browser.addMockModule('swiftBrowserE2E', function() {
+        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+            swiftSim.reset();
+        });
+    });
 };
 
 exports.setContainers = function(containers) {
@@ -35,12 +33,16 @@ exports.setContainers = function(containers) {
        is a work-around for this.
     */
     browser.addMockModule('swiftBrowserE2E', function(jsonContainers) {
-        window.setContainers(JSON.parse(jsonContainers));
+        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+            swiftSim.setContainers(JSON.parse(jsonContainers));
+        });
     }, JSON.stringify(containers));
 };
 
 exports.setObjects = function(container, objects) {
     browser.addMockModule('swiftBrowserE2E', function(container, jsonObjects) {
-        window.setObjects(container, JSON.parse(jsonObjects));
+        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+            swiftSim.setObjects(container, JSON.parse(jsonObjects));
+        });
     }, container, JSON.stringify(objects));
 };
