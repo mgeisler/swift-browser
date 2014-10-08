@@ -141,7 +141,7 @@ describe('ObjectCtrl', function () {
     });
 
     it('should set system headers', function() {
-        expect(this.scope.systemHeaders).toEqual([
+        expect(this.scope.headers.sys).toEqual([
             {name: 'content-length', value: '10'},
             {name: 'content-type', value: 'text/plain'},
             {name: 'etag', value: 'b1946ac92492d2347c6235b4d2611184'},
@@ -150,7 +150,7 @@ describe('ObjectCtrl', function () {
     });
 
     it('should set custom headers', function () {
-        expect(this.scope.customHeaders).toEqual([
+        expect(this.scope.headers.meta).toEqual([
             {name : 'x-object-meta-mtime', value: '1412687972.660354'}
         ]);
     });

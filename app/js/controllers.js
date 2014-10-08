@@ -240,10 +240,16 @@ angular.module('swiftBrowser.controllers',
                 if (redirect) {
                     return;
                 }
+
+                var headers = {meta: [], sys: []};
                 $scope.container = container;
                 $scope.name = name;
+                $scope.reset = function () {
+                    $scope.headers = angular.copy(headers);
+                };
+
                 $swift.headObject(container, name).then(function (result) {
-                    var headers = result.headers();
+                    var allHeaders = result.headers();
                     var sysHeaders = [
                         'last-modified',
                         'content-length',
@@ -255,18 +261,17 @@ angular.module('swiftBrowser.controllers',
                         'x-object-manifest',
                         'x-static-large-object'
                     ];
-                    var systemHeaders = [];
-                    var customHeaders = [];
-                    angular.forEach(headers, function (value, name) {
+                    angular.forEach(allHeaders, function (value, name) {
                         var header = {name: name, value: value};
                         if (name.indexOf('x-object-meta-') == 0) {
-                            customHeaders.push(header);
+                            headers.meta.push(header);
                         } else if (sysHeaders.indexOf(name) > -1) {
-                            systemHeaders.push(header);
+                            headers.sys.push(header);
                         }
+                        headers.meta.sort();
+                        headers.sys.sort();
+                        $scope.reset();
                     });
-                    $scope.systemHeaders = systemHeaders.sort();
-                    $scope.customHeaders = customHeaders.sort();
                 });
             });
         }]);

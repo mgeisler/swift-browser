@@ -19,26 +19,24 @@
 </div>
 
 <h2>System Headers</h2>
-
 <table class="table table-striped">
   <tr>
     <th class="header-name">Name</th>
     <th>Value</th>
   </tr>
-  <tr ng-repeat="header in systemHeaders">
+  <tr ng-repeat="header in headers.sys">
     <td>{{ header.name }}</td>
     <td>{{ header.value }}</td>
   </tr>
 </table>
 
 <h2>Custom Metadata</h2>
-
 <table class="table table-striped">
   <tr>
     <th class="header-name">Name</th>
     <th>Value</th>
   </tr>
-  <tr ng-repeat="header in customHeaders">
+  <tr ng-repeat="header in headers.meta">
     <td>{{ header.name }}</td>
     <td>{{ header.value }}</td>
   </tr>
