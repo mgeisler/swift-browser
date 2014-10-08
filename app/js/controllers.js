@@ -121,7 +121,7 @@ angular.module('swiftBrowser.controllers',
                                 req = $swift.deleteObject(container,
                                                           item.name);
                             }
-                            req.success(function (result) {
+                            req.then(function () {
                                 delete $scope.items[item.idx];
                             });
                         }

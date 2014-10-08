@@ -349,6 +349,42 @@ describe('Object listing', function () {
         expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
     });
 
+    it('should allow deleting pseudo-directories', function () {
+        SwiftMock.setContainers([
+            {name: "foo", count: 3, bytes: 40}
+        ]);
+        SwiftMock.setObjects('foo', [
+            {hash: "401b30e3b8b5d629635a5c613cdb7919",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 20,
+             name: "x.txt",
+             'content_type': "text/plain"},
+            {hash: "009520053b00386d1173f3988c55d192",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "bar/y.txt",
+             'content_type': "text/plain"},
+            {hash: "009520053b00386d1173f3988c55d192",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 10,
+             name: "bar/z.txt",
+             'content_type': "text/plain"}
+        ]);
+        browser.get('index.html#/foo/');
+
+        var names = by.css('td:nth-child(2)');
+        var modalNames = by.css('div.modal td:nth-child(2)');
+        var deleteBtn = $('.btn[ng-click="delete()"]');
+        var closeBtn = $('div.modal .btn[ng-click="$close()"]');
+
+        $$('td:nth-child(1) input').first().click();
+        deleteBtn.click();
+        expect(mapGetText(modalNames)).toEqual(['bar/']);
+
+        closeBtn.click();
+        expect(mapGetText(names)).toEqual(['x.txt']);
+    });
+
     it('should allow uploading files', function () {
         SwiftMock.setContainers([
             {name: "foo", count: 1, bytes: 20}
