@@ -23,6 +23,7 @@
   <tr>
     <th class="header-name">Name</th>
     <th>Value</th>
+    <th class="remove"></th>
   </tr>
   <tr ng-repeat="header in headers.sys">
     <td>
@@ -35,6 +36,12 @@
       <input ng-if="header.editable" class="form-control"
              ng-model="header.value">
     </td>
+    <td class="remove">
+      <a ng-if="header.editable" class="text-danger" href
+         ng-click="remove('sys', $index)">
+        <span class="glyphicon glyphicon-trash"></span>
+      </a>
+    </td>
   </tr>
 </table>
 
@@ -43,6 +50,7 @@
   <tr>
     <th class="header-name">Name</th>
     <th>Value</th>
+    <th class="remove"></th>
   </tr>
   <tr ng-repeat="header in headers.meta">
     <td>
@@ -50,6 +58,11 @@
     </td>
     <td>
       <input class="form-control" ng-model="header.value">
+    </td>
+    <td class="remove">
+      <a class="text-danger" href ng-click="remove('meta', $index)">
+        <span class="glyphicon glyphicon-trash"></span>
+      </a>
     </td>
   </tr>
 </table>

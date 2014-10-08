@@ -262,6 +262,9 @@ angular.module('swiftBrowser.controllers',
                         headers = angular.copy($scope.headers);
                     });
                 };
+                $scope.remove = function (type, idx) {
+                    $scope.headers[type].splice(idx, 1);
+                };
                 $scope.isUnchanged = function () {
                     return angular.equals($scope.headers, headers);
                 };
