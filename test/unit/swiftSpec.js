@@ -142,6 +142,14 @@ describe('Swift request types', function() {
         this.$httpBackend.flush();
     });
 
+    it('should send POST request when setting metadata', function() {
+        this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo/bar')
+            .respond(202, null);
+        var headers = {'Content-Type': 'text/plain'};
+        this.$swift.postObject('cont', 'foo/bar', headers);
+        this.$httpBackend.flush();
+    });
+
     it('should send DELETE request when deleting an objct', function() {
         this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo/bar')
             .respond(204, null);
