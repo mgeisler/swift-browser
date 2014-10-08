@@ -23,7 +23,7 @@ config(['$stateProvider', '$urlRouterProvider',
         controller: 'ContainerCtrl'
     });
     $stateProvider.state('directory', {
-        url: '/{container}/{path:.*/}',
+        url: '/{container}/{prefix:.*/}',
         templateUrl: 'partials/container.html',
         controller: 'ContainerCtrl'
     });

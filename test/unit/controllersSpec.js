@@ -53,7 +53,7 @@ describe('ContainerCtrl', function(){
 
     it('should create breadcrumbs', function() {
         setupCtrl({container: 'cont',
-                   path: 'foo/bar/'});
+                   prefix: 'foo/bar/'});
         expect(this.scope.breadcrumbs).toEqual([
             {name: '', title: 'Root'},
             {name: 'cont/', title: 'cont'},
@@ -64,7 +64,7 @@ describe('ContainerCtrl', function(){
 
     it('should query container', inject(function($httpBackend) {
         setupCtrl({container: 'cont',
-                   path: 'foo/'});
+                   prefix: 'foo/'});
 
         var reply = [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",

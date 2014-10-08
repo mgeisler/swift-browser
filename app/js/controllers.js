@@ -79,7 +79,7 @@ angular.module('swiftBrowser.controllers',
         '$scope', '$swift', '$stateParams', '$location', '$modal',
         function($scope, $swift, $stateParams, $location, $modal) {
             var container = $stateParams.container;
-            var path = $stateParams.path || '';
+            var prefix = $stateParams.prefix || '';
             $scope.container = container;
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
@@ -132,7 +132,7 @@ angular.module('swiftBrowser.controllers',
             $scope.upload = function () {
                 var scope = $scope.$new(true);
                 scope.files = [];
-                scope.path = container + '/' + path;
+                scope.path = container + '/' + prefix;
                 scope.fileSelected = function(elm) {
                     // Since fileSelected is called from a non-Angular
                     // event handler, we need to inform the scope
@@ -159,7 +159,7 @@ angular.module('swiftBrowser.controllers',
                         if (file.uploadPct == 100) {
                             return;
                         }
-                        var name = path + file.name;
+                        var name = prefix + file.name;
                         var item = {name: name,
                                     title: file.name,
                                     bytes: file.size};
@@ -188,7 +188,7 @@ angular.module('swiftBrowser.controllers',
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 
-            var parts = path.split('/');
+            var parts = prefix.split('/');
             parts.unshift(container);
             for (var i = 0; i < parts.length - 1; i++) {
                 var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
@@ -196,7 +196,7 @@ angular.module('swiftBrowser.controllers',
                 $scope.breadcrumbs.push(crumb);
             }
 
-            var params = {prefix: path, delimiter: '/'};
+            var params = {prefix: prefix, delimiter: '/'};
             $swift.listObjects(container, params).then(function (result) {
                 $scope.items = $.map(result.data, function (item) {
                     var parts = (item.subdir || item.name).split('/');
