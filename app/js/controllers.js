@@ -247,9 +247,33 @@ angular.module('swiftBrowser.controllers',
                 $scope.reset = function () {
                     $scope.headers = angular.copy(headers);
                 };
+                $scope.save = function() {
+                    var flattened = {};
+                    $scope.headers.sys.forEach(function (header) {
+                        if (header.editable) {
+                            flattened[header.name] = header.value;
+                        }
+                    });
+                    $scope.headers.meta.forEach(function (header) {
+                        flattened[header.name] = header.value;
+                    });
+                    var req = $swift.postObject(container, name, flattened);
+                    req.then(function (result) {
+                        headers = angular.copy($scope.headers);
+                    });
+                };
+                $scope.isUnchanged = function () {
+                    return angular.equals($scope.headers, headers);
+                };
 
                 $swift.headObject(container, name).then(function (result) {
                     var allHeaders = result.headers();
+                    var editableHeaders = [
+                        'content-type',
+                        'content-encoding',
+                        'content-disposition',
+                        'x-delete-at'
+                    ];
                     var sysHeaders = [
                         'last-modified',
                         'content-length',
@@ -266,6 +290,9 @@ angular.module('swiftBrowser.controllers',
                         if (name.indexOf('x-object-meta-') == 0) {
                             headers.meta.push(header);
                         } else if (sysHeaders.indexOf(name) > -1) {
+                            if (editableHeaders.indexOf(name) > -1) {
+                                header.editable = true;
+                            }
                             headers.sys.push(header);
                         }
                         headers.meta.sort();
