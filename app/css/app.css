@@ -12,6 +12,10 @@ th.count {
     width: 8em;
 }
 
+th.header-name {
+    width: 16em;
+}
+
 th.type {
     width: 8em;
 }

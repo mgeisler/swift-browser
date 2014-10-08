@@ -76,10 +76,10 @@ angular.module('swiftBrowser.controllers',
         });
     }])
     .controller('ContainerCtrl', [
-        '$scope', '$swift', '$routeParams', '$location', '$modal',
-        function($scope, $swift, $routeParams, $location, $modal) {
-            var container = $routeParams.container;
-            var path = $routeParams.path || '';
+        '$scope', '$swift', '$stateParams', '$location', '$modal',
+        function($scope, $swift, $stateParams, $location, $modal) {
+            var container = $stateParams.container;
+            var prefix = $stateParams.prefix || '';
             $scope.container = container;
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
@@ -132,7 +132,7 @@ angular.module('swiftBrowser.controllers',
             $scope.upload = function () {
                 var scope = $scope.$new(true);
                 scope.files = [];
-                scope.path = container + '/' + path;
+                scope.path = container + '/' + prefix;
                 scope.fileSelected = function(elm) {
                     // Since fileSelected is called from a non-Angular
                     // event handler, we need to inform the scope
@@ -159,7 +159,7 @@ angular.module('swiftBrowser.controllers',
                         if (file.uploadPct == 100) {
                             return;
                         }
-                        var name = path + file.name;
+                        var name = prefix + file.name;
                         var item = {name: name,
                                     title: file.name,
                                     bytes: file.size};
@@ -188,7 +188,7 @@ angular.module('swiftBrowser.controllers',
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 
-            var parts = path.split('/');
+            var parts = prefix.split('/');
             parts.unshift(container);
             for (var i = 0; i < parts.length - 1; i++) {
                 var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
@@ -196,18 +196,9 @@ angular.module('swiftBrowser.controllers',
                 $scope.breadcrumbs.push(crumb);
             }
 
-            var params = {prefix: path, delimiter: '/'};
+            var params = {prefix: prefix, delimiter: '/'};
             $swift.listObjects(container, params).then(function (result) {
-                var items = result.data;
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].subdir == path + '/') {
-                        // Add trailing slash for pseudo-directory
-                        $location.path($location.path() + '/');
-                        return;
-                    }
-                }
-
-                $scope.items = $.map(items, function (item) {
+                $scope.items = $.map(result.data, function (item) {
                     var parts = (item.subdir || item.name).split('/');
 
                     if (item.subdir) {
@@ -222,4 +213,60 @@ angular.module('swiftBrowser.controllers',
                 });
             });
         }
-    ]);
+    ])
+    .controller('ObjectCtrl', ['$scope', '$stateParams', '$swift', '$location',
+        function ($scope, $stateParams, $swift, $location) {
+            var container = $stateParams.container;
+            var name = $stateParams.name;
+
+            $scope.breadcrumbs = [{name: '', title: 'Root'}];
+            var parts = name.split('/');
+            parts.unshift(container);
+            for (var i = 0; i < parts.length; i++) {
+                var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
+                             title: parts[i]};
+                $scope.breadcrumbs.push(crumb);
+            }
+
+            var params = {prefix: name, delimiter: '/'};
+            $swift.listObjects(container, params).then(function (result) {
+                var redirect = result.data.some(function (item) {
+                    if (item.subdir == name + '/') {
+                        // Add trailing slash for pseudo-directory
+                        $location.path($location.path() + '/');
+                        return true;
+                    }
+                });
+                if (redirect) {
+                    return;
+                }
+                $scope.container = container;
+                $scope.name = name;
+                $swift.headObject(container, name).then(function (result) {
+                    var headers = result.headers();
+                    var sysHeaders = [
+                        'last-modified',
+                        'content-length',
+                        'content-type',
+                        'etag',
+                        'content-encoding',
+                        'content-disposition',
+                        'x-delete-at',
+                        'x-object-manifest',
+                        'x-static-large-object'
+                    ];
+                    var systemHeaders = [];
+                    var customHeaders = [];
+                    angular.forEach(headers, function (value, name) {
+                        var header = {name: name, value: value};
+                        if (name.indexOf('x-object-meta-') == 0) {
+                            customHeaders.push(header);
+                        } else if (sysHeaders.indexOf(name) > -1) {
+                            systemHeaders.push(header);
+                        }
+                    });
+                    $scope.systemHeaders = systemHeaders.sort();
+                    $scope.customHeaders = customHeaders.sort();
+                });
+            });
+        }]);
