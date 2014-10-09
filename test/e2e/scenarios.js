@@ -529,4 +529,22 @@ describe('Object metadata', function () {
         expect(td(rows, 3, 0).getText()).toEqual('content-type');
         expect(input.getAttribute('value')).toEqual('text/plain');
     });
+
+    it('should allow editing metadata', function () {
+        var rows = by.repeater('header in headers.sys');
+        var contentType = td(rows, 3, 1).$('input');
+        var saveBtn = $('.btn[ng-click="save()"]');
+
+        expect(saveBtn.isEnabled()).toBe(false);
+        contentType.clear();
+        contentType.sendKeys('image/png');
+        expect(saveBtn.isEnabled()).toBe(true);
+        saveBtn.click();
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+
+        expect(contentType.getAttribute('value')).toEqual('image/png');
+    });
 });
