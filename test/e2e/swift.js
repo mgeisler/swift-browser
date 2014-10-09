@@ -139,9 +139,28 @@ describe('deleteDirectory', function () {
 });
 
 describe('headObject', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
+    function callHeadObject(container, name) {
+        function script(container, name, callback) {
+            function handler(result) {
+                callback({status: result.status,
+                          headers: result.headers()});
+            }
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.headObject(container, name);
+            req.then(handler, handler);
+        }
+        return browser.driver.executeAsyncScript(
+            script, container, name
+        );
+    }
+    function select(prop) {
+        return function (result) {
+            return result[prop];
+        };
+    }
 
-    it('should return object metadata as headers', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+    beforeEach(function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
                         'last_modified': "2014-08-16T13:33:21.848400",
                         bytes: 20,
@@ -150,13 +169,20 @@ describe('headObject', function () {
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
-        var headers = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.headObject('foo', 'a.txt');
-            req.success(function (data, status, headers) {
-                callback(headers());
-            });
-        });
+    });
+
+    it('should return 200 for an existing object', function () {
+        var status = callHeadObject('foo', 'a.txt').then(select('status'));
+        expect(status).toEqual(200);
+    });
+
+    it('should return 404 for a non-existing object', function () {
+        var status = callHeadObject('foo', 'b.txt').then(select('status'));
+        expect(status).toEqual(404);
+    });
+
+    it('should return object metadata as headers', function () {
+        var headers = callHeadObject('foo', 'a.txt').then(select('headers'));
         expect(headers).toEqual({
             'content-type': 'text/plain',
             'etag': '401b30e3b8b5d629635a5c613cdb7919',
