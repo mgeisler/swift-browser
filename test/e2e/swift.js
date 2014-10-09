@@ -137,3 +137,31 @@ describe('deleteDirectory', function () {
         expect(data).toEqual([204, 204]);
     });
 });
+
+describe('headObject', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+
+    it('should return object metadata as headers', function () {
+        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
+                        'last_modified': "2014-08-16T13:33:21.848400",
+                        bytes: 20,
+                        name: "a.txt",
+                        'content_type': "text/plain"}];
+        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
+        SwiftMock.setObjects('foo', objects);
+        browser.get('index.html#/');
+        var headers = browser.driver.executeAsyncScript(function (callback) {
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift.headObject('foo', 'a.txt');
+            req.success(function (data, status, headers) {
+                callback(headers());
+            });
+        });
+        expect(headers).toEqual({
+            'content-type': 'text/plain',
+            'etag': '401b30e3b8b5d629635a5c613cdb7919',
+            'last-modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+            'content-length': '20'
+        });
+    });
+});

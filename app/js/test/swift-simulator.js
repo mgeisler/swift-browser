@@ -40,6 +40,8 @@ function SwiftSimulator($httpBackend) {
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
 
+    $httpBackend.when('HEAD', this.objRegex)
+        .respond(this.headObject.bind(this));
     $httpBackend.whenDELETE(this.objRegex)
         .respond(this.deleteObject.bind(this));
     $httpBackend.whenPUT(this.objRegex)
@@ -107,6 +109,32 @@ SwiftSimulator.prototype.deleteObject = function(method, url, data) {
         if (objects[i].name == name) {
             objects.splice(i, 1);
             return [204, null];
+        }
+    }
+    return [404, 'Not Found'];
+};
+
+SwiftSimulator.prototype.headObject = function(method, url, data) {
+    var match = url.match(this.objRegex);
+    var container = match[1];
+    var name = match[2];
+
+    var objects = this.objects[container];
+    if (objects == undefined) {
+        return [404, 'Container "' + container + '" not found'];
+    }
+
+    for (var i = 0; i < objects.length; i++) {
+        if (objects[i].name == name) {
+            var object = objects[i];
+            var d = new Date(object.last_modified);
+            // Convert from local timezone to UTC timezone
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            var headers = {'ETag': object.hash,
+                           'Last-Modified': d.toUTCString(),
+                           'Content-Length': object.bytes,
+                           'Content-Type': object.content_type};
+            return [200, null, headers];
         }
     }
     return [404, 'Not Found'];
