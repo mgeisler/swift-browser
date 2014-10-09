@@ -484,3 +484,49 @@ describe('Listing a pseudo-directory', function () {
         expect(url).toMatch("index.html#/foo/bar/$");
     });
 });
+
+describe('Object metadata', function () {
+    beforeEach(function () {
+        SwiftMock.loadAngularMocks();
+        SwiftMock.setContainers([
+            {name: "foo", count: 1, bytes: 20}
+        ]);
+        SwiftMock.setObjects('foo', [
+            {hash: "401b30e3b8b5d629635a5c613cdb7919",
+             'last_modified': "2014-08-16T13:33:21.848400",
+             bytes: 20,
+             name: "bar/baz.txt",
+             'content_type': "text/plain"}
+        ]);
+        browser.get('index.html#/foo/bar/baz.txt');
+    });
+
+    it('should show metadata', function () {
+        var rows = by.repeater('header in headers.sys');
+
+        function td(row, col) {
+            col += 1; // css child selectors are 1-based
+            return element(rows.row(row)).$('td:nth-child(' + col + ')');
+        }
+        function getText(el) {
+            return el.getText();
+        }
+        function textInRow(idx) {
+            return element(rows.row(idx)).$$('td').map(getText);
+        }
+
+        expect(element.all(rows).count()).toEqual(4);
+
+        expect(textInRow(0)).toEqual([
+            'etag', '401b30e3b8b5d629635a5c613cdb7919', ''
+        ]);
+        expect(textInRow(1)).toEqual([
+            'last-modified', 'Sat, 16 Aug 2014 13:33:21 GMT', ''
+        ]);
+        expect(textInRow(2)).toEqual([
+            'content-length', '20', ''
+        ]);
+        expect(td(3, 0).getText()).toEqual('content-type');
+        expect(td(3, 1).$('input').getAttribute('value')).toEqual('text/plain');
+    });
+});
