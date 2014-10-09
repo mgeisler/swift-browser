@@ -8,7 +8,8 @@ function callSwiftMethod(method) {
         function script(method, args, callback) {
             function handler(result) {
                 callback({status: result.status,
-                          headers: result.headers()});
+                          headers: result.headers(),
+                          data: result.data});
             }
             var $swift = window.getFromInjector('$swift');
             var req = $swift[method].apply($swift, args);
@@ -45,6 +46,7 @@ describe('Test isolation', function() {
 
 describe('listObjects', function () {
     beforeEach(SwiftMock.loadAngularMocks);
+    var callListObjects = callSwiftMethod('listObjects');
 
     it('should return 200 for an existing container', function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
@@ -55,12 +57,8 @@ describe('listObjects', function () {
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
-        var data = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.listObjects('foo');
-            req.then(function (result) {
-                callback([result.status, result.data]);
-            });
+        var data = callListObjects('foo').then(function (result) {
+            return [result.status, result.data];
         });
         expect(data).toEqual([200, objects]);
     });
@@ -68,14 +66,8 @@ describe('listObjects', function () {
     it('should return 404 for a non-existing container', function () {
         SwiftMock.setContainers([]);
         browser.get('index.html#/');
-        var status = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.listObjects('no-such-container');
-            req.then(null, function (result) {
-                callback(result.status);
-            });
-        });
-        expect(status).toBe(404);
+        var result = callListObjects('no-such-container');
+        expect(result.then(select('status'))).toBe(404);
     });
 });
 
