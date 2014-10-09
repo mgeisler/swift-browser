@@ -42,6 +42,8 @@ function SwiftSimulator($httpBackend) {
 
     $httpBackend.when('HEAD', this.objRegex)
         .respond(this.headObject.bind(this));
+    $httpBackend.whenPOST(this.objRegex)
+        .respond(this.postObject.bind(this));
     $httpBackend.whenDELETE(this.objRegex)
         .respond(this.deleteObject.bind(this));
     $httpBackend.whenPUT(this.objRegex)
@@ -135,6 +137,32 @@ SwiftSimulator.prototype.headObject = function(method, url, data) {
                            'Content-Length': object.bytes,
                            'Content-Type': object.content_type};
             return [200, null, headers];
+        }
+    }
+    return [404, 'Not Found'];
+};
+
+SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
+    var match = url.match(this.objRegex);
+    var container = match[1];
+    var name = match[2];
+
+    var objects = this.objects[container];
+    if (objects == undefined) {
+        return [404, 'Container "' + container + '" not found'];
+    }
+
+    for (var i = 0; i < objects.length; i++) {
+        if (objects[i].name == name) {
+            var object = objects[i];
+            var d = new Date();
+            // Convert from local timezone to UTC timezone
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            /* eslint-disable camelcase */
+            object.last_modified = d.toISOString();
+            object.content_type = headers['content-type'];
+            /* eslint-enable */
+            return [202, null];
         }
     }
     return [404, 'Not Found'];

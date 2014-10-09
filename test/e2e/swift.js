@@ -179,3 +179,35 @@ describe('headObject', function () {
         });
     });
 });
+
+describe('postObject', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+    beforeEach(function () {
+        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
+                        'last_modified': "2014-08-16T13:33:21.848400",
+                        bytes: 20,
+                        name: "a.txt",
+                        'content_type': "text/plain"}];
+        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
+        SwiftMock.setObjects('foo', objects);
+        browser.get('index.html#/');
+    });
+    var callPostObject = callSwiftMethod('postObject');
+
+    it('should return 202 for an existing object', function () {
+        var status = callPostObject('foo', 'a.txt', {}).then(select('status'));
+        expect(status).toEqual(202);
+    });
+
+    it('should return 404 for a non-existing object', function () {
+        var status = callPostObject('foo', 'b.txt', {}).then(select('status'));
+        expect(status).toEqual(404);
+    });
+
+    it('should return 404 for a non-existing container', function () {
+        SwiftMock.setContainers([]);
+        browser.get('index.html#/');
+        var data = callPostObject('no-such-container', 'a.txt', {});
+        expect(data.then(select('status'))).toEqual(404);
+    });
+});
