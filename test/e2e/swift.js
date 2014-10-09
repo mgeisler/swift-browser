@@ -73,6 +73,7 @@ describe('listObjects', function () {
 
 describe('deleteObject', function () {
     beforeEach(SwiftMock.loadAngularMocks);
+    var callDeleteObject = callSwiftMethod('deleteObject');
 
     it('should return 204 for an existing object', function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
@@ -83,41 +84,23 @@ describe('deleteObject', function () {
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
-        var data = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.deleteObject('foo', 'a.txt');
-            req.then(function (result) {
-                callback(result.status);
-            });
-        });
-        expect(data).toEqual(204);
+        var status = callDeleteObject('foo', 'a.txt').then(select('status'));
+        expect(status).toEqual(204);
     });
 
     it('should return 404 for a non-existing object', function () {
         SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', []);
         browser.get('index.html#/');
-        var data = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.deleteObject('foo', 'no-such-object');
-            req.then(null, function (result) {
-                callback(result.status);
-            });
-        });
-        expect(data).toEqual(404);
+        var data = callDeleteObject('foo', 'no-such-object');
+        expect(data.then(select('status'))).toEqual(404);
     });
 
     it('should return 404 for a non-existing container', function () {
         SwiftMock.setContainers([]);
         browser.get('index.html#/');
-        var data = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.deleteObject('no-such-container', 'a.txt');
-            req.then(null, function (result) {
-                callback(result.status);
-            });
-        });
-        expect(data).toEqual(404);
+        var data = callDeleteObject('no-such-container', 'a.txt');
+        expect(data.then(select('status'))).toEqual(404);
     });
 });
 
