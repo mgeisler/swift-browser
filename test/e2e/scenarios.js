@@ -501,32 +501,32 @@ describe('Object metadata', function () {
         browser.get('index.html#/foo/bar/baz.txt');
     });
 
+    function td(rows, row, col) {
+        col += 1; // css child selectors are 1-based
+        return element(rows.row(row)).$('td:nth-child(' + col + ')');
+    }
+    function getText(el) {
+        return el.getText();
+    }
+    function textInRow(rows, idx) {
+        return element(rows.row(idx)).$$('td').map(getText);
+    }
+
     it('should show metadata', function () {
         var rows = by.repeater('header in headers.sys');
-
-        function td(row, col) {
-            col += 1; // css child selectors are 1-based
-            return element(rows.row(row)).$('td:nth-child(' + col + ')');
-        }
-        function getText(el) {
-            return el.getText();
-        }
-        function textInRow(idx) {
-            return element(rows.row(idx)).$$('td').map(getText);
-        }
-
         expect(element.all(rows).count()).toEqual(4);
 
-        expect(textInRow(0)).toEqual([
+        expect(textInRow(rows, 0)).toEqual([
             'etag', '401b30e3b8b5d629635a5c613cdb7919', ''
         ]);
-        expect(textInRow(1)).toEqual([
+        expect(textInRow(rows, 1)).toEqual([
             'last-modified', 'Sat, 16 Aug 2014 13:33:21 GMT', ''
         ]);
-        expect(textInRow(2)).toEqual([
+        expect(textInRow(rows, 2)).toEqual([
             'content-length', '20', ''
         ]);
-        expect(td(3, 0).getText()).toEqual('content-type');
-        expect(td(3, 1).$('input').getAttribute('value')).toEqual('text/plain');
+        var input = td(rows, 3, 1).$('input');
+        expect(td(rows, 3, 0).getText()).toEqual('content-type');
+        expect(input.getAttribute('value')).toEqual('text/plain');
     });
 });
