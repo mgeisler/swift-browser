@@ -2,6 +2,28 @@
 
 var SwiftMock = require('../swift-mock.js');
 
+function callSwiftMethod(method) {
+    return function () {
+        var args = Array.prototype.slice.call(arguments);
+        function script(method, args, callback) {
+            function handler(result) {
+                callback({status: result.status,
+                          headers: result.headers()});
+            }
+            var $swift = window.getFromInjector('$swift');
+            var req = $swift[method].apply($swift, args);
+            req.then(handler, handler);
+        }
+        return browser.driver.executeAsyncScript(script, method, args);
+    };
+}
+
+function select(prop) {
+    return function (result) {
+        return result[prop];
+    };
+}
+
 describe('Test isolation', function() {
     beforeEach(function () {
         SwiftMock.loadAngularMocks();
@@ -139,26 +161,6 @@ describe('deleteDirectory', function () {
 });
 
 describe('headObject', function () {
-    function callHeadObject(container, name) {
-        function script(container, name, callback) {
-            function handler(result) {
-                callback({status: result.status,
-                          headers: result.headers()});
-            }
-            var $swift = window.getFromInjector('$swift');
-            var req = $swift.headObject(container, name);
-            req.then(handler, handler);
-        }
-        return browser.driver.executeAsyncScript(
-            script, container, name
-        );
-    }
-    function select(prop) {
-        return function (result) {
-            return result[prop];
-        };
-    }
-
     beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
@@ -170,6 +172,7 @@ describe('headObject', function () {
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
     });
+    var callHeadObject = callSwiftMethod('headObject');
 
     it('should return 200 for an existing object', function () {
         var status = callHeadObject('foo', 'a.txt').then(select('status'));
