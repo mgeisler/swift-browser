@@ -5,7 +5,17 @@ var SwiftMock = require('../swift-mock.js');
 function callSwiftMethod(method) {
     return function () {
         var args = Array.prototype.slice.call(arguments);
+        // Object hashes passed as arguments to executeAsyncScript are
+        // unserialized correctly in the browser. This results in
+        //
+        //   Permission denied to access property '$$hashKey'
+        //
+        // being thrown by angular.setHashKey if angular.extend or
+        // angular.copy is called on an object passed here. Converting
+        // to and from JSON helps.
+        args = JSON.stringify(args);
         function script(method, args, callback) {
+            args = JSON.parse(args);
             function handler(result) {
                 callback({status: result.status,
                           headers: result.headers(),
