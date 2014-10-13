@@ -41,9 +41,7 @@ describe('Test isolation', function() {
     });
 
     it('should show foo container', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 0, bytes: 0}
-        ]);
+        SwiftMock.addContainer('foo');
         browser.get('index.html#/');
         expect($('td:nth-child(2)').getText()).toEqual('foo');
     });
@@ -64,7 +62,6 @@ describe('listObjects', function () {
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
         var data = callListObjects('foo').then(function (result) {
@@ -74,7 +71,6 @@ describe('listObjects', function () {
     });
 
     it('should return 404 for a non-existing container', function () {
-        SwiftMock.setContainers([]);
         browser.get('index.html#/');
         var result = callListObjects('no-such-container');
         expect(result.then(select('status'))).toBe(404);
@@ -91,7 +87,6 @@ describe('deleteObject', function () {
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
         var status = callDeleteObject('foo', 'a.txt').then(select('status'));
@@ -99,7 +94,6 @@ describe('deleteObject', function () {
     });
 
     it('should return 404 for a non-existing object', function () {
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', []);
         browser.get('index.html#/');
         var data = callDeleteObject('foo', 'no-such-object');
@@ -107,7 +101,6 @@ describe('deleteObject', function () {
     });
 
     it('should return 404 for a non-existing container', function () {
-        SwiftMock.setContainers([]);
         browser.get('index.html#/');
         var data = callDeleteObject('no-such-container', 'a.txt');
         expect(data.then(select('status'))).toEqual(404);
@@ -128,7 +121,6 @@ describe('deleteDirectory', function () {
                         bytes: 20,
                         name: "bar/b.txt",
                         'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
@@ -153,7 +145,6 @@ describe('headObject', function () {
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
     });
@@ -188,7 +179,6 @@ describe('postObject', function () {
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
         SwiftMock.setObjects('foo', objects);
         browser.get('index.html#/');
     });
@@ -206,7 +196,6 @@ describe('postObject', function () {
     });
 
     it('should return 404 for a non-existing container', function () {
-        SwiftMock.setContainers([]);
         browser.get('index.html#/');
         var data = callPostObject('no-such-container', 'a.txt', {});
         expect(data.then(select('status'))).toEqual(404);

@@ -45,9 +45,24 @@ describe('Container listing', function () {
     describe('should be sortable', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "bar", count: 20, bytes: 1234},
-                {name: "foo", count: 10, bytes: 2345}
+            SwiftMock.setObjects('foo', [
+                {hash: "401b30e3b8b5d629635a5c613cdb7919",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
+                 bytes: 1000,
+                 name: "x.txt",
+                 'content_type': "text/plain"},
+                {hash: "009520053b00386d1173f3988c55d192",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
+                 bytes: 234,
+                 name: "y.txt",
+                 'content_type': "text/plain"}
+            ]);
+            SwiftMock.setObjects('bar', [
+                {hash: "401b30e3b8b5d629635a5c613cdb7919",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
+                 bytes: 2345,
+                 name: "x.txt",
+                 'content_type': "text/plain"},
             ]);
             browser.get('index.html#/');
         });
@@ -66,9 +81,9 @@ describe('Container listing', function () {
         it('by size', function () {
             var sizes = by.css('td:nth-child(3)');
 
-            // Initial sort
-            expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
-            // Sorting by size makes no change
+            // Initial sort is by name
+            expect(mapGetText(sizes)).toEqual(['2.3 KB', '1.2 KB']);
+            // Clicking the header sorts
             element.all(by.css('th')).get(2).click();
             expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
             // Clicking again reverses
@@ -81,13 +96,13 @@ describe('Container listing', function () {
             var counts = rows.column('{{ container.count | number }}');
 
             // Initial sort order is by name
-            expect(mapGetText(counts)).toEqual(['20 objects', '10 objects']);
-            // Clicking the header sorts
+            expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
+            // Clicking the header sorts (no change)
             element.all(by.css('th')).get(3).click();
-            expect(mapGetText(counts)).toEqual(['10 objects', '20 objects']);
+            expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
             // Clicking the header sorts reverses the order
             element.all(by.css('th')).get(3).click();
-            expect(mapGetText(counts)).toEqual(['20 objects', '10 objects']);
+            expect(mapGetText(counts)).toEqual(['2 objects', '1 objects']);
         });
 
     });
@@ -95,10 +110,8 @@ describe('Container listing', function () {
     describe('selection', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "bar", count: 20, bytes: 1234},
-                {name: "foo", count: 10, bytes: 2345}
-            ]);
+            SwiftMock.addContainer('foo');
+            SwiftMock.addContainer('bar');
             browser.get('index.html#/');
         });
 
@@ -127,7 +140,6 @@ describe('Container listing', function () {
     describe('with no containers', function () {
 
         it('should not show all containers selected', function () {
-            SwiftMock.setContainers([]);
             browser.get('index.html#/');
 
             var toggle = by.css('th.toggle input');
@@ -144,9 +156,6 @@ describe('Object listing', function () {
     describe('should be sortable', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "foo", count: 2, bytes: 20}
-            ]);
             SwiftMock.setObjects('foo', [
                 {hash: "401b30e3b8b5d629635a5c613cdb7919",
                  'last_modified': "2014-08-16T13:33:21.000Z",
@@ -186,9 +195,6 @@ describe('Object listing', function () {
     });
 
     it('should understand pseudo-directories', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 2, bytes: 20}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
@@ -208,9 +214,6 @@ describe('Object listing', function () {
     });
 
     it('should understand deep pseudo-directories', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 3, bytes: 30}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
@@ -243,9 +246,6 @@ describe('Object listing', function () {
     describe('selection', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "foo", count: 2, bytes: 20}
-            ]);
             SwiftMock.setObjects('foo', [
                 {hash: "401b30e3b8b5d629635a5c613cdb7919",
                  'last_modified': "2014-08-16T13:33:21.000Z",
@@ -285,9 +285,7 @@ describe('Object listing', function () {
     describe('with no objects', function () {
 
         it('should not show all objects selected', function () {
-            SwiftMock.setContainers([
-                {name: "foo", count: 0, bytes: 0}
-            ]);
+            SwiftMock.addContainer('foo');
             browser.get('index.html#/foo/');
 
             var toggle = by.css('th.toggle input');
@@ -296,9 +294,6 @@ describe('Object listing', function () {
     });
 
     it('should allow deletion', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 2, bytes: 20}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
@@ -350,9 +345,6 @@ describe('Object listing', function () {
     });
 
     it('should allow deleting pseudo-directories', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 3, bytes: 40}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
@@ -386,9 +378,6 @@ describe('Object listing', function () {
     });
 
     it('should allow uploading files', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 1, bytes: 20}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
@@ -435,10 +424,7 @@ describe('Object listing', function () {
     });
 
     it('should allow unscheduling files for upload', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 0, bytes: 0}
-        ]);
-        SwiftMock.setObjects('foo', []);
+        SwiftMock.addContainer('foo');
         browser.get('index.html#/foo/');
 
         var names = by.css('td:nth-child(2)');
@@ -468,9 +454,6 @@ describe('Object listing', function () {
 describe('Listing a pseudo-directory', function () {
     it('should add traling slash', function() {
         SwiftMock.loadAngularMocks();
-        SwiftMock.setContainers([
-            {name: "foo", count: 2, bytes: 20}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
@@ -488,9 +471,6 @@ describe('Listing a pseudo-directory', function () {
 describe('Object metadata', function () {
     beforeEach(function () {
         SwiftMock.loadAngularMocks();
-        SwiftMock.setContainers([
-            {name: "foo", count: 1, bytes: 20}
-        ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
              'last_modified': "2014-08-16T13:33:21.000Z",
