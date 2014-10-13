@@ -146,6 +146,12 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
     var match = url.match(this.objRegex);
     var container = match[1];
     var name = match[2];
+    var contentType;
+    angular.forEach(headers, function (value, name) {
+        if (name.toLowerCase() == 'content-type') {
+            contentType = value;
+        }
+    });
 
     var objects = this.objects[container];
     if (objects == undefined) {
@@ -160,7 +166,7 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
             d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
             /* eslint-disable camelcase */
             object.last_modified = d.toISOString();
-            object.content_type = headers['content-type'];
+            object.content_type = contentType;
             /* eslint-enable */
             return [202, null];
         }

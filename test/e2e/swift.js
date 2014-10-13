@@ -193,6 +193,7 @@ describe('postObject', function () {
         browser.get('index.html#/');
     });
     var callPostObject = callSwiftMethod('postObject');
+    var callHeadObject = callSwiftMethod('headObject');
 
     it('should return 202 for an existing object', function () {
         var status = callPostObject('foo', 'a.txt', {}).then(select('status'));
@@ -209,5 +210,11 @@ describe('postObject', function () {
         browser.get('index.html#/');
         var data = callPostObject('no-such-container', 'a.txt', {});
         expect(data.then(select('status'))).toEqual(404);
+    });
+
+    it('should update headers case-insensitively', function () {
+        callPostObject('foo', 'a.txt', {'content-TYPE': 'foo/bar'});
+        var headers = callHeadObject('foo', 'a.txt').then(select('headers'));
+        expect(headers.then(select('content-type'))).toEqual('foo/bar');
     });
 });
