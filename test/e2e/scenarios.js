@@ -149,12 +149,12 @@ describe('Object listing', function () {
             ]);
             SwiftMock.setObjects('foo', [
                 {hash: "401b30e3b8b5d629635a5c613cdb7919",
-                 'last_modified': "2014-08-16T13:33:21.848400",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
                  bytes: 20,
                  name: "x.txt",
                  'content_type': "text/plain"},
                 {hash: "009520053b00386d1173f3988c55d192",
-                 'last_modified': "2014-08-16T13:33:21.848400",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
                  bytes: 10,
                  name: "y.txt",
                  'content_type': "text/plain"}
@@ -191,12 +191,12 @@ describe('Object listing', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "x.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "dir/y.txt",
              'content_type': "text/plain"}
@@ -213,17 +213,17 @@ describe('Object listing', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 13,
              name: "x.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "deeply/y.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "deeply/nested/z.txt",
              'content_type': "text/plain"}
@@ -248,12 +248,12 @@ describe('Object listing', function () {
             ]);
             SwiftMock.setObjects('foo', [
                 {hash: "401b30e3b8b5d629635a5c613cdb7919",
-                 'last_modified': "2014-08-16T13:33:21.848400",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
                  bytes: 20,
                  name: "x.txt",
                  'content_type': "text/plain"},
                 {hash: "009520053b00386d1173f3988c55d192",
-                 'last_modified': "2014-08-16T13:33:21.848400",
+                 'last_modified': "2014-08-16T13:33:21.000Z",
                  bytes: 10,
                  name: "y.txt",
                  'content_type': "text/plain"}
@@ -301,17 +301,17 @@ describe('Object listing', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 20,
              name: "x.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "y.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "z.txt",
              'content_type': "text/plain"}
@@ -355,17 +355,17 @@ describe('Object listing', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 20,
              name: "x.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "bar/y.txt",
              'content_type': "text/plain"},
             {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 10,
              name: "bar/z.txt",
              'content_type': "text/plain"}
@@ -391,7 +391,7 @@ describe('Object listing', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 20,
              name: "nested/x.txt",
              'content_type': "text/plain"}
@@ -473,7 +473,7 @@ describe('Listing a pseudo-directory', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 20,
              name: "bar/baz.txt",
              'content_type': "text/plain"}
@@ -493,7 +493,7 @@ describe('Object metadata', function () {
         ]);
         SwiftMock.setObjects('foo', [
             {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+             'last_modified': "2014-08-16T13:33:21.000Z",
              bytes: 20,
              name: "bar/baz.txt",
              'content_type': "text/plain"}

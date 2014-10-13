@@ -60,7 +60,7 @@ describe('listObjects', function () {
 
     it('should return 200 for an existing container', function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
+                        'last_modified': "2014-08-16T13:33:21.000Z",
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
@@ -87,7 +87,7 @@ describe('deleteObject', function () {
 
     it('should return 204 for an existing object', function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
+                        'last_modified': "2014-08-16T13:33:21.000Z",
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
@@ -119,12 +119,12 @@ describe('deleteDirectory', function () {
 
     it('should return an array with deletion results', function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
+                        'last_modified': "2014-08-16T13:33:21.000Z",
                         bytes: 20,
                         name: "bar/a.txt",
                         'content_type': "text/plain"},
                        {hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
+                        'last_modified': "2014-08-16T13:33:21.000Z",
                         bytes: 20,
                         name: "bar/b.txt",
                         'content_type': "text/plain"}];
@@ -149,7 +149,7 @@ describe('headObject', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
+                        'last_modified': "2014-08-16T13:33:21.000Z",
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];
@@ -184,7 +184,7 @@ describe('postObject', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
+                        'last_modified': "2014-08-16T13:33:21.000Z",
                         bytes: 20,
                         name: "a.txt",
                         'content_type': "text/plain"}];

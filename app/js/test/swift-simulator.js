@@ -130,8 +130,6 @@ SwiftSimulator.prototype.headObject = function(method, url, data) {
         if (objects[i].name == name) {
             var object = objects[i];
             var d = new Date(object.last_modified);
-            // Convert from local timezone to UTC timezone
-            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
             var headers = {'ETag': object.hash,
                            'Last-Modified': d.toUTCString(),
                            'Content-Length': object.bytes};
