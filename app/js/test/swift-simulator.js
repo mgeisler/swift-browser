@@ -1,5 +1,16 @@
 'use strict';
 
+function byProperty(prop) {
+    return function (a, b) {
+        if (a[prop] < b[prop]) {
+            return -1;
+        } else if (a[prop] > b[prop]) {
+            return 1;
+        }
+        return 0;
+    };
+}
+
 function escape(string) {
     return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
 }
@@ -78,9 +89,7 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
         return [404, 'Container "' + match[1] + '" not found'];
     }
 
-    for (var i = 0; i < objects.length; i++) {
-        var object = objects[i];
-        var name = object.name;
+    angular.forEach(objects, function (object, name) {
         if (name.indexOf(prefix) == 0) {
             var idx = name.indexOf(delimiter, prefix.length);
             if (idx > -1) {
@@ -90,10 +99,18 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
                     subdirs[subdir] = true;
                 }
             } else {
-                results.push(object);
+                var lastModified = new Date(object.headers['Last-Modified']);
+                results.push({
+                    'hash': object.headers.ETag,
+                    'content_type': object.headers['Content-Type'],
+                    'last_modified': lastModified.toISOString(),
+                    'bytes': object.headers['Content-Length'],
+                    'name': name
+                });
             }
         }
-    }
+    });
+    results.sort(byProperty('name'));
     return [200, results];
 };
 
@@ -107,11 +124,9 @@ SwiftSimulator.prototype.deleteObject = function(method, url, data) {
         return [404, 'Container "' + container + '" not found'];
     }
 
-    for (var i = 0; i < objects.length; i++) {
-        if (objects[i].name == name) {
-            objects.splice(i, 1);
-            return [204, null];
-        }
+    if (name in objects) {
+        delete objects[name];
+        return [204, null];
     }
     return [404, 'Not Found'];
 };
@@ -126,18 +141,9 @@ SwiftSimulator.prototype.headObject = function(method, url, data) {
         return [404, 'Container "' + container + '" not found'];
     }
 
-    for (var i = 0; i < objects.length; i++) {
-        if (objects[i].name == name) {
-            var object = objects[i];
-            var d = new Date(object.last_modified);
-            var headers = {'ETag': object.hash,
-                           'Last-Modified': d.toUTCString(),
-                           'Content-Length': object.bytes};
-            if (object.content_type) {
-                headers['Content-Type'] = object.content_type;
-            }
-            return [200, null, headers];
-        }
+    var object = objects[name];
+    if (object) {
+        return [200, null, object.headers];
     }
     return [404, 'Not Found'];
 };
@@ -158,18 +164,18 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
         return [404, 'Container "' + container + '" not found'];
     }
 
-    for (var i = 0; i < objects.length; i++) {
-        if (objects[i].name == name) {
-            var object = objects[i];
-            var d = new Date();
-            // Convert from local timezone to UTC timezone
-            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-            /* eslint-disable camelcase */
-            object.last_modified = d.toISOString();
-            object.content_type = contentType;
-            /* eslint-enable */
-            return [202, null];
+    var object = objects[name];
+    if (object) {
+        var d = new Date();
+        // Convert from local timezone to UTC timezone
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        object.headers['Last-Modified'] = d.toUTCString();
+        if (contentType) {
+            object.headers['Content-Type'] = contentType;
+        } else {
+            delete object.headers['Content-Type'];
         }
+        return [202, null];
     }
     return [404, 'Not Found'];
 };
@@ -185,18 +191,11 @@ SwiftSimulator.prototype.putObject = function(method, url, data) {
     }
 
     var lastModified = data.lastModifiedDate.toISOString();
-    var object = {name: name,
-                  bytes: data.size,
-                  'last_modified': lastModified,
-                  'content_type': 'application/octet-stream',
-                  hash: ''};
-    // Remove object if it's already there
-    for (var i = 0; i < objects.length; i++) {
-        if (objects[i].name == name) {
-            objects.splice(i, 1);
-        }
-    }
-    objects.push(object);
+    var object = {headers: {'ETag': '',
+                            'Last-Modified': lastModified,
+                            'Content-Length': data.size,
+                            'Content-Type': 'application/octet-stream'}};
+    objects[name] = object;
     return [201, null];
 };
 
@@ -206,7 +205,16 @@ SwiftSimulator.prototype.setContainers = function(containers) {
 };
 
 SwiftSimulator.prototype.setObjects = function(container, objects) {
-    this.objects[container] = objects;
+    var converted = {};
+    angular.forEach(objects, function (object) {
+        var lastModified = new Date(object.last_modified);
+        var headers = {'ETag': object.hash,
+                       'Last-Modified': lastModified.toUTCString(),
+                       'Content-Length': object.bytes,
+                       'Content-Type': object.content_type};
+        converted[object.name] = {headers: headers};
+    });
+    this.objects[container] = converted;
 };
 
 angular.module('swiftBrowserE2E', ['ngMockE2E'])
