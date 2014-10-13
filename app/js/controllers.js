@@ -255,7 +255,9 @@ angular.module('swiftBrowser.controllers',
                         }
                     });
                     $scope.headers.meta.forEach(function (header) {
-                        flattened[header.name] = header.value;
+                        if (header.name) {
+                            flattened[header.name] = header.value;
+                        }
                     });
                     var req = $swift.postObject(container, name, flattened);
                     req.then(function (result) {
@@ -267,6 +269,13 @@ angular.module('swiftBrowser.controllers',
                 };
                 $scope.isUnchanged = function () {
                     return angular.equals($scope.headers, headers);
+                };
+                $scope.add = function (type) {
+                    if (type == 'meta') {
+                        $scope.headers.meta.push({name: 'x-object-meta-',
+                                                  value: '',
+                                                  added: true});
+                    }
                 };
 
                 $swift.headObject(container, name).then(function (result) {
