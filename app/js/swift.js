@@ -72,6 +72,12 @@ SwiftClient.prototype.headObject = function (container, object) {
     return this._$http.head(url, {headers: this._headers});
 };
 
+SwiftClient.prototype.postObject = function (container, object, headers) {
+    var url = this._swiftUrl + '/' + container + '/' + object;
+    angular.extend(headers, this._headers);
+    return this._$http.post(url, null, {headers: headers});
+};
+
 SwiftClient.prototype.deleteObject = function (container, object) {
     var url = this._swiftUrl + '/' + container + '/' + object;
     return this._$http.delete(url, {headers: this._headers});

@@ -142,6 +142,14 @@ describe('Swift request types', function() {
         this.$httpBackend.flush();
     });
 
+    it('should send POST request when setting metadata', function() {
+        this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo/bar')
+            .respond(202, null);
+        var headers = {'Content-Type': 'text/plain'};
+        this.$swift.postObject('cont', 'foo/bar', headers);
+        this.$httpBackend.flush();
+    });
+
     it('should send DELETE request when deleting an objct', function() {
         this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo/bar')
             .respond(204, null);
@@ -153,6 +161,41 @@ describe('Swift request types', function() {
         this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar', 'data')
             .respond(201, null);
         this.$swift.uploadObject('cont', 'foo/bar', 'data');
+        this.$httpBackend.flush();
+    });
+});
+
+describe('postObject', function () {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    it('should send custom headers', function () {
+        var headers = {'Content-Type': 'text/plain',
+                       'X-Foo': 'some value'};
+        function check(allHeaders) {
+            return (allHeaders['Content-Type'] == 'text/plain' &&
+                    allHeaders['X-Foo'] == 'some value');
+        }
+        this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo', null, check)
+            .respond(202, null);
+        this.$swift.postObject('cont', 'foo', headers);
+        this.$httpBackend.flush();
+    });
+
+    it('should merge in $swift headers', function () {
+        function check(allHeaders) {
+            return allHeaders['X-Auth-Token'] == 'a token';
+        }
+        this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo', null, check)
+            .respond(202, null);
+        this.$swift._headers['X-Auth-Token'] = 'a token';
+        this.$swift.postObject('cont', 'foo', {});
         this.$httpBackend.flush();
     });
 });

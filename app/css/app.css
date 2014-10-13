@@ -24,6 +24,10 @@ th.remove {
     width: 24px;
 }
 
+td.remove {
+    vertical-align: middle !important;
+}
+
 div.upload {
     width: 12em;
     margin-bottom: 0px;
