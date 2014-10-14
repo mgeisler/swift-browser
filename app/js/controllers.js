@@ -261,6 +261,9 @@ angular.module('swiftBrowser.controllers',
                     });
                     var req = $swift.postObject(container, name, flattened);
                     req.then(function (result) {
+                        $scope.headers.meta.forEach(function (header) {
+                            header.added = false;
+                        });
                         headers = angular.copy($scope.headers);
                     });
                 };
