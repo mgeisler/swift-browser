@@ -134,8 +134,10 @@ SwiftSimulator.prototype.headObject = function(method, url, data) {
             d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
             var headers = {'ETag': object.hash,
                            'Last-Modified': d.toUTCString(),
-                           'Content-Length': object.bytes,
-                           'Content-Type': object.content_type};
+                           'Content-Length': object.bytes};
+            if (object.content_type) {
+                headers['Content-Type'] = object.content_type;
+            }
             return [200, null, headers];
         }
     }
