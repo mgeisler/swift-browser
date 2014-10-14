@@ -527,4 +527,27 @@ describe('Object metadata', function () {
 
         expect(contentType.getAttribute('value')).toEqual('image/png');
     });
+
+    it('should allow adding metadata', function () {
+        var rows = by.repeater('header in headers.meta');
+        var saveBtn = $('.btn[ng-click="save()"]');
+        var addBtn = $('.btn[ng-click="add(\'meta\')"]');
+        var input = td(rows, 0, 0).$('input');
+        var p = td(rows, 0, 0).$('p');
+
+        addBtn.click();
+        expect(input.getAttribute('value')).toEqual('x-object-meta-');
+
+        input.sendKeys('foobar');
+        saveBtn.click();
+        expect(input.isPresent()).toBe(false);
+        expect(p.getText()).toEqual('x-object-meta-foobar');
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+
+        expect(p.getText()).toEqual('x-object-meta-foobar');
+    });
+
 });

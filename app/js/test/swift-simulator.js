@@ -160,22 +160,37 @@ SwiftSimulator.prototype.headObject = function(method, url, data) {
 
 SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
     return this.findObjectOr404(url, function (container, object) {
-        var contentType;
+        var editableHeaders = [
+            'content-type',
+            'content-encoding',
+            'content-disposition',
+            'x-delete-at'
+        ];
+        var newHeaders = {};
+
+        // Copy all non-editable headers unchanged
+        angular.forEach(object.headers, function (value, name) {
+            name = name.toLowerCase();
+            if (editableHeaders.indexOf(name) == -1) {
+                newHeaders[name] = value;
+            }
+        });
+
+        // Set the editable headers that was submitted with the POST
         angular.forEach(headers, function (value, name) {
-            if (name.toLowerCase() == 'content-type') {
-                contentType = value;
+            name = name.toLowerCase();
+            if (editableHeaders.indexOf(name) > -1) {
+                newHeaders[name] = value;
+            } else if (name.indexOf('x-object-meta-') == 0) {
+                newHeaders[name] = value;
             }
         });
 
         var d = new Date();
         // Convert from local timezone to UTC timezone
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-        object.headers['Last-Modified'] = d.toUTCString();
-        if (contentType) {
-            object.headers['Content-Type'] = contentType;
-        } else {
-            delete object.headers['Content-Type'];
-        }
+        newHeaders['Last-Modified'] = d.toUTCString();
+        object.headers = newHeaders;
         return [202, null];
     });
 };
