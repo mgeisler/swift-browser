@@ -496,7 +496,8 @@ describe('Object metadata', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
+                'Content-Type': 'text/plain',
+                'Content-Encoding': 'gzip'
             }}
         });
         browser.get('index.html#/foo/bar/baz.txt');
@@ -515,7 +516,7 @@ describe('Object metadata', function () {
 
     it('should show metadata', function () {
         var rows = by.repeater('header in headers.sys');
-        expect(element.all(rows).count()).toEqual(4);
+        expect(element.all(rows).count()).toEqual(5);
 
         expect(textInRow(rows, 0)).toEqual([
             'etag', '401b30e3b8b5d629635a5c613cdb7919', ''
@@ -569,6 +570,39 @@ describe('Object metadata', function () {
         $('td a').click();
 
         expect(p.getText()).toEqual('x-object-meta-foobar');
+    });
+
+    it('should allow removing headers', function () {
+        var rows = by.repeater('header in headers.sys');
+        var names = rows.column('header.name');
+        var trashLink = td(rows, 4, 2).$('a');
+        var saveBtn = $('.btn[ng-click="save()"]');
+
+        expect(mapGetText(names)).toEqual([
+            'etag',
+            'last-modified',
+            'content-length',
+            'content-type',
+            'content-encoding'
+        ]);
+        trashLink.click();
+        expect(mapGetText(names)).toEqual([
+            'etag',
+            'last-modified',
+            'content-length',
+            'content-type'
+        ]);
+        saveBtn.click();
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+        expect(mapGetText(names)).toEqual([
+            'etag',
+            'last-modified',
+            'content-length',
+            'content-type'
+        ]);
     });
 
 });
