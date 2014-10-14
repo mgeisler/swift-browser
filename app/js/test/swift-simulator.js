@@ -212,19 +212,10 @@ SwiftSimulator.prototype.addContainer = function(name) {
 };
 
 SwiftSimulator.prototype.setObjects = function(container, objects) {
-    var converted = {};
-    angular.forEach(objects, function (object) {
-        var lastModified = new Date(object.last_modified);
-        var headers = {'ETag': object.hash,
-                       'Last-Modified': lastModified.toUTCString(),
-                       'Content-Length': object.bytes,
-                       'Content-Type': object.content_type};
-        converted[object.name] = {headers: headers};
-    });
     if (!this.data[container]) {
         this.addContainer(container);
     }
-    this.data[container].objects = converted;
+    this.data[container].objects = objects;
 };
 
 angular.module('swiftBrowserE2E', ['ngMockE2E'])
