@@ -67,6 +67,28 @@ SwiftSimulator.prototype.reset = function() {
     this.data = {};
 };
 
+SwiftSimulator.prototype.findContainerOr404 = function (url, callback) {
+    var match = url.match(this.objRegex);
+    var containerName = match[1];
+    var objectName = match[2];
+
+    var container = this.data[containerName];
+    if (!container) {
+        return [404, 'Container "' + containerName + '" not found'];
+    }
+    return callback(container, containerName, objectName);
+};
+
+SwiftSimulator.prototype.findObjectOr404 = function (url, callback) {
+    return this.findContainerOr404(url, function (container, contName, name) {
+        var object = container.objects[name];
+        if (!object) {
+            return [404, 'Not Found'];
+        }
+        return callback(container, object, contName, name);
+    });
+};
+
 SwiftSimulator.prototype.listContainers = function(method, url, data) {
     var results = [];
     angular.forEach(this.data, function (container, name) {
@@ -124,57 +146,27 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
 };
 
 SwiftSimulator.prototype.deleteObject = function(method, url, data) {
-    var match = url.match(this.objRegex);
-    var contName = match[1];
-    var name = match[2];
-
-    var container = this.data[contName];
-    if (container == undefined) {
-        return [404, 'Container "' + contName + '" not found'];
-    }
-
-    if (name in container.objects) {
-        delete container.objects[name];
+    return this.findObjectOr404(url, function (cont, obj, contName, name) {
+        delete cont.objects[name];
         return [204, null];
-    }
-    return [404, 'Not Found'];
+    });
 };
 
 SwiftSimulator.prototype.headObject = function(method, url, data) {
-    var match = url.match(this.objRegex);
-    var contName = match[1];
-    var name = match[2];
-
-    var container = this.data[contName];
-    if (container == undefined) {
-        return [404, 'Container "' + contName + '" not found'];
-    }
-
-    var object = container.objects[name];
-    if (object) {
+    return this.findObjectOr404(url, function (container, object) {
         return [200, null, object.headers];
-    }
-    return [404, 'Not Found'];
+    });
 };
 
 SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
-    var match = url.match(this.objRegex);
-    var contName = match[1];
-    var name = match[2];
-    var contentType;
-    angular.forEach(headers, function (value, name) {
-        if (name.toLowerCase() == 'content-type') {
-            contentType = value;
-        }
-    });
+    return this.findObjectOr404(url, function (container, object) {
+        var contentType;
+        angular.forEach(headers, function (value, name) {
+            if (name.toLowerCase() == 'content-type') {
+                contentType = value;
+            }
+        });
 
-    var container = this.data[contName];
-    if (container == undefined) {
-        return [404, 'Container "' + contName + '" not found'];
-    }
-
-    var object = container.objects[name];
-    if (object) {
         var d = new Date();
         // Convert from local timezone to UTC timezone
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -185,27 +177,19 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
             delete object.headers['Content-Type'];
         }
         return [202, null];
-    }
-    return [404, 'Not Found'];
+    });
 };
 
 SwiftSimulator.prototype.putObject = function(method, url, data) {
-    var match = url.match(this.objRegex);
-    var contName = match[1];
-    var name = match[2];
-
-    var container = this.data[contName];
-    if (container == undefined) {
-        return [404, 'Container "' + contName + '" not found'];
-    }
-
-    var lastModified = data.lastModifiedDate.toISOString();
-    var object = {headers: {'ETag': '',
-                            'Last-Modified': lastModified,
-                            'Content-Length': data.size,
-                            'Content-Type': 'application/octet-stream'}};
-    container.objects[name] = object;
-    return [201, null];
+    return this.findContainerOr404(url, function (cont, contName, objName) {
+        var lastModified = data.lastModifiedDate.toISOString();
+        var object = {headers: {'ETag': '',
+                                'Last-Modified': lastModified,
+                                'Content-Length': data.size,
+                                'Content-Type': 'application/octet-stream'}};
+        cont.objects[objName] = object;
+        return [201, null];
+    });
 };
 
 SwiftSimulator.prototype.addContainer = function(name) {
