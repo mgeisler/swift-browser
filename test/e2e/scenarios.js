@@ -12,7 +12,7 @@ describe('my app', function() {
   browser.get('index.html');
 
   it('should redirect to /#/ when fragment is empty', function() {
-    expect(browser.getLocationAbsUrl()).toMatch("#/");
+    expect(browser.getLocationAbsUrl()).toEqual("/");
   });
 
 });
@@ -72,7 +72,7 @@ describe('Container listing', function () {
 
         it('by name', function () {
             var rows = by.repeater('container in containers');
-            var names = rows.column('{{ container.name }}');
+            var names = rows.column('container.name');
 
             // Initial sort order is by name
             expect(mapGetText(names)).toEqual(['bar', 'foo']);
@@ -96,7 +96,7 @@ describe('Container listing', function () {
 
         it('by count', function () {
             var rows = by.repeater('container in containers');
-            var counts = rows.column('{{ container.count | number }}');
+            var counts = rows.column('container.count | number');
 
             // Initial sort order is by name
             expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
@@ -178,7 +178,7 @@ describe('Object listing', function () {
 
         it('by name', function () {
             var rows = by.repeater('item in items');
-            var names = rows.column('{{ item.title }}');
+            var names = rows.column('item.title');
 
             // Initial sort order is by name
             expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
@@ -422,7 +422,7 @@ describe('Object listing', function () {
 
             var uploadBtn = $('.btn[ng-click="uploadFiles()"]');
             var rows = by.repeater('file in files');
-            var uploads = rows.column('{{ file.name }}');
+            var uploads = rows.column('file.name');
             var newNames = paths.map(path.basename);
             expect(mapGetText(uploads)).toEqual(newNames);
 
@@ -453,7 +453,7 @@ describe('Object listing', function () {
         Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
             var paths = [res1[0], res2[0]];
             var rows = by.repeater('file in files');
-            var uploads = rows.column('{{ file.name }}');
+            var uploads = rows.column('file.name');
             var base = path.basename(paths[1]);
             paths.forEach(uploadFile);
 
@@ -484,7 +484,7 @@ describe('Listing a pseudo-directory', function () {
         browser.get('index.html#/foo/bar');
 
         var url = browser.getLocationAbsUrl();
-        expect(url).toMatch("index.html#/foo/bar/$");
+        expect(url).toEqual("/foo/bar/");
     });
 });
 
