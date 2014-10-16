@@ -25,7 +25,6 @@
     "karma-jasmine": "^0.1.5",
     "protractor": "^1.2.0",
     "q": "^1.0.1",
-    "shelljs": "^0.2.6",
     "tmp": "0.0.24"
   },
   "scripts": {
