@@ -201,7 +201,10 @@ describe('postObject', function () {
 
     it('should not send a default Content-Type header', function () {
         function check(allHeaders) {
-            return !('Content-Type' in allHeaders);
+            var names = Object.keys(allHeaders);
+            return names.some(function (name) {
+                return name.toLowerCase() == 'content-type';
+            });
         }
         this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo', null, check)
             .respond(202, null);
