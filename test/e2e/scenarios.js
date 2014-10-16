@@ -605,4 +605,9 @@ describe('Object metadata', function () {
         ]);
     });
 
+    it('should not allow removing the Content-Type header', function () {
+        var rows = by.repeater('header in headers.sys');
+        expect(td(rows, 3, 0).getText()).toEqual('content-type');
+        expect(td(rows, 3, 2).$('a').isPresent()).toBe(false);
+    });
 });

@@ -289,6 +289,11 @@ angular.module('swiftBrowser.controllers',
                         'content-disposition',
                         'x-delete-at'
                     ];
+                    var removableHeaders = [
+                        'content-encoding',
+                        'content-disposition',
+                        'x-delete-at'
+                    ];
                     var sysHeaders = [
                         'last-modified',
                         'content-length',
@@ -307,6 +312,9 @@ angular.module('swiftBrowser.controllers',
                         } else if (sysHeaders.indexOf(name) > -1) {
                             if (editableHeaders.indexOf(name) > -1) {
                                 header.editable = true;
+                            }
+                            if (removableHeaders.indexOf(name) > -1) {
+                                header.removable = true;
                             }
                             headers.sys.push(header);
                         }

@@ -225,4 +225,10 @@ describe('postObject', function () {
         var headers = callHeadObject('foo', 'a.txt').then(select('headers'));
         expect(headers.then(select('content-type'))).toEqual('foo/bar');
     });
+
+    it('should keep Content-Type header unchanged', function () {
+        callPostObject('foo', 'a.txt', {'content-encoding': 'gzip'});
+        var headers = callHeadObject('foo', 'a.txt').then(select('headers'));
+        expect(headers.then(select('content-type'))).toEqual('text/plain');
+    });
 });

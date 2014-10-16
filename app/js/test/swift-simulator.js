@@ -173,13 +173,16 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
             name = name.toLowerCase();
             if (editableHeaders.indexOf(name) == -1) {
                 newHeaders[name] = value;
+            } else if (name == 'content-type') {
+                // The Content-Type header is always present
+                newHeaders[name] = value;
             }
         });
 
         // Set the editable headers that was submitted with the POST
         angular.forEach(headers, function (value, name) {
             name = name.toLowerCase();
-            if (editableHeaders.indexOf(name) > -1) {
+            if (editableHeaders.indexOf(name) > -1 && value) {
                 newHeaders[name] = value;
             } else if (name.indexOf('x-object-meta-') == 0) {
                 newHeaders[name] = value;
