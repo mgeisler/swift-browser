@@ -550,6 +550,34 @@ describe('Object metadata', function () {
         expect(contentType.getAttribute('value')).toEqual('image/png');
     });
 
+    it('should allow adding system headers', function () {
+        var rows = by.repeater('header in headers.sys');
+        var saveBtn = $('.btn[ng-click="save()"]');
+        var addBtn = $('.btn[ng-click="add(\'sys\')"]');
+        var options = by.options('name for name in removableHeaders');
+        var allOptions = element.all(options);
+        var input = td(rows, 5, 1).$('input');
+        var p = td(rows, 5, 0).$('p');
+
+        addBtn.click();
+        expect(mapGetText(options)).toEqual([
+            'content-encoding', 'content-disposition', 'x-delete-at'
+        ]);
+        expect(allOptions.get(0).isSelected()).toBe(true);
+        allOptions.get(1).click();
+        input.sendKeys('attachement');
+
+        saveBtn.click();
+        expect(allOptions.count()).toBe(0);
+        expect(p.getText()).toEqual('content-disposition');
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+
+        expect(p.getText()).toEqual('content-disposition');
+    });
+
     it('should allow adding metadata', function () {
         var rows = by.repeater('header in headers.meta');
         var saveBtn = $('.btn[ng-click="save()"]');

@@ -19,6 +19,13 @@
 </div>
 
 <h2>System Headers</h2>
+
+<p>
+  <button class="btn btn-default" ng-click="add('sys')">
+    Add new header
+  </button>
+</p>
+
 <table class="table table-striped">
   <tr>
     <th class="header-name">Name</th>
@@ -27,7 +34,12 @@
   </tr>
   <tr ng-repeat="header in headers.sys">
     <td>
-      <p class="form-control-static">{{ header.name }}</p>
+      <p ng-if="!header.added" class="form-control-static">
+        {{ header.name }}
+      </p>
+      <select ng-if="header.added" class="form-control" ng-model="header.name"
+              ng-options="name for name in removableHeaders">
+      </select>
     </td>
     <td>
       <p ng-if="!header.editable" class="form-control-static">

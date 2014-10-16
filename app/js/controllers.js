@@ -264,6 +264,9 @@ angular.module('swiftBrowser.controllers',
                         $scope.headers.meta.forEach(function (header) {
                             header.added = false;
                         });
+                        $scope.headers.sys.forEach(function (header) {
+                            header.added = false;
+                        });
                         headers = angular.copy($scope.headers);
                     });
                 };
@@ -278,6 +281,14 @@ angular.module('swiftBrowser.controllers',
                         $scope.headers.meta.push({name: 'x-object-meta-',
                                                   value: '',
                                                   added: true});
+                    } else {
+                        // Use first removable header as default value
+                        var name = $scope.removableHeaders[0];
+                        $scope.headers.sys.push({name: name,
+                                                 value: '',
+                                                 added: true,
+                                                 editable: true,
+                                                 removable: true});
                     }
                 };
 
@@ -289,7 +300,7 @@ angular.module('swiftBrowser.controllers',
                         'content-disposition',
                         'x-delete-at'
                     ];
-                    var removableHeaders = [
+                    $scope.removableHeaders = [
                         'content-encoding',
                         'content-disposition',
                         'x-delete-at'
@@ -313,7 +324,7 @@ angular.module('swiftBrowser.controllers',
                             if (editableHeaders.indexOf(name) > -1) {
                                 header.editable = true;
                             }
-                            if (removableHeaders.indexOf(name) > -1) {
+                            if ($scope.removableHeaders.indexOf(name) > -1) {
                                 header.removable = true;
                             }
                             headers.sys.push(header);
