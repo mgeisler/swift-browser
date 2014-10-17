@@ -64,7 +64,7 @@ describe('Container listing', function () {
             // Initial sort order is by name
             expect(names.getText()).toEqual(['bar', 'foo']);
             // Clicking the name header sorts reverses the order
-            element(by.css('th:nth-child(2)')).click();
+            $('th:nth-child(2)').click();
             expect(names.getText()).toEqual(['foo', 'bar']);
         });
 
@@ -105,22 +105,22 @@ describe('Container listing', function () {
             browser.get('index.html#/');
         });
 
-        var toggle = by.css('th.toggle input');
+        var toggle = $('th.toggle input');
         var checkboxes = $$('td:nth-child(1) input');
 
         it('should be deselected by default', function () {
-            expect(element(toggle).isSelected()).toBe(false);
+            expect(toggle.isSelected()).toBe(false);
             expect(checkboxes.isSelected()).toEqual([false, false]);
         });
 
         it('should allow toggle all', function () {
-            element(toggle).click();
+            toggle.click();
             expect(checkboxes.isSelected()).toEqual([true, true]);
         });
 
         it('should notice manually selecting all', function () {
             checkboxes.click();
-            expect(element(toggle).isSelected()).toBe(true);
+            expect(toggle.isSelected()).toBe(true);
         });
 
     });
@@ -130,8 +130,8 @@ describe('Container listing', function () {
         it('should not show all containers selected', function () {
             browser.get('index.html#/');
 
-            var toggle = by.css('th.toggle input');
-            expect(element(toggle).isSelected()).toBe(false);
+            var toggle = $('th.toggle input');
+            expect(toggle.isSelected()).toBe(false);
         });
     });
 });
@@ -178,7 +178,7 @@ describe('Object listing', function () {
             // Initial sort order is by name
             expect(sizes.getText()).toEqual(['20.0 B', '10.0 B']);
             // Clicking the header sorts
-            element(by.css('th:last-child')).click();
+            $('th:last-child').click();
             expect(sizes.getText()).toEqual(['10.0 B', '20.0 B']);
         });
 
@@ -258,22 +258,22 @@ describe('Object listing', function () {
             browser.get('index.html#/foo/');
         });
 
-        var toggle = by.css('th.toggle input');
+        var toggle = $('th.toggle input');
         var checkboxes = $$('td:nth-child(1) input');
 
         it('should be deselected by default', function () {
-            expect(element(toggle).isSelected()).toBe(false);
+            expect(toggle.isSelected()).toBe(false);
             expect(checkboxes.isSelected()).toEqual([false, false]);
         });
 
         it('should allow toggle all', function () {
-            element(toggle).click();
+            toggle.click();
             expect(checkboxes.isSelected()).toEqual([true, true]);
         });
 
         it('should notice manually selecting all', function () {
             checkboxes.click();
-            expect(element(toggle).isSelected()).toBe(true);
+            expect(toggle.isSelected()).toBe(true);
         });
     });
 
@@ -283,8 +283,8 @@ describe('Object listing', function () {
             SwiftMock.addContainer('foo');
             browser.get('index.html#/foo/');
 
-            var toggle = by.css('th.toggle input');
-            expect(element(toggle).isSelected()).toBe(false);
+            var toggle = $('th.toggle input');
+            expect(toggle.isSelected()).toBe(false);
         });
     });
 
