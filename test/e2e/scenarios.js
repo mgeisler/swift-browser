@@ -69,15 +69,15 @@ describe('Container listing', function () {
         });
 
         it('by size', function () {
-            var sizes = element.all(by.css('td:nth-child(3)'));
+            var sizes = $$('td:nth-child(3)');
 
             // Initial sort is by name
             expect(sizes.getText()).toEqual(['2.3 KB', '1.2 KB']);
             // Clicking the header sorts
-            element.all(by.css('th')).get(2).click();
+            $$('th').get(2).click();
             expect(sizes.getText()).toEqual(['1.2 KB', '2.3 KB']);
             // Clicking again reverses
-            element.all(by.css('th')).get(2).click();
+            $$('th').get(2).click();
             expect(sizes.getText()).toEqual(['2.3 KB', '1.2 KB']);
         });
 
@@ -88,10 +88,10 @@ describe('Container listing', function () {
             // Initial sort order is by name
             expect(counts.getText()).toEqual(['1 objects', '2 objects']);
             // Clicking the header sorts (no change)
-            element.all(by.css('th')).get(3).click();
+            $$('th').get(3).click();
             expect(counts.getText()).toEqual(['1 objects', '2 objects']);
             // Clicking the header sorts reverses the order
-            element.all(by.css('th')).get(3).click();
+            $$('th').get(3).click();
             expect(counts.getText()).toEqual(['2 objects', '1 objects']);
         });
 
@@ -106,7 +106,7 @@ describe('Container listing', function () {
         });
 
         var toggle = by.css('th.toggle input');
-        var checkboxes = element.all(by.css('td:nth-child(1) input'));
+        var checkboxes = $$('td:nth-child(1) input');
 
         it('should be deselected by default', function () {
             expect(element(toggle).isSelected()).toBe(false);
@@ -168,12 +168,12 @@ describe('Object listing', function () {
             // Initial sort order is by name
             expect(names.getText()).toEqual(['x.txt', 'y.txt']);
             // Clicking the name header sorts reverses the order
-            element.all(by.css('th')).get(1).click();
+            $$('th').get(1).click();
             expect(names.getText()).toEqual(['y.txt', 'x.txt']);
         });
 
         it('by size', function () {
-            var sizes = element.all(by.css('td:last-child'));
+            var sizes = $$('td:last-child');
 
             // Initial sort order is by name
             expect(sizes.getText()).toEqual(['20.0 B', '10.0 B']);
@@ -201,7 +201,7 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var names = element.all(by.css('td:nth-child(2)'));
+        var names = $$('td:nth-child(2)');
         expect(names.getText()).toEqual(['dir/', 'x.txt']);
     });
 
@@ -228,7 +228,7 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var links = element.all(by.css('td:nth-child(2) a'));
+        var links = $$('td:nth-child(2) a');
         expect(links.getText()).toEqual(['deeply/', 'x.txt']);
         links.first().click();
 
@@ -259,7 +259,7 @@ describe('Object listing', function () {
         });
 
         var toggle = by.css('th.toggle input');
-        var checkboxes = element.all(by.css('td:nth-child(1) input'));
+        var checkboxes = $$('td:nth-child(1) input');
 
         it('should be deselected by default', function () {
             expect(element(toggle).isSelected()).toBe(false);
@@ -310,8 +310,8 @@ describe('Object listing', function () {
             }}
         });
         browser.get('index.html#/foo/');
-        var names = element.all(by.css('td:nth-child(2)'));
-        var checkboxes = element.all(by.css('td:nth-child(1) input'));
+        var names = $$('td:nth-child(2)');
+        var checkboxes = $$('td:nth-child(1) input');
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
         checkboxes.get(0).click();
@@ -319,9 +319,8 @@ describe('Object listing', function () {
 
         deleteBtn.click();
 
-        var modalNames = element.all(by.css('div.modal td:nth-child(2)'));
-        var modalCheckboxes = element.all(
-            by.css('div.modal td:nth-child(1) input'));
+        var modalNames = $$('div.modal td:nth-child(2)');
+        var modalCheckboxes = $$('div.modal td:nth-child(1) input');
         var modalTitle = $('div.modal h3');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
@@ -366,8 +365,8 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var names = element.all(by.css('td:nth-child(2)'));
-        var modalNames = element.all(by.css('div.modal td:nth-child(2)'));
+        var names = $$('td:nth-child(2)');
+        var modalNames = $$('div.modal td:nth-child(2)');
         var deleteBtn = $('.btn[ng-click="delete()"]');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
@@ -391,7 +390,7 @@ describe('Object listing', function () {
         browser.get('index.html#/foo/nested/');
 
         var uploadBtn = $('.btn[ng-click="upload()"]');
-        var names = element.all(by.css('td:nth-child(2)'));
+        var names = $$('td:nth-child(2)');
         expect(names.getText()).toEqual(['x.txt']);
 
         uploadBtn.click();
@@ -430,7 +429,7 @@ describe('Object listing', function () {
         SwiftMock.addContainer('foo');
         browser.get('index.html#/foo/');
 
-        var names = element.all(by.css('td:nth-child(2)'));
+        var names = $$('td:nth-child(2)');
 
         $('.btn[ng-click="upload()"]').click();
 
