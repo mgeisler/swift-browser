@@ -17,13 +17,6 @@ describe('my app', function() {
 
 });
 
-
-function mapIsSelected(locator) {
-    return element.all(locator).map(function (el) {
-        return el.isSelected();
-    });
-}
-
 function uploadFile(path) {
     browser.executeScript(function () {
         $('#file-1').removeClass('hidden');
@@ -113,20 +106,20 @@ describe('Container listing', function () {
         });
 
         var toggle = by.css('th.toggle input');
-        var checkboxes = by.css('td:nth-child(1) input');
+        var checkboxes = element.all(by.css('td:nth-child(1) input'));
 
         it('should be deselected by default', function () {
             expect(element(toggle).isSelected()).toBe(false);
-            expect(mapIsSelected(checkboxes)).toEqual([false, false]);
+            expect(checkboxes.isSelected()).toEqual([false, false]);
         });
 
         it('should allow toggle all', function () {
             element(toggle).click();
-            expect(mapIsSelected(checkboxes)).toEqual([true, true]);
+            expect(checkboxes.isSelected()).toEqual([true, true]);
         });
 
         it('should notice manually selecting all', function () {
-            element.all(checkboxes).each(function (el) {
+            checkboxes.each(function (el) {
                 el.click();
             });
             expect(element(toggle).isSelected()).toBe(true);
@@ -268,20 +261,20 @@ describe('Object listing', function () {
         });
 
         var toggle = by.css('th.toggle input');
-        var checkboxes = by.css('td:nth-child(1) input');
+        var checkboxes = element.all(by.css('td:nth-child(1) input'));
 
         it('should be deselected by default', function () {
             expect(element(toggle).isSelected()).toBe(false);
-            expect(mapIsSelected(checkboxes)).toEqual([false, false]);
+            expect(checkboxes.isSelected()).toEqual([false, false]);
         });
 
         it('should allow toggle all', function () {
             element(toggle).click();
-            expect(mapIsSelected(checkboxes)).toEqual([true, true]);
+            expect(checkboxes.isSelected()).toEqual([true, true]);
         });
 
         it('should notice manually selecting all', function () {
-            element.all(checkboxes).each(function (el) {
+            checkboxes.each(function (el) {
                 el.click();
             });
             expect(element(toggle).isSelected()).toBe(true);
@@ -322,34 +315,35 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
         var names = element.all(by.css('td:nth-child(2)'));
-        var checkboxes = by.css('td:nth-child(1) input');
+        var checkboxes = element.all(by.css('td:nth-child(1) input'));
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
-        element.all(checkboxes).get(0).click();
-        element.all(checkboxes).get(2).click();
+        checkboxes.get(0).click();
+        checkboxes.get(2).click();
 
         deleteBtn.click();
 
         var modalNames = element.all(by.css('div.modal td:nth-child(2)'));
-        var modalCheckboxes = by.css('div.modal td:nth-child(1) input');
+        var modalCheckboxes = element.all(
+            by.css('div.modal td:nth-child(1) input'));
         var modalTitle = $('div.modal h3');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
         expect(modalTitle.getText()).toMatch('Deleting 2 objects');
         expect(modalNames.getText()).toEqual(['x.txt', 'z.txt']);
-        expect(mapIsSelected(modalCheckboxes)).toEqual([true, true]);
+        expect(modalCheckboxes.isSelected()).toEqual([true, true]);
 
         $('div.modal th:nth-child(1) input').click();
-        expect(mapIsSelected(modalCheckboxes)).toEqual([false, false]);
+        expect(modalCheckboxes.isSelected()).toEqual([false, false]);
         expect(closeBtn.isEnabled()).toBe(false);
 
-        element.all(modalCheckboxes).last().click();
+        modalCheckboxes.last().click();
         expect(modalTitle.getText()).toMatch('Deleting 1 objects');
 
         closeBtn.click();
         expect(modalTitle.isPresent()).toBe(false);
 
-        expect(mapIsSelected(checkboxes)).toEqual([true, false]);
+        expect(checkboxes.isSelected()).toEqual([true, false]);
         expect(names.getText()).toEqual(['x.txt', 'y.txt']);
     });
 
