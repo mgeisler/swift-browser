@@ -8,13 +8,10 @@ var Q = require('q');
 var mktemp = Q.nfbind(tmp.file);
 
 describe('my app', function() {
-
-    browser.get('index.html');
-
     it('should redirect to /#/ when fragment is empty', function() {
+        browser.get('index.html');
         expect(browser.getLocationAbsUrl()).toEqual("/");
     });
-
 });
 
 function uploadFile(path) {
@@ -26,11 +23,9 @@ function uploadFile(path) {
 }
 
 describe('Container listing', function () {
-
     beforeEach(SwiftMock.loadAngularMocks);
 
     describe('should be sortable', function () {
-
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
@@ -94,11 +89,9 @@ describe('Container listing', function () {
             $$('th').get(3).click();
             expect(counts.getText()).toEqual(['2 objects', '1 objects']);
         });
-
     });
 
     describe('selection', function () {
-
         beforeEach(function () {
             SwiftMock.addContainer('foo');
             SwiftMock.addContainer('bar');
@@ -122,11 +115,9 @@ describe('Container listing', function () {
             checkboxes.click();
             expect(toggle.isSelected()).toBe(true);
         });
-
     });
 
     describe('with no containers', function () {
-
         it('should not show all containers selected', function () {
             browser.get('index.html#/');
 
@@ -138,11 +129,9 @@ describe('Container listing', function () {
 
 
 describe('Object listing', function () {
-
     beforeEach(SwiftMock.loadAngularMocks);
 
     describe('should be sortable', function () {
-
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
@@ -181,7 +170,6 @@ describe('Object listing', function () {
             $('th:last-child').click();
             expect(sizes.getText()).toEqual(['10.0 B', '20.0 B']);
         });
-
     });
 
     it('should understand pseudo-directories', function () {
@@ -239,7 +227,6 @@ describe('Object listing', function () {
     });
 
     describe('selection', function () {
-
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
@@ -278,7 +265,6 @@ describe('Object listing', function () {
     });
 
     describe('with no objects', function () {
-
         it('should not show all objects selected', function () {
             SwiftMock.addContainer('foo');
             browser.get('index.html#/foo/');
@@ -316,7 +302,6 @@ describe('Object listing', function () {
 
         checkboxes.get(0).click();
         checkboxes.get(2).click();
-
         deleteBtn.click();
 
         var modalNames = $$('div.modal td:nth-child(2)');
@@ -430,7 +415,6 @@ describe('Object listing', function () {
         browser.get('index.html#/foo/');
 
         var names = $$('td:nth-child(2)');
-
         $('.btn[ng-click="upload()"]').click();
 
         Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
