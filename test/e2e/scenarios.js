@@ -119,9 +119,7 @@ describe('Container listing', function () {
         });
 
         it('should notice manually selecting all', function () {
-            checkboxes.each(function (el) {
-                el.click();
-            });
+            checkboxes.click();
             expect(element(toggle).isSelected()).toBe(true);
         });
 
@@ -274,9 +272,7 @@ describe('Object listing', function () {
         });
 
         it('should notice manually selecting all', function () {
-            checkboxes.each(function (el) {
-                el.click();
-            });
+            checkboxes.click();
             expect(element(toggle).isSelected()).toBe(true);
         });
     });
