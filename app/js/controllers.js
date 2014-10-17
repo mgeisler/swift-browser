@@ -214,8 +214,9 @@ angular.module('swiftBrowser.controllers',
             });
         }
     ])
-    .controller('ObjectCtrl', ['$scope', '$stateParams', '$swift', '$location',
-        function ($scope, $stateParams, $swift, $location) {
+    .controller('ObjectCtrl', [
+        '$scope', '$stateParams', '$swift', '$location', '$modal',
+        function ($scope, $stateParams, $swift, $location, $modal) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -292,6 +293,17 @@ angular.module('swiftBrowser.controllers',
                     }
                 };
 
+                $scope.show = function () {
+                    var scope = $scope.$new(true);
+                    scope.name = name;
+                    $swift.getObject(container, name).then(function (result) {
+                        scope.content = result.data;
+                    });
+                    $modal.open({templateUrl: 'partials/show-modal.html',
+                                 scope: scope,
+                                 size: 'lg'});
+                };
+
                 $swift.headObject(container, name).then(function (result) {
                     var allHeaders = result.headers();
                     var editableHeaders = [
@@ -335,4 +347,5 @@ angular.module('swiftBrowser.controllers',
                     });
                 });
             });
-        }]);
+        }
+    ]);
