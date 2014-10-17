@@ -9,11 +9,11 @@ var mktemp = Q.nfbind(tmp.file);
 
 describe('my app', function() {
 
-  browser.get('index.html');
+    browser.get('index.html');
 
-  it('should redirect to /#/ when fragment is empty', function() {
-    expect(browser.getLocationAbsUrl()).toEqual("/");
-  });
+    it('should redirect to /#/ when fragment is empty', function() {
+        expect(browser.getLocationAbsUrl()).toEqual("/");
+    });
 
 });
 
