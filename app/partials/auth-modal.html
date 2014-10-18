@@ -7,7 +7,7 @@
       <label class="col-sm-2 control-label" for="authUrl">Url</label>
       <div class="col-sm-10">
         <input class="form-control" type="text"
-               name="url" id="authUrl" ng-model="credentials.authUrl" />
+               name="url" id="authUrl" ng-model="credentials.authUrl">
       </div>
     </div>
     <div class="form-group" ng-switch-when="liteauth">
@@ -16,14 +16,14 @@
       </label>
       <div class="col-sm-10">
         <input class="form-control" type="text"
-               name="user" id="authUser" ng-model="credentials.authUser" />
+               name="user" id="authUser" ng-model="credentials.authUser">
       </div>
     </div>
     <div class="form-group" ng-switch-when="liteauth">
       <label class="col-sm-2 control-label" for="authKey">Key</label>
       <div class="col-sm-10">
         <input class="form-control" type="text"
-               name="key" id="authKey" ng-model="credentials.authKey" />
+               name="key" id="authKey" ng-model="credentials.authKey">
       </div>
     </div>
 
@@ -33,7 +33,7 @@
       <div class="col-sm-10">
         <input class="form-control" type="text"
                name="tenant" id="authTenant"
-               ng-model="credentials.authTenant" />
+               ng-model="credentials.authTenant">
       </div>
     </div>
     <div class="form-group"  ng-switch-when="keystone">
@@ -42,7 +42,7 @@
       <div class="col-sm-10">
         <input class="form-control" type="text"
                name="username" id="authUsername"
-               ng-model="credentials.authUsername" />
+               ng-model="credentials.authUsername">
       </div>
     </div>
     <div class="form-group" ng-switch-when="keystone">
@@ -51,7 +51,7 @@
       <div class="col-sm-10">
         <input class="form-control" type="text"
                name="password" id="authPassword"
-               ng-model="credentials.authPassword" />
+               ng-model="credentials.authPassword">
       </div>
     </div>
 
@@ -60,5 +60,5 @@
 
 <div class="modal-footer">
   <input type="submit" class="btn btn-primary" ng-click="$close()"
-         value="Authenticate" />
+         value="Authenticate">
 </div>

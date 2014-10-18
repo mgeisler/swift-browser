@@ -26,7 +26,7 @@
   <tr>
     <th class="toggle">
       <input type="checkbox" ng-checked="allSelected()"
-             ng-click="toggleAll()" />
+             ng-click="toggleAll()">
     </th>
     <th ng-click="updateOrderBy('name')">
       Name <span ng-class="sortCls.name"></span>
@@ -36,8 +36,8 @@
     </th>
   </tr>
   <tr ng-repeat="item in items | notUndefined | orderBy:orderProp">
-    <td><input type="checkbox" ng-model="item.selected" /></td>
+    <td><input type="checkbox" ng-model="item.selected"></td>
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
-    <td class="text-right" sb-format-bytes count="item.bytes" />
+    <td class="text-right" sb-format-bytes count="item.bytes"></td>
   </tr>
 </table>
