@@ -43,8 +43,11 @@ function SwiftSimulator($httpBackend) {
     this.reset();
 
     var prefix = escape(accountUrl() + '/');
-    this.listRegex = new RegExp(prefix + '(.*?)(?:' + escape('?') + '(.*)|$)');
-    this.objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
+    var container = '(.*?)';
+    var object = '(.*)';
+    var qsOrEmpty = '(?:' + escape('?') + '(.*)|$)';
+    this.listRegex = new RegExp(prefix + container + qsOrEmpty);
+    this.objRegex = new RegExp(prefix + container + escape('/') + object);
 
     $httpBackend.whenGET(accountUrl())
         .respond(this.listContainers.bind(this));
