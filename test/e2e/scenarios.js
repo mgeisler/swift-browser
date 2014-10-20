@@ -607,3 +607,29 @@ describe('Object metadata', function () {
         expect(td(rows, 3, 2).$('a').isPresent()).toBe(false);
     });
 });
+
+describe('Object content', function () {
+    beforeEach(function () {
+        SwiftMock.loadAngularMocks();
+        SwiftMock.setObjects('foo', {
+            'bar.html': {
+                headers: {
+                    'ETag': '556490ea2c67498969d69d28abb9f960',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': '19',
+                    'Content-Type': 'text/html'
+                },
+                content: 'Hello <i>World</i>\n'
+            }
+        });
+        browser.get('index.html#/foo/bar.html');
+    });
+
+    it('should allow showing object content', function () {
+        var showBtn = $('a[ng-click="show()"]');
+        var content = $('.object-content');
+        showBtn.click();
+        expect(content.getAttribute('readonly')).toEqual('true');
+        expect(content.getText()).toEqual('Hello <i>World</i>');
+    });
+});
