@@ -255,10 +255,18 @@ angular.module('swiftBrowser.controllers',
                         }
                     });
                     $scope.headers.meta.forEach(function (header) {
-                        flattened[header.name] = header.value;
+                        if (header.name) {
+                            flattened[header.name] = header.value;
+                        }
                     });
                     var req = $swift.postObject(container, name, flattened);
                     req.then(function (result) {
+                        $scope.headers.meta.forEach(function (header) {
+                            header.added = false;
+                        });
+                        $scope.headers.sys.forEach(function (header) {
+                            header.added = false;
+                        });
                         headers = angular.copy($scope.headers);
                     });
                 };
@@ -268,11 +276,31 @@ angular.module('swiftBrowser.controllers',
                 $scope.isUnchanged = function () {
                     return angular.equals($scope.headers, headers);
                 };
+                $scope.add = function (type) {
+                    if (type == 'meta') {
+                        $scope.headers.meta.push({name: 'x-object-meta-',
+                                                  value: '',
+                                                  added: true});
+                    } else {
+                        // Use first removable header as default value
+                        var name = $scope.removableHeaders[0];
+                        $scope.headers.sys.push({name: name,
+                                                 value: '',
+                                                 added: true,
+                                                 editable: true,
+                                                 removable: true});
+                    }
+                };
 
                 $swift.headObject(container, name).then(function (result) {
                     var allHeaders = result.headers();
                     var editableHeaders = [
                         'content-type',
+                        'content-encoding',
+                        'content-disposition',
+                        'x-delete-at'
+                    ];
+                    $scope.removableHeaders = [
                         'content-encoding',
                         'content-disposition',
                         'x-delete-at'
@@ -295,6 +323,9 @@ angular.module('swiftBrowser.controllers',
                         } else if (sysHeaders.indexOf(name) > -1) {
                             if (editableHeaders.indexOf(name) > -1) {
                                 header.editable = true;
+                            }
+                            if ($scope.removableHeaders.indexOf(name) > -1) {
+                                header.removable = true;
                             }
                             headers.sys.push(header);
                         }

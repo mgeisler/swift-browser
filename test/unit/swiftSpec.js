@@ -198,4 +198,16 @@ describe('postObject', function () {
         this.$swift.postObject('cont', 'foo', {});
         this.$httpBackend.flush();
     });
+
+    it('should not send a default Content-Type header', function () {
+        function check(allHeaders) {
+            var names = Object.keys(allHeaders);
+            return names.some(function (name) {
+                return name.toLowerCase() == 'content-type';
+            });
+        }
+        this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo', null, check)
+            .respond(202, null);
+        this.$swift.postObject('cont', 'foo', {});
+    });
 });

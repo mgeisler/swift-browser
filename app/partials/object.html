@@ -19,6 +19,13 @@
 </div>
 
 <h2>System Headers</h2>
+
+<p>
+  <button class="btn btn-default" ng-click="add('sys')">
+    Add new header
+  </button>
+</p>
+
 <table class="table table-striped">
   <tr>
     <th class="header-name">Name</th>
@@ -27,7 +34,12 @@
   </tr>
   <tr ng-repeat="header in headers.sys">
     <td>
-      <p class="form-control-static">{{ header.name }}</p>
+      <p ng-if="!header.added" class="form-control-static">
+        {{ header.name }}
+      </p>
+      <select ng-if="header.added" class="form-control" ng-model="header.name"
+              ng-options="name for name in removableHeaders">
+      </select>
     </td>
     <td>
       <p ng-if="!header.editable" class="form-control-static">
@@ -37,7 +49,7 @@
              ng-model="header.value">
     </td>
     <td class="remove">
-      <a ng-if="header.editable" class="text-danger" href
+      <a ng-if="header.removable" class="text-danger" href
          ng-click="remove('sys', $index)">
         <span class="glyphicon glyphicon-trash"></span>
       </a>
@@ -46,6 +58,13 @@
 </table>
 
 <h2>Custom Metadata</h2>
+
+<p>
+  <button class="btn btn-default" ng-click="add('meta')">
+    Add new header
+  </button>
+</p>
+
 <table class="table table-striped">
   <tr>
     <th class="header-name">Name</th>
@@ -54,7 +73,11 @@
   </tr>
   <tr ng-repeat="header in headers.meta">
     <td>
-      <p class="form-control-static">{{ header.name }}</p>
+      <p ng-if="!header.added" class="form-control-static">
+        {{ header.name }}
+      </p>
+      <input ng-if="header.added" class="form-control"
+             ng-model="header.name">
     </td>
     <td>
       <input class="form-control" ng-model="header.value">

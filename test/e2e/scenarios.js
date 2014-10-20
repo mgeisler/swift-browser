@@ -45,10 +45,28 @@ describe('Container listing', function () {
     describe('should be sortable', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "bar", count: 20, bytes: 1234},
-                {name: "foo", count: 10, bytes: 2345}
-            ]);
+            SwiftMock.setObjects('foo', {
+                'x.txt': {headers: {
+                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 1000,
+                    'Content-Type': 'text/plain'
+                }},
+                'y.txt': {headers: {
+                    'ETag': '009520053b00386d1173f3988c55d192',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 234,
+                    'Content-Type': 'text/plain'
+                }}
+            });
+            SwiftMock.setObjects('bar', {
+                'x.txt': {headers: {
+                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 2345,
+                    'Content-Type': 'text/plain'
+                }}
+            });
             browser.get('index.html#/');
         });
 
@@ -66,9 +84,9 @@ describe('Container listing', function () {
         it('by size', function () {
             var sizes = by.css('td:nth-child(3)');
 
-            // Initial sort
-            expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
-            // Sorting by size makes no change
+            // Initial sort is by name
+            expect(mapGetText(sizes)).toEqual(['2.3 KB', '1.2 KB']);
+            // Clicking the header sorts
             element.all(by.css('th')).get(2).click();
             expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
             // Clicking again reverses
@@ -81,13 +99,13 @@ describe('Container listing', function () {
             var counts = rows.column('{{ container.count | number }}');
 
             // Initial sort order is by name
-            expect(mapGetText(counts)).toEqual(['20 objects', '10 objects']);
-            // Clicking the header sorts
+            expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
+            // Clicking the header sorts (no change)
             element.all(by.css('th')).get(3).click();
-            expect(mapGetText(counts)).toEqual(['10 objects', '20 objects']);
+            expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
             // Clicking the header sorts reverses the order
             element.all(by.css('th')).get(3).click();
-            expect(mapGetText(counts)).toEqual(['20 objects', '10 objects']);
+            expect(mapGetText(counts)).toEqual(['2 objects', '1 objects']);
         });
 
     });
@@ -95,10 +113,8 @@ describe('Container listing', function () {
     describe('selection', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "bar", count: 20, bytes: 1234},
-                {name: "foo", count: 10, bytes: 2345}
-            ]);
+            SwiftMock.addContainer('foo');
+            SwiftMock.addContainer('bar');
             browser.get('index.html#/');
         });
 
@@ -127,7 +143,6 @@ describe('Container listing', function () {
     describe('with no containers', function () {
 
         it('should not show all containers selected', function () {
-            SwiftMock.setContainers([]);
             browser.get('index.html#/');
 
             var toggle = by.css('th.toggle input');
@@ -144,21 +159,20 @@ describe('Object listing', function () {
     describe('should be sortable', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "foo", count: 2, bytes: 20}
-            ]);
-            SwiftMock.setObjects('foo', [
-                {hash: "401b30e3b8b5d629635a5c613cdb7919",
-                 'last_modified': "2014-08-16T13:33:21.848400",
-                 bytes: 20,
-                 name: "x.txt",
-                 'content_type': "text/plain"},
-                {hash: "009520053b00386d1173f3988c55d192",
-                 'last_modified': "2014-08-16T13:33:21.848400",
-                 bytes: 10,
-                 name: "y.txt",
-                 'content_type': "text/plain"}
-            ]);
+            SwiftMock.setObjects('foo', {
+                'x.txt': {headers: {
+                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 20,
+                    'Content-Type': 'text/plain'
+                }},
+                'y.txt': {headers: {
+                    'ETag': '009520053b00386d1173f3988c55d192',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 10,
+                    'Content-Type': 'text/plain'
+                }}
+            });
             browser.get('index.html#/foo/');
         });
 
@@ -186,21 +200,20 @@ describe('Object listing', function () {
     });
 
     it('should understand pseudo-directories', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 2, bytes: 20}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "x.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "dir/y.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 13,
+                'Content-Type': 'text/plain'
+            }},
+            'dir/y.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }},
+        });
         browser.get('index.html#/foo/');
 
         var names = by.css('td:nth-child(2)');
@@ -208,26 +221,26 @@ describe('Object listing', function () {
     });
 
     it('should understand deep pseudo-directories', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 3, bytes: 30}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 13,
-             name: "x.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "deeply/y.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "deeply/nested/z.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 13,
+                'Content-Type': 'text/plain'
+            }},
+            'deeply/y.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }},
+            'deeply/nested/z.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/foo/');
 
         var links = by.css('td:nth-child(2) a');
@@ -243,21 +256,20 @@ describe('Object listing', function () {
     describe('selection', function () {
 
         beforeEach(function () {
-            SwiftMock.setContainers([
-                {name: "foo", count: 2, bytes: 20}
-            ]);
-            SwiftMock.setObjects('foo', [
-                {hash: "401b30e3b8b5d629635a5c613cdb7919",
-                 'last_modified': "2014-08-16T13:33:21.848400",
-                 bytes: 20,
-                 name: "x.txt",
-                 'content_type': "text/plain"},
-                {hash: "009520053b00386d1173f3988c55d192",
-                 'last_modified': "2014-08-16T13:33:21.848400",
-                 bytes: 10,
-                 name: "y.txt",
-                 'content_type': "text/plain"}
-            ]);
+            SwiftMock.setObjects('foo', {
+                'x.txt': {headers: {
+                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 20,
+                    'Content-Type': 'text/plain'
+                }},
+                'y.txt': {headers: {
+                    'ETag': '009520053b00386d1173f3988c55d192',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 10,
+                    'Content-Type': 'text/plain'
+                }}
+            });
             browser.get('index.html#/foo/');
         });
 
@@ -285,9 +297,7 @@ describe('Object listing', function () {
     describe('with no objects', function () {
 
         it('should not show all objects selected', function () {
-            SwiftMock.setContainers([
-                {name: "foo", count: 0, bytes: 0}
-            ]);
+            SwiftMock.addContainer('foo');
             browser.get('index.html#/foo/');
 
             var toggle = by.css('th.toggle input');
@@ -296,26 +306,26 @@ describe('Object listing', function () {
     });
 
     it('should allow deletion', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 2, bytes: 20}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "x.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "y.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "z.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'y.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }},
+            'z.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/foo/');
         var names = by.css('td:nth-child(2)');
         var checkboxes = by.css('td:nth-child(1) input');
@@ -350,26 +360,26 @@ describe('Object listing', function () {
     });
 
     it('should allow deleting pseudo-directories', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 3, bytes: 40}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "x.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "bar/y.txt",
-             'content_type': "text/plain"},
-            {hash: "009520053b00386d1173f3988c55d192",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 10,
-             name: "bar/z.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'bar/y.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }},
+            'bar/z.txt': {headers: {
+                'ETag': '009520053b00386d1173f3988c55d192',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 10,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/foo/');
 
         var names = by.css('td:nth-child(2)');
@@ -386,16 +396,14 @@ describe('Object listing', function () {
     });
 
     it('should allow uploading files', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 1, bytes: 20}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "nested/x.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'nested/x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/foo/nested/');
 
         var uploadBtn = $('.btn[ng-click="upload()"]');
@@ -435,10 +443,7 @@ describe('Object listing', function () {
     });
 
     it('should allow unscheduling files for upload', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 0, bytes: 0}
-        ]);
-        SwiftMock.setObjects('foo', []);
+        SwiftMock.addContainer('foo');
         browser.get('index.html#/foo/');
 
         var names = by.css('td:nth-child(2)');
@@ -468,16 +473,14 @@ describe('Object listing', function () {
 describe('Listing a pseudo-directory', function () {
     it('should add traling slash', function() {
         SwiftMock.loadAngularMocks();
-        SwiftMock.setContainers([
-            {name: "foo", count: 2, bytes: 20}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "bar/baz.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'bar/baz.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/foo/bar');
 
         var url = browser.getLocationAbsUrl();
@@ -488,16 +491,15 @@ describe('Listing a pseudo-directory', function () {
 describe('Object metadata', function () {
     beforeEach(function () {
         SwiftMock.loadAngularMocks();
-        SwiftMock.setContainers([
-            {name: "foo", count: 1, bytes: 20}
-        ]);
-        SwiftMock.setObjects('foo', [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
-             bytes: 20,
-             name: "bar/baz.txt",
-             'content_type': "text/plain"}
-        ]);
+        SwiftMock.setObjects('foo', {
+            'bar/baz.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain',
+                'Content-Encoding': 'gzip'
+            }}
+        });
         browser.get('index.html#/foo/bar/baz.txt');
     });
 
@@ -514,7 +516,7 @@ describe('Object metadata', function () {
 
     it('should show metadata', function () {
         var rows = by.repeater('header in headers.sys');
-        expect(element.all(rows).count()).toEqual(4);
+        expect(element.all(rows).count()).toEqual(5);
 
         expect(textInRow(rows, 0)).toEqual([
             'etag', '401b30e3b8b5d629635a5c613cdb7919', ''
@@ -546,5 +548,94 @@ describe('Object metadata', function () {
         $('td a').click();
 
         expect(contentType.getAttribute('value')).toEqual('image/png');
+    });
+
+    it('should allow adding system headers', function () {
+        var rows = by.repeater('header in headers.sys');
+        var saveBtn = $('.btn[ng-click="save()"]');
+        var addBtn = $('.btn[ng-click="add(\'sys\')"]');
+        var options = by.options('name for name in removableHeaders');
+        var allOptions = element.all(options);
+        var input = td(rows, 5, 1).$('input');
+        var p = td(rows, 5, 0).$('p');
+
+        addBtn.click();
+        expect(mapGetText(options)).toEqual([
+            'content-encoding', 'content-disposition', 'x-delete-at'
+        ]);
+        expect(allOptions.get(0).isSelected()).toBe(true);
+        allOptions.get(1).click();
+        input.sendKeys('attachement');
+
+        saveBtn.click();
+        expect(allOptions.count()).toBe(0);
+        expect(p.getText()).toEqual('content-disposition');
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+
+        expect(p.getText()).toEqual('content-disposition');
+    });
+
+    it('should allow adding metadata', function () {
+        var rows = by.repeater('header in headers.meta');
+        var saveBtn = $('.btn[ng-click="save()"]');
+        var addBtn = $('.btn[ng-click="add(\'meta\')"]');
+        var input = td(rows, 0, 0).$('input');
+        var p = td(rows, 0, 0).$('p');
+
+        addBtn.click();
+        expect(input.getAttribute('value')).toEqual('x-object-meta-');
+
+        input.sendKeys('foobar');
+        saveBtn.click();
+        expect(input.isPresent()).toBe(false);
+        expect(p.getText()).toEqual('x-object-meta-foobar');
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+
+        expect(p.getText()).toEqual('x-object-meta-foobar');
+    });
+
+    it('should allow removing headers', function () {
+        var rows = by.repeater('header in headers.sys');
+        var names = rows.column('header.name');
+        var trashLink = td(rows, 4, 2).$('a');
+        var saveBtn = $('.btn[ng-click="save()"]');
+
+        expect(mapGetText(names)).toEqual([
+            'etag',
+            'last-modified',
+            'content-length',
+            'content-type',
+            'content-encoding'
+        ]);
+        trashLink.click();
+        expect(mapGetText(names)).toEqual([
+            'etag',
+            'last-modified',
+            'content-length',
+            'content-type'
+        ]);
+        saveBtn.click();
+
+        // Reload data from simulator
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+        expect(mapGetText(names)).toEqual([
+            'etag',
+            'last-modified',
+            'content-length',
+            'content-type'
+        ]);
+    });
+
+    it('should not allow removing the Content-Type header', function () {
+        var rows = by.repeater('header in headers.sys');
+        expect(td(rows, 3, 0).getText()).toEqual('content-type');
+        expect(td(rows, 3, 2).$('a').isPresent()).toBe(false);
     });
 });

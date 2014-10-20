@@ -41,9 +41,7 @@ describe('Test isolation', function() {
     });
 
     it('should show foo container', function () {
-        SwiftMock.setContainers([
-            {name: "foo", count: 0, bytes: 0}
-        ]);
+        SwiftMock.addContainer('foo');
         browser.get('index.html#/');
         expect($('td:nth-child(2)').getText()).toEqual('foo');
     });
@@ -59,22 +57,30 @@ describe('listObjects', function () {
     var callListObjects = callSwiftMethod('listObjects');
 
     it('should return 200 for an existing container', function () {
-        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
-                        bytes: 20,
-                        name: "a.txt",
-                        'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
-        SwiftMock.setObjects('foo', objects);
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+
         browser.get('index.html#/');
         var data = callListObjects('foo').then(function (result) {
             return [result.status, result.data];
         });
-        expect(data).toEqual([200, objects]);
+        expect(data).toEqual([200, [{
+            hash: "401b30e3b8b5d629635a5c613cdb7919",
+            'last_modified': "2014-08-16T13:33:21.000Z",
+            bytes: 20,
+            name: "a.txt",
+            'content_type': "text/plain"
+        }]]);
     });
 
     it('should return 404 for a non-existing container', function () {
-        SwiftMock.setContainers([]);
         browser.get('index.html#/');
         var result = callListObjects('no-such-container');
         expect(result.then(select('status'))).toBe(404);
@@ -86,28 +92,27 @@ describe('deleteObject', function () {
     var callDeleteObject = callSwiftMethod('deleteObject');
 
     it('should return 204 for an existing object', function () {
-        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
-                        bytes: 20,
-                        name: "a.txt",
-                        'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
-        SwiftMock.setObjects('foo', objects);
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/');
         var status = callDeleteObject('foo', 'a.txt').then(select('status'));
         expect(status).toEqual(204);
     });
 
     it('should return 404 for a non-existing object', function () {
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
-        SwiftMock.setObjects('foo', []);
+        SwiftMock.setObjects('foo', {});
         browser.get('index.html#/');
         var data = callDeleteObject('foo', 'no-such-object');
         expect(data.then(select('status'))).toEqual(404);
     });
 
     it('should return 404 for a non-existing container', function () {
-        SwiftMock.setContainers([]);
         browser.get('index.html#/');
         var data = callDeleteObject('no-such-container', 'a.txt');
         expect(data.then(select('status'))).toEqual(404);
@@ -118,18 +123,20 @@ describe('deleteDirectory', function () {
     beforeEach(SwiftMock.loadAngularMocks);
 
     it('should return an array with deletion results', function () {
-        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
-                        bytes: 20,
-                        name: "bar/a.txt",
-                        'content_type': "text/plain"},
-                       {hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
-                        bytes: 20,
-                        name: "bar/b.txt",
-                        'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
-        SwiftMock.setObjects('foo', objects);
+        SwiftMock.setObjects('foo', {
+            'bar/a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'bar/b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
             var $swift = window.getFromInjector('$swift');
@@ -148,13 +155,14 @@ describe('deleteDirectory', function () {
 describe('headObject', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
-        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
-                        bytes: 20,
-                        name: "a.txt",
-                        'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
-        SwiftMock.setObjects('foo', objects);
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/');
     });
     var callHeadObject = callSwiftMethod('headObject');
@@ -183,16 +191,18 @@ describe('headObject', function () {
 describe('postObject', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
-        var objects = [{hash: "401b30e3b8b5d629635a5c613cdb7919",
-                        'last_modified': "2014-08-16T13:33:21.848400",
-                        bytes: 20,
-                        name: "a.txt",
-                        'content_type': "text/plain"}];
-        SwiftMock.setContainers([{name: "foo", count: 1, bytes: 20}]);
-        SwiftMock.setObjects('foo', objects);
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
         browser.get('index.html#/');
     });
     var callPostObject = callSwiftMethod('postObject');
+    var callHeadObject = callSwiftMethod('headObject');
 
     it('should return 202 for an existing object', function () {
         var status = callPostObject('foo', 'a.txt', {}).then(select('status'));
@@ -205,9 +215,20 @@ describe('postObject', function () {
     });
 
     it('should return 404 for a non-existing container', function () {
-        SwiftMock.setContainers([]);
         browser.get('index.html#/');
         var data = callPostObject('no-such-container', 'a.txt', {});
         expect(data.then(select('status'))).toEqual(404);
+    });
+
+    it('should update headers case-insensitively', function () {
+        callPostObject('foo', 'a.txt', {'content-TYPE': 'foo/bar'});
+        var headers = callHeadObject('foo', 'a.txt').then(select('headers'));
+        expect(headers.then(select('content-type'))).toEqual('foo/bar');
+    });
+
+    it('should keep Content-Type header unchanged', function () {
+        callPostObject('foo', 'a.txt', {'content-encoding': 'gzip'});
+        var headers = callHeadObject('foo', 'a.txt').then(select('headers'));
+        expect(headers.then(select('content-type'))).toEqual('text/plain');
     });
 });

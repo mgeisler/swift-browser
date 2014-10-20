@@ -74,7 +74,10 @@ SwiftClient.prototype.headObject = function (container, object) {
 
 SwiftClient.prototype.postObject = function (container, object, headers) {
     var url = this._swiftUrl + '/' + container + '/' + object;
-    angular.extend(headers, this._headers);
+    // Explicitly unset the Content-Type header in order to avoid
+    // sending a default Content-Type with the request.
+    headers = angular.extend({'content-type': undefined},
+                             headers, this._headers);
     return this._$http.post(url, null, {headers: headers});
 };
 
