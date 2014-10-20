@@ -8,27 +8,11 @@ var Q = require('q');
 var mktemp = Q.nfbind(tmp.file);
 
 describe('my app', function() {
-
-  browser.get('index.html');
-
-  it('should redirect to /#/ when fragment is empty', function() {
-    expect(browser.getLocationAbsUrl()).toMatch("#/");
-  });
-
+    it('should redirect to /#/ when fragment is empty', function() {
+        browser.get('index.html');
+        expect(browser.getLocationAbsUrl()).toEqual("/");
+    });
 });
-
-
-function mapGetText(locator) {
-    return element.all(locator).map(function (el) {
-        return el.getText();
-    });
-}
-
-function mapIsSelected(locator) {
-    return element.all(locator).map(function (el) {
-        return el.isSelected();
-    });
-}
 
 function uploadFile(path) {
     browser.executeScript(function () {
@@ -39,11 +23,9 @@ function uploadFile(path) {
 }
 
 describe('Container listing', function () {
-
     beforeEach(SwiftMock.loadAngularMocks);
 
     describe('should be sortable', function () {
-
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
@@ -72,92 +54,84 @@ describe('Container listing', function () {
 
         it('by name', function () {
             var rows = by.repeater('container in containers');
-            var names = rows.column('{{ container.name }}');
+            var names = element.all(rows.column('container.name'));
 
             // Initial sort order is by name
-            expect(mapGetText(names)).toEqual(['bar', 'foo']);
+            expect(names.getText()).toEqual(['bar', 'foo']);
             // Clicking the name header sorts reverses the order
-            element(by.css('th:nth-child(2)')).click();
-            expect(mapGetText(names)).toEqual(['foo', 'bar']);
+            $('th:nth-child(2)').click();
+            expect(names.getText()).toEqual(['foo', 'bar']);
         });
 
         it('by size', function () {
-            var sizes = by.css('td:nth-child(3)');
+            var sizes = $$('td:nth-child(3)');
 
             // Initial sort is by name
-            expect(mapGetText(sizes)).toEqual(['2.3 KB', '1.2 KB']);
+            expect(sizes.getText()).toEqual(['2.3 KB', '1.2 KB']);
             // Clicking the header sorts
-            element.all(by.css('th')).get(2).click();
-            expect(mapGetText(sizes)).toEqual(['1.2 KB', '2.3 KB']);
+            $$('th').get(2).click();
+            expect(sizes.getText()).toEqual(['1.2 KB', '2.3 KB']);
             // Clicking again reverses
-            element.all(by.css('th')).get(2).click();
-            expect(mapGetText(sizes)).toEqual(['2.3 KB', '1.2 KB']);
+            $$('th').get(2).click();
+            expect(sizes.getText()).toEqual(['2.3 KB', '1.2 KB']);
         });
 
         it('by count', function () {
             var rows = by.repeater('container in containers');
-            var counts = rows.column('{{ container.count | number }}');
+            var counts = element.all(rows.column('container.count | number'));
 
             // Initial sort order is by name
-            expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
+            expect(counts.getText()).toEqual(['1 objects', '2 objects']);
             // Clicking the header sorts (no change)
-            element.all(by.css('th')).get(3).click();
-            expect(mapGetText(counts)).toEqual(['1 objects', '2 objects']);
+            $$('th').get(3).click();
+            expect(counts.getText()).toEqual(['1 objects', '2 objects']);
             // Clicking the header sorts reverses the order
-            element.all(by.css('th')).get(3).click();
-            expect(mapGetText(counts)).toEqual(['2 objects', '1 objects']);
+            $$('th').get(3).click();
+            expect(counts.getText()).toEqual(['2 objects', '1 objects']);
         });
-
     });
 
     describe('selection', function () {
-
         beforeEach(function () {
             SwiftMock.addContainer('foo');
             SwiftMock.addContainer('bar');
             browser.get('index.html#/');
         });
 
-        var toggle = by.css('th.toggle input');
-        var checkboxes = by.css('td:nth-child(1) input');
+        var toggle = $('th.toggle input');
+        var checkboxes = $$('td:nth-child(1) input');
 
         it('should be deselected by default', function () {
-            expect(element(toggle).isSelected()).toBe(false);
-            expect(mapIsSelected(checkboxes)).toEqual([false, false]);
+            expect(toggle.isSelected()).toBe(false);
+            expect(checkboxes.isSelected()).toEqual([false, false]);
         });
 
         it('should allow toggle all', function () {
-            element(toggle).click();
-            expect(mapIsSelected(checkboxes)).toEqual([true, true]);
+            toggle.click();
+            expect(checkboxes.isSelected()).toEqual([true, true]);
         });
 
         it('should notice manually selecting all', function () {
-            element.all(checkboxes).each(function (el) {
-                el.click();
-            });
-            expect(element(toggle).isSelected()).toBe(true);
+            checkboxes.click();
+            expect(toggle.isSelected()).toBe(true);
         });
-
     });
 
     describe('with no containers', function () {
-
         it('should not show all containers selected', function () {
             browser.get('index.html#/');
 
-            var toggle = by.css('th.toggle input');
-            expect(element(toggle).isSelected()).toBe(false);
+            var toggle = $('th.toggle input');
+            expect(toggle.isSelected()).toBe(false);
         });
     });
 });
 
 
 describe('Object listing', function () {
-
     beforeEach(SwiftMock.loadAngularMocks);
 
     describe('should be sortable', function () {
-
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
@@ -178,25 +152,24 @@ describe('Object listing', function () {
 
         it('by name', function () {
             var rows = by.repeater('item in items');
-            var names = rows.column('{{ item.title }}');
+            var names = element.all(rows.column('item.title'));
 
             // Initial sort order is by name
-            expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
+            expect(names.getText()).toEqual(['x.txt', 'y.txt']);
             // Clicking the name header sorts reverses the order
-            element.all(by.css('th')).get(1).click();
-            expect(mapGetText(names)).toEqual(['y.txt', 'x.txt']);
+            $$('th').get(1).click();
+            expect(names.getText()).toEqual(['y.txt', 'x.txt']);
         });
 
         it('by size', function () {
-            var sizes = by.css('td:last-child');
+            var sizes = $$('td:last-child');
 
             // Initial sort order is by name
-            expect(mapGetText(sizes)).toEqual(['20.0 B', '10.0 B']);
+            expect(sizes.getText()).toEqual(['20.0 B', '10.0 B']);
             // Clicking the header sorts
-            element(by.css('th:last-child')).click();
-            expect(mapGetText(sizes)).toEqual(['10.0 B', '20.0 B']);
+            $('th:last-child').click();
+            expect(sizes.getText()).toEqual(['10.0 B', '20.0 B']);
         });
-
     });
 
     it('should understand pseudo-directories', function () {
@@ -216,8 +189,8 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var names = by.css('td:nth-child(2)');
-        expect(mapGetText(names)).toEqual(['dir/', 'x.txt']);
+        var names = $$('td:nth-child(2)');
+        expect(names.getText()).toEqual(['dir/', 'x.txt']);
     });
 
     it('should understand deep pseudo-directories', function () {
@@ -243,18 +216,17 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var links = by.css('td:nth-child(2) a');
-        expect(mapGetText(links)).toEqual(['deeply/', 'x.txt']);
-        element.all(links).first().click();
+        var links = $$('td:nth-child(2) a');
+        expect(links.getText()).toEqual(['deeply/', 'x.txt']);
+        links.first().click();
 
-        expect(mapGetText(links)).toEqual(['nested/', 'y.txt']);
-        element.all(links).first().click();
+        expect(links.getText()).toEqual(['nested/', 'y.txt']);
+        links.first().click();
 
-        expect(mapGetText(links)).toEqual(['z.txt']);
+        expect(links.getText()).toEqual(['z.txt']);
     });
 
     describe('selection', function () {
-
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
@@ -273,35 +245,32 @@ describe('Object listing', function () {
             browser.get('index.html#/foo/');
         });
 
-        var toggle = by.css('th.toggle input');
-        var checkboxes = by.css('td:nth-child(1) input');
+        var toggle = $('th.toggle input');
+        var checkboxes = $$('td:nth-child(1) input');
 
         it('should be deselected by default', function () {
-            expect(element(toggle).isSelected()).toBe(false);
-            expect(mapIsSelected(checkboxes)).toEqual([false, false]);
+            expect(toggle.isSelected()).toBe(false);
+            expect(checkboxes.isSelected()).toEqual([false, false]);
         });
 
         it('should allow toggle all', function () {
-            element(toggle).click();
-            expect(mapIsSelected(checkboxes)).toEqual([true, true]);
+            toggle.click();
+            expect(checkboxes.isSelected()).toEqual([true, true]);
         });
 
         it('should notice manually selecting all', function () {
-            element.all(checkboxes).each(function (el) {
-                el.click();
-            });
-            expect(element(toggle).isSelected()).toBe(true);
+            checkboxes.click();
+            expect(toggle.isSelected()).toBe(true);
         });
     });
 
     describe('with no objects', function () {
-
         it('should not show all objects selected', function () {
             SwiftMock.addContainer('foo');
             browser.get('index.html#/foo/');
 
-            var toggle = by.css('th.toggle input');
-            expect(element(toggle).isSelected()).toBe(false);
+            var toggle = $('th.toggle input');
+            expect(toggle.isSelected()).toBe(false);
         });
     });
 
@@ -327,36 +296,35 @@ describe('Object listing', function () {
             }}
         });
         browser.get('index.html#/foo/');
-        var names = by.css('td:nth-child(2)');
-        var checkboxes = by.css('td:nth-child(1) input');
+        var names = $$('td:nth-child(2)');
+        var checkboxes = $$('td:nth-child(1) input');
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
-        element.all(checkboxes).get(0).click();
-        element.all(checkboxes).get(2).click();
-
+        checkboxes.get(0).click();
+        checkboxes.get(2).click();
         deleteBtn.click();
 
-        var modalNames = by.css('div.modal td:nth-child(2)');
-        var modalCheckboxes = by.css('div.modal td:nth-child(1) input');
+        var modalNames = $$('div.modal td:nth-child(2)');
+        var modalCheckboxes = $$('div.modal td:nth-child(1) input');
         var modalTitle = $('div.modal h3');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
         expect(modalTitle.getText()).toMatch('Deleting 2 objects');
-        expect(mapGetText(modalNames)).toEqual(['x.txt', 'z.txt']);
-        expect(mapIsSelected(modalCheckboxes)).toEqual([true, true]);
+        expect(modalNames.getText()).toEqual(['x.txt', 'z.txt']);
+        expect(modalCheckboxes.isSelected()).toEqual([true, true]);
 
         $('div.modal th:nth-child(1) input').click();
-        expect(mapIsSelected(modalCheckboxes)).toEqual([false, false]);
+        expect(modalCheckboxes.isSelected()).toEqual([false, false]);
         expect(closeBtn.isEnabled()).toBe(false);
 
-        element.all(modalCheckboxes).last().click();
+        modalCheckboxes.last().click();
         expect(modalTitle.getText()).toMatch('Deleting 1 objects');
 
         closeBtn.click();
         expect(modalTitle.isPresent()).toBe(false);
 
-        expect(mapIsSelected(checkboxes)).toEqual([true, false]);
-        expect(mapGetText(names)).toEqual(['x.txt', 'y.txt']);
+        expect(checkboxes.isSelected()).toEqual([true, false]);
+        expect(names.getText()).toEqual(['x.txt', 'y.txt']);
     });
 
     it('should allow deleting pseudo-directories', function () {
@@ -382,17 +350,17 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var names = by.css('td:nth-child(2)');
-        var modalNames = by.css('div.modal td:nth-child(2)');
+        var names = $$('td:nth-child(2)');
+        var modalNames = $$('div.modal td:nth-child(2)');
         var deleteBtn = $('.btn[ng-click="delete()"]');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
         $$('td:nth-child(1) input').first().click();
         deleteBtn.click();
-        expect(mapGetText(modalNames)).toEqual(['bar/']);
+        expect(modalNames.getText()).toEqual(['bar/']);
 
         closeBtn.click();
-        expect(mapGetText(names)).toEqual(['x.txt']);
+        expect(names.getText()).toEqual(['x.txt']);
     });
 
     it('should allow uploading files', function () {
@@ -407,8 +375,8 @@ describe('Object listing', function () {
         browser.get('index.html#/foo/nested/');
 
         var uploadBtn = $('.btn[ng-click="upload()"]');
-        var names = by.css('td:nth-child(2)');
-        expect(mapGetText(names)).toEqual(['x.txt']);
+        var names = $$('td:nth-child(2)');
+        expect(names.getText()).toEqual(['x.txt']);
 
         uploadBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
@@ -422,9 +390,9 @@ describe('Object listing', function () {
 
             var uploadBtn = $('.btn[ng-click="uploadFiles()"]');
             var rows = by.repeater('file in files');
-            var uploads = rows.column('{{ file.name }}');
+            var uploads = element.all(rows.column('file.name'));
             var newNames = paths.map(path.basename);
-            expect(mapGetText(uploads)).toEqual(newNames);
+            expect(uploads.getText()).toEqual(newNames);
 
             expect(uploadBtn.isEnabled()).toBe(true);
             uploadBtn.click();
@@ -438,7 +406,7 @@ describe('Object listing', function () {
             var expected = paths.map(path.basename);
             expected.push('x.txt');
             expected.sort();
-            expect(mapGetText(names)).toEqual(expected);
+            expect(names.getText()).toEqual(expected);
         });
     });
 
@@ -446,25 +414,24 @@ describe('Object listing', function () {
         SwiftMock.addContainer('foo');
         browser.get('index.html#/foo/');
 
-        var names = by.css('td:nth-child(2)');
-
+        var names = $$('td:nth-child(2)');
         $('.btn[ng-click="upload()"]').click();
 
         Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
             var paths = [res1[0], res2[0]];
             var rows = by.repeater('file in files');
-            var uploads = rows.column('{{ file.name }}');
+            var uploads = element.all(rows.column('file.name'));
             var base = path.basename(paths[1]);
             paths.forEach(uploadFile);
 
             // Remove the first file, expect that the second is still
             // there and that it's the only one.
             $$('a[ng-click="remove($index)"]').first().click();
-            expect(mapGetText(uploads)).toEqual([base]);
+            expect(uploads.getText()).toEqual([base]);
 
             $('.btn[ng-click="uploadFiles()"]').click();
             $('.btn[ng-click="$dismiss()"]').click();
-            expect(mapGetText(names)).toEqual([base]);
+            expect(names.getText()).toEqual([base]);
         });
     });
 
@@ -484,7 +451,7 @@ describe('Listing a pseudo-directory', function () {
         browser.get('index.html#/foo/bar');
 
         var url = browser.getLocationAbsUrl();
-        expect(url).toMatch("index.html#/foo/bar/$");
+        expect(url).toEqual("/foo/bar/");
     });
 });
 
@@ -554,21 +521,22 @@ describe('Object metadata', function () {
         var rows = by.repeater('header in headers.sys');
         var saveBtn = $('.btn[ng-click="save()"]');
         var addBtn = $('.btn[ng-click="add(\'sys\')"]');
-        var options = by.options('name for name in removableHeaders');
-        var allOptions = element.all(options);
+        var options = element.all(
+            by.options('name for name in removableHeaders')
+        );
         var input = td(rows, 5, 1).$('input');
         var p = td(rows, 5, 0).$('p');
 
         addBtn.click();
-        expect(mapGetText(options)).toEqual([
+        expect(options.getText()).toEqual([
             'content-encoding', 'content-disposition', 'x-delete-at'
         ]);
-        expect(allOptions.get(0).isSelected()).toBe(true);
-        allOptions.get(1).click();
+        expect(options.get(0).isSelected()).toBe(true);
+        options.get(1).click();
         input.sendKeys('attachement');
 
         saveBtn.click();
-        expect(allOptions.count()).toBe(0);
+        expect(options.count()).toBe(0);
         expect(p.getText()).toEqual('content-disposition');
 
         // Reload data from simulator
@@ -602,11 +570,11 @@ describe('Object metadata', function () {
 
     it('should allow removing headers', function () {
         var rows = by.repeater('header in headers.sys');
-        var names = rows.column('header.name');
+        var names = element.all(rows.column('header.name'));
         var trashLink = td(rows, 4, 2).$('a');
         var saveBtn = $('.btn[ng-click="save()"]');
 
-        expect(mapGetText(names)).toEqual([
+        expect(names.getText()).toEqual([
             'etag',
             'last-modified',
             'content-length',
@@ -614,7 +582,7 @@ describe('Object metadata', function () {
             'content-encoding'
         ]);
         trashLink.click();
-        expect(mapGetText(names)).toEqual([
+        expect(names.getText()).toEqual([
             'etag',
             'last-modified',
             'content-length',
@@ -625,7 +593,7 @@ describe('Object metadata', function () {
         // Reload data from simulator
         $$('.breadcrumb a').last().click();
         $('td a').click();
-        expect(mapGetText(names)).toEqual([
+        expect(names.getText()).toEqual([
             'etag',
             'last-modified',
             'content-length',
