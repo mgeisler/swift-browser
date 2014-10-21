@@ -54,6 +54,8 @@ function SwiftSimulator($httpBackend) {
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
 
+    $httpBackend.whenGET(this.objRegex)
+        .respond(this.getObject.bind(this));
     $httpBackend.when('HEAD', this.objRegex)
         .respond(this.headObject.bind(this));
     $httpBackend.whenPOST(this.objRegex)
@@ -158,6 +160,12 @@ SwiftSimulator.prototype.deleteObject = function(method, url, data) {
 SwiftSimulator.prototype.headObject = function(method, url, data) {
     return this.findObjectOr404(url, function (container, object) {
         return [200, null, object.headers];
+    });
+};
+
+SwiftSimulator.prototype.getObject = function(method, url, data) {
+    return this.findObjectOr404(url, function (container, object) {
+        return [200, object.content, object.headers];
     });
 };
 

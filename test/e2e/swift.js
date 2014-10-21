@@ -188,6 +188,50 @@ describe('headObject', function () {
     });
 });
 
+describe('getObject', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+    beforeEach(function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {
+                headers: {
+                    'ETag': 'e59ff97941044f85df5297e1c302d260',
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 12,
+                    'Content-Type': 'text/plain'
+                },
+                content: 'Hello World\n'
+            }
+        });
+        browser.get('index.html#/');
+    });
+    var callGetObject = callSwiftMethod('getObject');
+
+    it('should return 200 for an existing object', function () {
+        var status = callGetObject('foo', 'a.txt').then(select('status'));
+        expect(status).toEqual(200);
+    });
+
+    it('should return 404 for a non-existing object', function () {
+        var status = callGetObject('foo', 'b.txt').then(select('status'));
+        expect(status).toEqual(404);
+    });
+
+    it('should return object content', function () {
+        var data = callGetObject('foo', 'a.txt').then(select('data'));
+        expect(data).toEqual('Hello World\n');
+    });
+
+    it('should return object metadata as headers', function () {
+        var headers = callGetObject('foo', 'a.txt').then(select('headers'));
+        expect(headers).toEqual({
+            'content-type': 'text/plain',
+            'etag': 'e59ff97941044f85df5297e1c302d260',
+            'last-modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+            'content-length': '12'
+        });
+    });
+});
+
 describe('postObject', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
