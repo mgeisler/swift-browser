@@ -60,7 +60,7 @@ function mkDownloadLink($scope, key) {
 }
 
 angular.module('swiftBrowser.controllers',
-               ['swiftBrowser.swift', 'ui.bootstrap'])
+               ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
     .controller('RootCtrl', ['$scope', '$swift', function($scope, $swift) {
         $scope.containers = [];
         $scope.updateOrderBy = mkUpdateOrderBy($scope);
@@ -216,7 +216,9 @@ angular.module('swiftBrowser.controllers',
     ])
     .controller('ObjectCtrl', [
         '$scope', '$stateParams', '$swift', '$location', '$modal',
-        function ($scope, $stateParams, $swift, $location, $modal) {
+        '$timeout', '$q',
+        function ($scope, $stateParams, $swift, $location, $modal,
+                  $timeout, $q) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -294,14 +296,30 @@ angular.module('swiftBrowser.controllers',
                 };
 
                 $scope.show = function () {
+                    // To prevent a blank editor showing, we need to
+                    // refresh it after opening the modal. We will
+                    // capture the editor here and refresh it below.
+                    var pendingEditor = $q.defer();
                     var scope = $scope.$new(true);
                     scope.name = name;
+                    scope.editor = {
+                        content: '',
+                        options: {
+                            onLoad: pendingEditor.resolve,
+                            readOnly: true
+                        }
+                    };
                     $swift.getObject(container, name).then(function (result) {
-                        scope.content = result.data;
+                        scope.editor.content = result.data;
                     });
-                    $modal.open({templateUrl: 'partials/show-modal.html',
-                                 scope: scope,
-                                 size: 'lg'});
+                    var opts = {templateUrl: 'partials/show-modal.html',
+                                scope: scope,
+                                size: 'lg'};
+                    $modal.open(opts).opened.then(function () {
+                        pendingEditor.promise.then(function (editor) {
+                            $timeout(editor.refresh.bind(editor));
+                        });
+                    });
                 };
 
                 $swift.headObject(container, name).then(function (result) {

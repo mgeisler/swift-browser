@@ -605,9 +605,8 @@ describe('Object content', function () {
 
     it('should allow showing object content', function () {
         var showBtn = $('a[ng-click="show()"]');
-        var content = $('.object-content');
+        var content = $('.CodeMirror-code');
         showBtn.click();
-        expect(content.getAttribute('readonly')).toEqual('true');
         expect(content.getText()).toEqual('Hello <i>World</i>');
     });
 });
