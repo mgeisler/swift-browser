@@ -29,13 +29,11 @@ describe('Container listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 1000,
                     'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
-                    'ETag': '009520053b00386d1173f3988c55d192',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 234,
                     'Content-Type': 'text/plain'
@@ -43,7 +41,6 @@ describe('Container listing', function () {
             });
             SwiftMock.setObjects('bar', {
                 'x.txt': {headers: {
-                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 2345,
                     'Content-Type': 'text/plain'
@@ -135,13 +132,11 @@ describe('Object listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
                     'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
-                    'ETag': '009520053b00386d1173f3988c55d192',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
                     'Content-Type': 'text/plain'
@@ -175,13 +170,11 @@ describe('Object listing', function () {
     it('should understand pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 13,
                 'Content-Type': 'text/plain'
             }},
             'dir/y.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
@@ -196,19 +189,16 @@ describe('Object listing', function () {
     it('should understand deep pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 13,
                 'Content-Type': 'text/plain'
             }},
             'deeply/y.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
             }},
             'deeply/nested/z.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
@@ -230,13 +220,11 @@ describe('Object listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
                     'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
-                    'ETag': '009520053b00386d1173f3988c55d192',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
                     'Content-Type': 'text/plain'
@@ -277,19 +265,16 @@ describe('Object listing', function () {
     it('should allow deletion', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
                 'Content-Type': 'text/plain'
             }},
             'y.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
             }},
             'z.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
@@ -330,19 +315,16 @@ describe('Object listing', function () {
     it('should allow deleting pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
                 'Content-Type': 'text/plain'
             }},
             'bar/y.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
             }},
             'bar/z.txt': {headers: {
-                'ETag': '009520053b00386d1173f3988c55d192',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
                 'Content-Type': 'text/plain'
@@ -366,7 +348,6 @@ describe('Object listing', function () {
     it('should allow uploading files', function () {
         SwiftMock.setObjects('foo', {
             'nested/x.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
                 'Content-Type': 'text/plain'
@@ -442,7 +423,6 @@ describe('Listing a pseudo-directory', function () {
         SwiftMock.loadAngularMocks();
         SwiftMock.setObjects('foo', {
             'bar/baz.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
                 'Content-Type': 'text/plain'
@@ -614,9 +594,7 @@ describe('Object content', function () {
         SwiftMock.setObjects('foo', {
             'bar.html': {
                 headers: {
-                    'ETag': '556490ea2c67498969d69d28abb9f960',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Length': '19',
                     'Content-Type': 'text/html'
                 },
                 content: 'Hello <i>World</i>\n'
