@@ -5,6 +5,7 @@ exports.loadAngularMocks = function () {
     browser.addMockModule('swiftBrowserE2E', function () {
         var srcs = [
             'bower_components/angular-mocks/angular-mocks.js',
+            'bower_components/spark-md5/spark-md5.js',
             'js/test/swift-simulator.js'
         ];
         srcs.forEach(function (src) {

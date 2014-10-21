@@ -1,3 +1,4 @@
+/* global SparkMD5: false */
 'use strict';
 
 function byProperty(prop) {
@@ -212,10 +213,14 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
 SwiftSimulator.prototype.putObject = function(method, url, data) {
     return this.findContainerOr404(url, function (cont, contName, objName) {
         var lastModified = data.lastModifiedDate.toISOString();
-        var object = {headers: {'ETag': '',
-                                'Last-Modified': lastModified,
+        var object = {headers: {'Last-Modified': lastModified,
                                 'Content-Length': data.size,
                                 'Content-Type': 'application/octet-stream'}};
+        var reader = new FileReader();
+        reader.onload = function () {
+            object.headers.ETag = SparkMD5.ArrayBuffer.hash(reader.result);
+        };
+        reader.readAsArrayBuffer(data);
         cont.objects[objName] = object;
         return [201, null];
     });
@@ -229,6 +234,14 @@ SwiftSimulator.prototype.setObjects = function(container, objects) {
     if (!this.data[container]) {
         this.addContainer(container);
     }
+    angular.forEach(objects, function (object, name) {
+        if (object.content) {
+            object.headers.ETag = SparkMD5.hash(object.content);
+            object.headers['Content-Length'] = object.content.length;
+        } else {
+            object.content = '';
+        }
+    });
     this.data[container].objects = objects;
 };
 
