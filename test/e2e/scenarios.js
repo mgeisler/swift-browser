@@ -603,10 +603,16 @@ describe('Object content', function () {
         browser.get('index.html#/foo/bar.html');
     });
 
+    function getValue() {
+        return browser.driver.executeScript(function () {
+            var editor = $('.CodeMirror')[0].CodeMirror;
+            return editor.getValue();
+        });
+    }
+
     it('should allow showing object content', function () {
         var showBtn = $('a[ng-click="show()"]');
-        var content = $('.CodeMirror-code');
         showBtn.click();
-        expect(content.getText()).toEqual('Hello <i>World</i>');
+        expect(getValue()).toEqual('Hello <i>World</i>\n');
     });
 });

@@ -306,6 +306,7 @@ angular.module('swiftBrowser.controllers',
                         content: '',
                         options: {
                             onLoad: pendingEditor.resolve,
+                            lineNumbers: true,
                             readOnly: true
                         }
                     };
