@@ -307,6 +307,7 @@ angular.module('swiftBrowser.controllers',
                         }
                     });
 
+                    var content = '';
                     var pendingEditor = $q.defer();
                     var scope = $scope.$new(true);
                     scope.name = name;
@@ -314,14 +315,23 @@ angular.module('swiftBrowser.controllers',
                         content: '',
                         options: {
                             onLoad: pendingEditor.resolve,
-                            lineNumbers: true,
-                            readOnly: true
+                            lineNumbers: true
                         }
                     };
+                    scope.isUnchanged = function () {
+                        return scope.editor.content == content;
+                    };
+                    scope.save = function () {
+                        var upload = $swift.uploadObject(container, name,
+                                                         scope.editor.content);
+                        upload.then(function () {
+                            content = scope.editor.content;
+                        });
+                    };
                     $swift.getObject(container, name).then(function (result) {
-                        scope.editor.content = result.data;
+                        content = scope.editor.content = result.data;
                     });
-                    var opts = {templateUrl: 'partials/show-modal.html',
+                    var opts = {templateUrl: 'partials/edit-modal.html',
                                 scope: scope,
                                 size: 'lg'};
                     $modal.open(opts).opened.then(function () {

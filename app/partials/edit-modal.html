@@ -5,5 +5,7 @@
   <div ui-codemirror="editor.options" ng-model="editor.content"></div>
 </div>
 <div class="modal-footer">
+  <a class="btn btn-default pull-left" ng-disabled="isUnchanged()"
+     ng-click="save()">Save</a>
   <a class="btn btn-primary" ng-click="$close()">Close</a>
 </div>

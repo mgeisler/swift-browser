@@ -617,8 +617,11 @@ describe('Object content', function () {
     }
 
     var getValue = callEditorMethod('getValue');
+    var setValue = callEditorMethod('setValue');
     var getOption = callEditorMethod('getOption');
     var showBtn = $('a[ng-click="show()"]');
+    var saveBtn = $('a[ng-click="save()"]');
+    var closeBtn = $('a[ng-click="$close()"]');
 
     it('should allow showing object content', function () {
         showBtn.click();
@@ -628,5 +631,14 @@ describe('Object content', function () {
     it('should set mode based on MIME type', function () {
         showBtn.click();
         expect(getOption('mode')).toEqual('htmlmixed');
+    });
+
+    it('should allow editing object content', function () {
+        showBtn.click();
+        setValue('<b>Hi!</b>\n');
+        saveBtn.click();
+        closeBtn.click();
+        showBtn.click();
+        expect(getValue()).toEqual('<b>Hi!</b>\n');
     });
 });
