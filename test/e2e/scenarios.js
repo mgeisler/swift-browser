@@ -603,16 +603,30 @@ describe('Object content', function () {
         browser.get('index.html#/foo/bar.html');
     });
 
-    function getValue() {
-        return browser.driver.executeScript(function () {
-            var editor = $('.CodeMirror')[0].CodeMirror;
-            return editor.getValue();
-        });
+    function callEditorMethod (method) {
+        return function () {
+            var args = Array.prototype.slice.call(arguments);
+            args = JSON.stringify(args);
+            function script(method, args) {
+                args = JSON.parse(args);
+                var editor = $('.CodeMirror')[0].CodeMirror;
+                return editor[method].apply(editor, args);
+            }
+            return browser.driver.executeScript(script, method, args);
+        };
     }
 
+    var getValue = callEditorMethod('getValue');
+    var getOption = callEditorMethod('getOption');
+    var showBtn = $('a[ng-click="show()"]');
+
     it('should allow showing object content', function () {
-        var showBtn = $('a[ng-click="show()"]');
         showBtn.click();
         expect(getValue()).toEqual('Hello <i>World</i>\n');
+    });
+
+    it('should set mode based on MIME type', function () {
+        showBtn.click();
+        expect(getOption('mode')).toEqual('htmlmixed');
     });
 });
