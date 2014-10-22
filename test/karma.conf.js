@@ -7,6 +7,8 @@ module.exports = function(config){
 
     files: [
       'app/bower_components/codemirror/lib/codemirror.js',
+      'app/bower_components/codemirror/mode/meta.js',
+      'app/bower_components/codemirror/addon/mode/loadmode.js',
       'app/bower_components/jquery/dist/jquery.js',
       'app/bower_components/ng-file-upload/angular-file-upload-html5-shim.js',
       'app/bower_components/angular/angular.js',

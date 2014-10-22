@@ -299,6 +299,14 @@ angular.module('swiftBrowser.controllers',
                     // To prevent a blank editor showing, we need to
                     // refresh it after opening the modal. We will
                     // capture the editor here and refresh it below.
+                    var mime = null;
+                    $scope.headers.sys.some(function (header) {
+                        if (header.name == 'content-type') {
+                            mime = header.value;
+                            return true;
+                        }
+                    });
+
                     var pendingEditor = $q.defer();
                     var scope = $scope.$new(true);
                     scope.name = name;
@@ -318,7 +326,15 @@ angular.module('swiftBrowser.controllers',
                                 size: 'lg'};
                     $modal.open(opts).opened.then(function () {
                         pendingEditor.promise.then(function (editor) {
-                            $timeout(editor.refresh.bind(editor));
+                            $timeout(function () {
+                                var CodeMirror = window.CodeMirror;
+                                var info = CodeMirror.findModeByMIME(mime);
+                                if (info) {
+                                    CodeMirror.autoLoadMode(editor, info.mode);
+                                    editor.setOption('mode', info.mode);
+                                }
+                                editor.refresh();
+                            });
                         });
                     });
                 };
