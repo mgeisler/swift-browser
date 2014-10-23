@@ -60,7 +60,7 @@ function mkDownloadLink($scope, key) {
 }
 
 angular.module('swiftBrowser.controllers',
-               ['swiftBrowser.swift', 'ui.bootstrap'])
+               ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
     .controller('RootCtrl', ['$scope', '$swift', function($scope, $swift) {
         $scope.containers = [];
         $scope.updateOrderBy = mkUpdateOrderBy($scope);
@@ -214,8 +214,11 @@ angular.module('swiftBrowser.controllers',
             });
         }
     ])
-    .controller('ObjectCtrl', ['$scope', '$stateParams', '$swift', '$location',
-        function ($scope, $stateParams, $swift, $location) {
+    .controller('ObjectCtrl', [
+        '$scope', '$stateParams', '$swift', '$location', '$modal',
+        '$timeout', '$q',
+        function ($scope, $stateParams, $swift, $location, $modal,
+                  $timeout, $q) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -292,6 +295,60 @@ angular.module('swiftBrowser.controllers',
                     }
                 };
 
+                $scope.show = function () {
+                    // To prevent a blank editor showing, we need to
+                    // refresh it after opening the modal. We will
+                    // capture the editor here and refresh it below.
+                    var mime = null;
+                    $scope.headers.sys.some(function (header) {
+                        if (header.name == 'content-type') {
+                            mime = header.value;
+                            return true;
+                        }
+                    });
+
+                    var content = '';
+                    var pendingEditor = $q.defer();
+                    var scope = $scope.$new(true);
+                    scope.name = name;
+                    scope.editor = {
+                        content: '',
+                        options: {
+                            onLoad: pendingEditor.resolve,
+                            lineNumbers: true
+                        }
+                    };
+                    scope.isUnchanged = function () {
+                        return scope.editor.content == content;
+                    };
+                    scope.save = function () {
+                        var upload = $swift.uploadObject(container, name,
+                                                         scope.editor.content);
+                        upload.then(function () {
+                            content = scope.editor.content;
+                        });
+                    };
+                    $swift.getObject(container, name).then(function (result) {
+                        content = scope.editor.content = result.data;
+                    });
+                    var opts = {templateUrl: 'partials/edit-modal.html',
+                                scope: scope,
+                                size: 'lg'};
+                    $modal.open(opts).opened.then(function () {
+                        pendingEditor.promise.then(function (editor) {
+                            $timeout(function () {
+                                var CodeMirror = window.CodeMirror;
+                                var info = CodeMirror.findModeByMIME(mime);
+                                if (info) {
+                                    CodeMirror.autoLoadMode(editor, info.mode);
+                                    editor.setOption('mode', info.mode);
+                                }
+                                editor.refresh();
+                            });
+                        });
+                    });
+                };
+
                 $swift.headObject(container, name).then(function (result) {
                     var allHeaders = result.headers();
                     var editableHeaders = [
@@ -335,4 +392,5 @@ angular.module('swiftBrowser.controllers',
                     });
                 });
             });
-        }]);
+        }
+    ]);

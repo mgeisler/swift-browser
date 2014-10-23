@@ -1,3 +1,4 @@
+/* global SparkMD5: false */
 'use strict';
 
 function byProperty(prop) {
@@ -43,14 +44,19 @@ function SwiftSimulator($httpBackend) {
     this.reset();
 
     var prefix = escape(accountUrl() + '/');
-    this.listRegex = new RegExp(prefix + '(.*?)(?:' + escape('?') + '(.*)|$)');
-    this.objRegex = new RegExp(prefix + '(.*?)' + escape('/') + '(.*)');
+    var container = '([^/]+?)';
+    var object = '(.+)';
+    var qsOrEmpty = '(?:' + escape('?') + '(.*)|$)';
+    this.listRegex = new RegExp(prefix + container + qsOrEmpty);
+    this.objRegex = new RegExp(prefix + container + escape('/') + object);
 
     $httpBackend.whenGET(accountUrl())
         .respond(this.listContainers.bind(this));
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
 
+    $httpBackend.whenGET(this.objRegex)
+        .respond(this.getObject.bind(this));
     $httpBackend.when('HEAD', this.objRegex)
         .respond(this.headObject.bind(this));
     $httpBackend.whenPOST(this.objRegex)
@@ -158,6 +164,12 @@ SwiftSimulator.prototype.headObject = function(method, url, data) {
     });
 };
 
+SwiftSimulator.prototype.getObject = function(method, url, data) {
+    return this.findObjectOr404(url, function (container, object) {
+        return [200, object.content, object.headers];
+    });
+};
+
 SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
     return this.findObjectOr404(url, function (container, object) {
         var editableHeaders = [
@@ -200,11 +212,23 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
 
 SwiftSimulator.prototype.putObject = function(method, url, data) {
     return this.findContainerOr404(url, function (cont, contName, objName) {
-        var lastModified = data.lastModifiedDate.toISOString();
-        var object = {headers: {'ETag': '',
-                                'Last-Modified': lastModified,
-                                'Content-Length': data.size,
+        var lastModified = data.lastModifiedDate || new Date();
+        var contentLength = data.size || data.length;
+        var object = {headers: {'Last-Modified': lastModified.toISOString(),
+                                'Content-Length': contentLength,
                                 'Content-Type': 'application/octet-stream'}};
+
+        if (angular.isString(data)) {
+            object.content = data;
+            object.headers.ETag = SparkMD5.hash(data);
+        } else {
+            var reader = new FileReader();
+            reader.onload = function () {
+                object.content = reader.result;
+                object.headers.ETag = SparkMD5.hash(reader.result);
+            };
+            reader.readAsText(data);
+        }
         cont.objects[objName] = object;
         return [201, null];
     });
@@ -218,6 +242,14 @@ SwiftSimulator.prototype.setObjects = function(container, objects) {
     if (!this.data[container]) {
         this.addContainer(container);
     }
+    angular.forEach(objects, function (object, name) {
+        if (object.content) {
+            object.headers.ETag = SparkMD5.hash(object.content);
+            object.headers['Content-Length'] = object.content.length;
+        } else {
+            object.content = '';
+        }
+    });
     this.data[container].objects = objects;
 };
 

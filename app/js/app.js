@@ -10,6 +10,9 @@ angular.module('swiftBrowser', [
   'swiftBrowser.controllers',
   'swiftBrowser.auth'
 ]).
+config(function () {
+    window.CodeMirror.modeURL = 'bower_components/codemirror/mode/%N/%N.js';
+}).
 config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('root', {
