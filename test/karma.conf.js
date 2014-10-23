@@ -10,7 +10,7 @@ module.exports = function(config){
       'app/bower_components/ng-file-upload/angular-file-upload-html5-shim.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/ng-file-upload/angular-file-upload.js',
-      'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-ui-router/release/angular-ui-router.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'app/js/**/*.js',
