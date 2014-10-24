@@ -68,8 +68,8 @@ function mkDownloadLink($scope, key) {
 angular.module('swiftBrowser.controllers',
                ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
     .controller('RootCtrl', [
-        '$scope', '$swift',
-        function($scope, $swift) {
+        '$scope', '$swift', '$modal',
+        function($scope, $swift, $modal) {
             $scope.containers = [];
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
@@ -78,6 +78,19 @@ angular.module('swiftBrowser.controllers',
             $scope.toggleAll = mkToggleAll($scope, 'containers',
                                            $scope.allSelected);
             $scope.nothingSelected = mkNothingSelected($scope, 'containers');
+
+            $scope.create = function () {
+                var opts = {
+                    templateUrl: 'partials/create-container-modal.html'
+                };
+                var inst = $modal.open(opts);
+                inst.result.then(function (name) {
+                    $swift.createContainer(name).then(function () {
+                        var container = {name: name, count: 0, bytes: 0};
+                        $scope.containers.push(container);
+                    });
+                });
+            };
 
             $swift.listContainers().then(function (result) {
                 $scope.containers = result.data;

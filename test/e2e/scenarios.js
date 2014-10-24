@@ -123,6 +123,25 @@ describe('Container listing', function () {
             expect(toggle.isSelected()).toBe(false);
         });
     });
+
+    it('should allow creating a new container', function () {
+        var rows = by.repeater('container in containers');
+        var names = element.all(rows.column('container.name'));
+        var sizes = $$('td:nth-child(3)');
+        var counts = element.all(rows.column('container.count | number'));
+        var openBtn = $('.btn[ng-click="create()"]');
+        var createBtn = $('.btn[ng-click="$close(name)"]');
+        var input = $('.modal-body input');
+
+        browser.get('index.html#/');
+        openBtn.click();
+        input.sendKeys('foo');
+        createBtn.click();
+
+        expect(names.getText()).toEqual(['foo']);
+        expect(sizes.getText()).toEqual(['0.0 B']);
+        expect(counts.getText()).toEqual(['0 objects']);
+    });
 });
 
 
