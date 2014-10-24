@@ -52,6 +52,24 @@ describe('Test isolation', function() {
     });
 });
 
+describe('createContainer', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+    var callCreateContainer = callSwiftMethod('createContainer');
+
+    it('should return 201 for a new container', function () {
+        browser.get('index.html#/');
+        var result = callCreateContainer('foo');
+        expect(result.then(select('status'))).toBe(201);
+    });
+
+    it('should return 202 for an existing container', function () {
+        SwiftMock.addContainer('foo');
+        browser.get('index.html#/');
+        var result = callCreateContainer('foo');
+        expect(result.then(select('status'))).toBe(202);
+    });
+});
+
 describe('listObjects', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     var callListObjects = callSwiftMethod('listObjects');

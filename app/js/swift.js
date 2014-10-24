@@ -63,6 +63,11 @@ SwiftClient.prototype.listContainers = function () {
     return this._$http.get(this._swiftUrl, {headers: this._headers});
 };
 
+SwiftClient.prototype.createContainer = function (container) {
+    var url = this._swiftUrl + '/' + container;
+    return this._$http.put(url, {headers: this._headers});
+};
+
 SwiftClient.prototype.listObjects = function (container, params) {
     var url = this._swiftUrl + '/' + container;
     return this._$http.get(url, {params: params, headers: this._headers});
