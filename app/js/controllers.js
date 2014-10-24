@@ -67,20 +67,23 @@ function mkDownloadLink($scope, key) {
 
 angular.module('swiftBrowser.controllers',
                ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
-    .controller('RootCtrl', ['$scope', '$swift', function($scope, $swift) {
-        $scope.containers = [];
-        $scope.updateOrderBy = mkUpdateOrderBy($scope);
-        $scope.updateOrderBy('name');
+    .controller('RootCtrl', [
+        '$scope', '$swift',
+        function($scope, $swift) {
+            $scope.containers = [];
+            $scope.updateOrderBy = mkUpdateOrderBy($scope);
+            $scope.updateOrderBy('name');
 
-        $scope.allSelected = mkAllSelected($scope, 'containers');
-        $scope.toggleAll = mkToggleAll($scope, 'containers',
-                                       $scope.allSelected);
-        $scope.nothingSelected = mkNothingSelected($scope, 'containers');
+            $scope.allSelected = mkAllSelected($scope, 'containers');
+            $scope.toggleAll = mkToggleAll($scope, 'containers',
+                                           $scope.allSelected);
+            $scope.nothingSelected = mkNothingSelected($scope, 'containers');
 
-        $swift.listContainers().then(function (result) {
-            $scope.containers = result.data;
-        });
-    }])
+            $swift.listContainers().then(function (result) {
+                $scope.containers = result.data;
+            });
+        }
+    ])
     .controller('ContainerCtrl', [
         '$scope', '$swift', '$stateParams', '$location', '$modal',
         function($scope, $swift, $stateParams, $location, $modal) {
