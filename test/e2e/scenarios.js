@@ -508,6 +508,7 @@ describe('Object metadata', function () {
         var p = td(rows, 5, 0).$('p');
 
         addBtn.click();
+        expect(saveBtn.isEnabled()).toBe(false);
         expect(options.getText()).toEqual([
             'content-encoding', 'content-disposition', 'x-delete-at'
         ]);
@@ -515,6 +516,7 @@ describe('Object metadata', function () {
         options.get(1).click();
         input.sendKeys('attachement');
 
+        expect(saveBtn.isEnabled()).toBe(true);
         saveBtn.click();
         expect(options.count()).toBe(0);
         expect(p.getText()).toEqual('content-disposition');
@@ -568,6 +570,7 @@ describe('Object metadata', function () {
             'content-length',
             'content-type'
         ]);
+        expect(saveBtn.isEnabled()).toBe(true);
         saveBtn.click();
 
         // Reload data from simulator

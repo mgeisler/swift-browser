@@ -271,13 +271,12 @@ angular.module('swiftBrowser.controllers',
                             header.added = false;
                         });
                         headers = angular.copy($scope.headers);
+                        $scope.form.$setPristine();
                     });
                 };
                 $scope.remove = function (type, idx) {
                     $scope.headers[type].splice(idx, 1);
-                };
-                $scope.isUnchanged = function () {
-                    return angular.equals($scope.headers, headers);
+                    $scope.form.$setDirty();
                 };
                 $scope.add = function (type) {
                     if (type == 'meta') {

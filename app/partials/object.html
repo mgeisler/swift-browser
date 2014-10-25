@@ -20,6 +20,8 @@
   </div>
 </div>
 
+<form name="form">
+
 <h2>System Headers</h2>
 
 <p>
@@ -92,9 +94,11 @@
   </tr>
 </table>
 
+</form>
+
 <div>
   <button class="btn btn-primary" ng-click="save()"
-          ng-disabled="isUnchanged()">Save</button>
+          ng-disabled="form.$pristine">Save</button>
   <button class="btn btn-default" ng-click="reset()"
-          ng-disabled="isUnchanged()">Reset</button>
+          ng-disabled="form.$pristine">Reset</button>
 </div>
