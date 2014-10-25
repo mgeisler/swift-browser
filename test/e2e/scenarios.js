@@ -623,8 +623,8 @@ describe('Object content', function () {
     var setValue = callEditorMethod('setValue');
     var getOption = callEditorMethod('getOption');
     var showBtn = $('a[ng-click="show()"]');
-    var saveBtn = $('a[ng-click="save()"]');
-    var closeBtn = $('a[ng-click="$close()"]');
+    var saveBtn = $('.modal-footer .btn[ng-click="save()"]');
+    var closeBtn = $('.modal-footer .btn[ng-click="$close()"]');
 
     it('should allow showing object content', function () {
         showBtn.click();
@@ -643,5 +643,20 @@ describe('Object content', function () {
         closeBtn.click();
         showBtn.click();
         expect(getValue()).toEqual('<b>Hi!</b>\n');
+    });
+
+    it('should enable save button when editing', function () {
+        showBtn.click();
+        expect(saveBtn.isEnabled()).toBe(false);
+        setValue('<b>Hi!</b>\n');
+        expect(saveBtn.isEnabled()).toBe(true);
+    });
+
+    it('should disable save button after save', function () {
+        showBtn.click();
+        setValue('<b>Hi!</b>\n');
+        expect(saveBtn.isEnabled()).toBe(true);
+        saveBtn.click();
+        expect(saveBtn.isEnabled()).toBe(false);
     });
 });
