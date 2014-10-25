@@ -592,6 +592,8 @@ describe('Object metadata', function () {
 });
 
 describe('Object content', function () {
+    var showBtn = $('a[ng-click="show()"]');
+
     beforeEach(function () {
         SwiftMock.loadAngularMocks();
         SwiftMock.setObjects('foo', {
@@ -604,6 +606,7 @@ describe('Object content', function () {
             }
         });
         browser.get('index.html#/foo/bar.html');
+        showBtn.click();
     });
 
     function callEditorMethod (method) {
@@ -622,22 +625,18 @@ describe('Object content', function () {
     var getValue = callEditorMethod('getValue');
     var setValue = callEditorMethod('setValue');
     var getOption = callEditorMethod('getOption');
-    var showBtn = $('a[ng-click="show()"]');
     var saveBtn = $('.modal-footer .btn[ng-click="save()"]');
     var closeBtn = $('.modal-footer .btn[ng-click="$close()"]');
 
     it('should allow showing object content', function () {
-        showBtn.click();
         expect(getValue()).toEqual('Hello <i>World</i>\n');
     });
 
     it('should set mode based on MIME type', function () {
-        showBtn.click();
         expect(getOption('mode')).toEqual('htmlmixed');
     });
 
     it('should allow editing object content', function () {
-        showBtn.click();
         setValue('<b>Hi!</b>\n');
         saveBtn.click();
         closeBtn.click();
@@ -646,14 +645,12 @@ describe('Object content', function () {
     });
 
     it('should enable save button when editing', function () {
-        showBtn.click();
         expect(saveBtn.isEnabled()).toBe(false);
         setValue('<b>Hi!</b>\n');
         expect(saveBtn.isEnabled()).toBe(true);
     });
 
     it('should disable save button after save', function () {
-        showBtn.click();
         setValue('<b>Hi!</b>\n');
         expect(saveBtn.isEnabled()).toBe(true);
         saveBtn.click();
