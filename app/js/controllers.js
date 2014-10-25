@@ -373,7 +373,6 @@ angular.module('swiftBrowser.controllers',
             // refresh it after opening the modal. We will
             // capture the editor here and refresh it below.
             var pendingEditor = $q.defer();
-            var content = '';
             $scope.name = name;
             $scope.editor = {
                 content: '',
@@ -382,20 +381,17 @@ angular.module('swiftBrowser.controllers',
                     lineNumbers: true
                 }
             };
-            $scope.isUnchanged = function () {
-                return $scope.editor.content == content;
-            };
             $scope.save = function () {
                 var upload = $swift.uploadObject(
                     container, name, $scope.editor.content
                 );
                 upload.then(function () {
-                    content = $scope.editor.content;
+                    $scope.form.$setPristine();
                 });
             };
             var req = $swift.getObject(container, name);
             req.then(function (result) {
-                content = $scope.editor.content = result.data;
+                $scope.editor.content = result.data;
             });
 
             $modalInstance.opened.then(function () {
