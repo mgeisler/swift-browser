@@ -27,9 +27,11 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-danger" ng-click="$close()"
+  <button type="button" class="btn btn-danger" ng-click="$close()"
           ng-disabled="nothingSelected()">
     Delete {{ items | selected | length }} objects
   </button>
-  <button class="btn btn-primary" ng-click="$dismiss()">Cancel</button>
+  <button type="button" class="btn btn-primary" ng-click="$dismiss()">
+    Cancel
+  </button>
 </div>
