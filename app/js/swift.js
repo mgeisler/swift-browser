@@ -106,6 +106,12 @@ SwiftClient.prototype.deleteDirectory = function (container, subdir) {
 
 SwiftClient.prototype.uploadObject = function (container, object, data) {
     var url = this._swiftUrl + '/' + container + '/' + object;
+    if (angular.isString(data)) {
+        // Firefox will unconditionally add a charset=UTF-8 to the
+        // Content-Type header when making a PUT request with a
+        // string. Sending a blob instead disables this behavior.
+        data = new Blob([data]);
+    }
     var config = {method: 'put',
                   url: url,
                   data: data,
