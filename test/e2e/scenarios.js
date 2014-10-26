@@ -355,11 +355,11 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/nested/');
 
-        var uploadBtn = $('.btn[ng-click="upload()"]');
+        var openModalBtn = $('.btn[ng-click="upload()"]');
         var names = $$('td:nth-child(2)');
         expect(names.getText()).toEqual(['x.txt']);
 
-        uploadBtn.click();
+        openModalBtn.click();
         expect($('div.modal h3').getText()).toMatch('to foo/nested/');
 
         // Test with two paths where the first sort after the second

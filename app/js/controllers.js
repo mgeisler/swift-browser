@@ -145,8 +145,8 @@ angular.module('swiftBrowser.controllers',
                     // about the update. Otherwise the update won't be
                     // noticed until the next digest cycle.
                     scope.$apply(function () {
-                        for (var i = 0; i < elm.files.length; i++) {
-                            var file = elm.files[i];
+                        for (var j = 0; j < elm.files.length; j++) {
+                            var file = elm.files[j];
                             file.uploadPct = null;
                             scope.files.push(file);
                         }
@@ -194,11 +194,11 @@ angular.module('swiftBrowser.controllers',
 
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 
-            var parts = prefix.split('/');
-            parts.unshift(container);
-            for (var i = 0; i < parts.length - 1; i++) {
-                var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
-                             title: parts[i]};
+            var prefixes = prefix.split('/');
+            prefixes.unshift(container);
+            for (var i = 0; i < prefixes.length - 1; i++) {
+                var crumb = {name: prefixes.slice(0, i + 1).join('/') + '/',
+                             title: prefixes[i]};
                 $scope.breadcrumbs.push(crumb);
             }
 
@@ -291,12 +291,13 @@ angular.module('swiftBrowser.controllers',
                                                   added: true});
                     } else {
                         // Use first removable header as default value
-                        var name = $scope.removableHeaders[0];
-                        $scope.headers.sys.push({name: name,
-                                                 value: '',
-                                                 added: true,
-                                                 editable: true,
-                                                 removable: true});
+                        $scope.headers.sys.push({
+                            name: $scope.removableHeaders[0],
+                            value: '',
+                            added: true,
+                            editable: true,
+                            removable: true
+                        });
                     }
                 };
 
