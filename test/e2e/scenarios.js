@@ -449,6 +449,26 @@ describe('Object listing', function () {
             expect(contentLength.getText()).toEqual('0');
         });
     });
+
+    it('should set Content-Type correctly for uploaded files', function () {
+        SwiftMock.addContainer('foo');
+        browser.get('index.html#/foo/');
+        $('.btn[ng-click="upload()"]').click();
+
+        var rows = by.repeater('file in files');
+        var types = element.all(rows.column('file.type'));
+
+        mktemp({postfix: '.html'}).spread(function (filename) {
+            uploadFile(filename);
+            expect(types.getText()).toEqual(['text/html']);
+            $('.btn[ng-click="uploadFiles()"]').click();
+            $('.btn[ng-click="$dismiss()"]').click();
+
+            $('td a').click();
+            var input = $('.content-type').$('input');
+            expect(input.getAttribute('value')).toEqual('text/html');
+        });
+    });
 });
 
 describe('Listing a pseudo-directory', function () {
