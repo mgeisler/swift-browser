@@ -22,7 +22,7 @@ module.exports = function(config){
     ],
 
     // Files created by Emacs FlyCheck
-    exclude : ['**/flycheck_*.js'],
+    exclude: ['**/flycheck_*.js'],
 
     autoWatch: true,
 
@@ -38,7 +38,7 @@ module.exports = function(config){
             'karma-jasmine',
             ],
 
-    reporters : ['progress'],
+    reporters: ['progress'],
 
   });
 };

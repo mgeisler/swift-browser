@@ -96,10 +96,13 @@ describe('Swift Keystone authentication', function() {
         };
 
         it('should POST tenant, username, and password', function() {
-            var loginRequest = {auth: {tenantName: 'tenant',
-                                       passwordCredentials:
-                                       {username: 'user',
-                                        password: 'pass'}}};
+            var loginRequest = {auth: {
+                tenantName: 'tenant',
+                passwordCredentials: {
+                    username: 'user',
+                    password: 'pass'
+                }
+            }};
             this.$httpBackend.expectPOST('/tokens', loginRequest)
                 .respond(200, loginResponse);
             this.$swift.auth('keystone', credentials);

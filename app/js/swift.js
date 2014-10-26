@@ -31,20 +31,21 @@ SwiftClient.prototype.liteauth = function (swiftAuth) {
     };
     var req = this._$http.get(swiftAuth.authUrl, {headers: headers});
     return req.then(function (result) {
-        var headers = result.headers;
-        self._headers['X-Auth-Token'] = headers('X-Auth-Token');
-        self._swiftUrl = headers('X-Storage-Url');
+        self._headers['X-Auth-Token'] = result.headers('X-Auth-Token');
+        self._swiftUrl = result.headers('X-Storage-Url');
         return self._headers;
     });
 };
 
 SwiftClient.prototype.keystone = function (swiftAuth) {
     var self = this;
-    var payload = {'auth':
-                   {'tenantName': swiftAuth.authTenant,
-                    'passwordCredentials':
-                    {'username': swiftAuth.authUsername,
-                     'password': swiftAuth.authPassword}}};
+    var payload = {'auth': {
+        'tenantName': swiftAuth.authTenant,
+        'passwordCredentials': {
+            'username': swiftAuth.authUsername,
+            'password': swiftAuth.authPassword
+        }
+    }};
     var req = this._$http.post(swiftAuth.authUrl, payload);
     return req.then(function (result) {
         self._headers['X-Auth-Token'] = result.data.access.token.id;
