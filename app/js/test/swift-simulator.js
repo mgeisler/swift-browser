@@ -213,15 +213,15 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
 SwiftSimulator.prototype.putObject = function(method, url, data) {
     return this.findContainerOr404(url, function (cont, contName, objName) {
         var lastModified = data.lastModifiedDate || new Date();
-        var contentLength = data.size || data.length;
         var object = {headers: {'Last-Modified': lastModified.toISOString(),
-                                'Content-Length': contentLength,
                                 'Content-Type': 'application/octet-stream'}};
 
         if (angular.isString(data)) {
             object.content = data;
             object.headers.ETag = SparkMD5.hash(data);
+            object.headers['Content-Length'] = data.length;
         } else {
+            object.headers['Content-Length'] = data.size;
             var reader = new FileReader();
             reader.onload = function () {
                 object.content = reader.result;
