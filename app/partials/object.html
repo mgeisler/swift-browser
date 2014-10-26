@@ -20,10 +20,12 @@
   </div>
 </div>
 
+<form name="form">
+
 <h2>System Headers</h2>
 
 <p>
-  <button class="btn btn-default" ng-click="add('sys')">
+  <button type="button" class="btn btn-default" ng-click="add('sys')">
     Add new header
   </button>
 </p>
@@ -62,7 +64,7 @@
 <h2>Custom Metadata</h2>
 
 <p>
-  <button class="btn btn-default" ng-click="add('meta')">
+  <button type="button" class="btn btn-default" ng-click="add('meta')">
     Add new header
   </button>
 </p>
@@ -92,9 +94,11 @@
   </tr>
 </table>
 
+</form>
+
 <div>
-  <button class="btn btn-primary" ng-click="save()"
-          ng-disabled="isUnchanged()">Save</button>
-  <button class="btn btn-default" ng-click="reset()"
-          ng-disabled="isUnchanged()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="save()"
+          ng-disabled="form.$pristine">Save</button>
+  <button type="button" class="btn btn-default" ng-click="reset()"
+          ng-disabled="form.$pristine">Reset</button>
 </div>

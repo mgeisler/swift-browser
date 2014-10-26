@@ -2,6 +2,12 @@
 
 /* Controllers */
 
+function valueFn (value) {
+    return function () {
+        return value;
+    };
+}
+
 function mkUpdateOrderBy($scope) {
     return function(column) {
         var rev = column == $scope.orderProp;
@@ -271,13 +277,12 @@ angular.module('swiftBrowser.controllers',
                             header.added = false;
                         });
                         headers = angular.copy($scope.headers);
+                        $scope.form.$setPristine();
                     });
                 };
                 $scope.remove = function (type, idx) {
                     $scope.headers[type].splice(idx, 1);
-                };
-                $scope.isUnchanged = function () {
-                    return angular.equals($scope.headers, headers);
+                    $scope.form.$setDirty();
                 };
                 $scope.add = function (type) {
                     if (type == 'meta') {
@@ -296,9 +301,6 @@ angular.module('swiftBrowser.controllers',
                 };
 
                 $scope.show = function () {
-                    // To prevent a blank editor showing, we need to
-                    // refresh it after opening the modal. We will
-                    // capture the editor here and refresh it below.
                     var mime = null;
                     $scope.headers.sys.some(function (header) {
                         if (header.name == 'content-type') {
@@ -306,47 +308,15 @@ angular.module('swiftBrowser.controllers',
                             return true;
                         }
                     });
-
-                    var content = '';
-                    var pendingEditor = $q.defer();
-                    var scope = $scope.$new(true);
-                    scope.name = name;
-                    scope.editor = {
-                        content: '',
-                        options: {
-                            onLoad: pendingEditor.resolve,
-                            lineNumbers: true
-                        }
-                    };
-                    scope.isUnchanged = function () {
-                        return scope.editor.content == content;
-                    };
-                    scope.save = function () {
-                        var upload = $swift.uploadObject(container, name,
-                                                         scope.editor.content);
-                        upload.then(function () {
-                            content = scope.editor.content;
-                        });
-                    };
-                    $swift.getObject(container, name).then(function (result) {
-                        content = scope.editor.content = result.data;
-                    });
                     var opts = {templateUrl: 'partials/edit-modal.html',
-                                scope: scope,
+                                controller: 'EditModalCtrl',
+                                resolve: {
+                                    container: valueFn(container),
+                                    name: valueFn(name),
+                                    mime: valueFn(mime)
+                                },
                                 size: 'lg'};
-                    $modal.open(opts).opened.then(function () {
-                        pendingEditor.promise.then(function (editor) {
-                            $timeout(function () {
-                                var CodeMirror = window.CodeMirror;
-                                var info = CodeMirror.findModeByMIME(mime);
-                                if (info) {
-                                    CodeMirror.autoLoadMode(editor, info.mode);
-                                    editor.setOption('mode', info.mode);
-                                }
-                                editor.refresh();
-                            });
-                        });
-                    });
+                    $modal.open(opts);
                 };
 
                 $swift.headObject(container, name).then(function (result) {
@@ -389,6 +359,51 @@ angular.module('swiftBrowser.controllers',
                         headers.meta.sort();
                         headers.sys.sort();
                         $scope.reset();
+                    });
+                });
+            });
+        }
+    ])
+    .controller('EditModalCtrl', [
+        '$swift', '$q', '$timeout', '$scope', '$modalInstance',
+        'container', 'name', 'mime',
+        function ($swift, $q, $timeout, $scope, $modalInstance,
+                  container, name, mime) {
+            // To prevent a blank editor showing, we need to
+            // refresh it after opening the modal. We will
+            // capture the editor here and refresh it below.
+            var pendingEditor = $q.defer();
+            $scope.name = name;
+            $scope.editor = {
+                content: '',
+                options: {
+                    onLoad: pendingEditor.resolve,
+                    lineNumbers: true
+                }
+            };
+            $scope.save = function () {
+                var upload = $swift.uploadObject(
+                    container, name, $scope.editor.content
+                );
+                upload.then(function () {
+                    $scope.form.$setPristine();
+                });
+            };
+            var req = $swift.getObject(container, name);
+            req.then(function (result) {
+                $scope.editor.content = result.data;
+            });
+
+            $modalInstance.opened.then(function () {
+                pendingEditor.promise.then(function (editor) {
+                    $timeout(function () {
+                        var CodeMirror = window.CodeMirror;
+                        var info = CodeMirror.findModeByMIME(mime);
+                        if (info) {
+                            CodeMirror.autoLoadMode(editor, info.mode);
+                            editor.setOption('mode', info.mode);
+                        }
+                        editor.refresh();
                     });
                 });
             });
