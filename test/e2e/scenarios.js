@@ -653,7 +653,8 @@ describe('Object content', function () {
             'bar.html': {
                 headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Type': 'text/html'
+                    'Content-Type': 'text/html',
+                    'X-Object-Meta-Foo': 'bar',
                 },
                 content: 'Hello <i>World</i>\n'
             }
@@ -695,6 +696,25 @@ describe('Object content', function () {
         closeBtn.click();
         showBtn.click();
         expect(getValue()).toEqual('<b>Hi!</b>\n');
+    });
+
+    it('should preserve Content-Type after edit', function () {
+        setValue('<b>Hi!</b>\n');
+        saveBtn.click();
+        closeBtn.click();
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+        var contentType = $('.content-type input');
+        expect(contentType.getAttribute('value')).toEqual('text/html');
+    });
+
+    it('should preserve custom metadata after edit', function () {
+        setValue('<b>Hi!</b>\n');
+        saveBtn.click();
+        closeBtn.click();
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+        expect($('.x-object-meta-foo').isPresent()).toBe(true);
     });
 
     it('should enable save button when editing', function () {

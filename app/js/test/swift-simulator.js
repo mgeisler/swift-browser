@@ -210,7 +210,8 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
     });
 };
 
-SwiftSimulator.prototype.putObject = function(method, url, data) {
+SwiftSimulator.prototype.putObject = function(method, url, data, headers) {
+    var postObject = this.postObject.bind(this);
     return this.findContainerOr404(url, function (cont, contName, objName) {
         var lastModified = data.lastModifiedDate || new Date();
         var object = {headers: {'Last-Modified': lastModified.toISOString()}};
@@ -231,6 +232,8 @@ SwiftSimulator.prototype.putObject = function(method, url, data) {
             reader.readAsText(data);
         }
         cont.objects[objName] = object;
+        // Update object headers
+        postObject(method, url, data, headers);
         return [201, null];
     });
 };
