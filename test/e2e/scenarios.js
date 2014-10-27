@@ -142,6 +142,26 @@ describe('Container listing', function () {
         expect(sizes.getText()).toEqual(['0.0 B']);
         expect(counts.getText()).toEqual(['0 objects']);
     });
+
+    it('should not allow a slash in a container name', function () {
+        var openBtn = $('.btn[ng-click="create()"]');
+        var createBtn = $('.btn[ng-click="$close(name)"]');
+        var input = $('.modal-body input');
+        var help = $('.modal-body .help-block');
+        browser.get('index.html#/');
+
+        openBtn.click();
+        expect(createBtn.isEnabled()).toBe(false);
+        expect(help.isDisplayed()).toBe(false);
+
+        input.sendKeys('foo');
+        expect(createBtn.isEnabled()).toBe(true);
+        expect(help.isDisplayed()).toBe(false);
+
+        input.sendKeys('/bar');
+        expect(createBtn.isEnabled()).toBe(false);
+        expect(help.isDisplayed()).toBe(true);
+    });
 });
 
 
