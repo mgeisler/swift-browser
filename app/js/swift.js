@@ -70,7 +70,8 @@ SwiftClient.prototype.listObjects = function (container, params) {
 
 SwiftClient.prototype.getObject = function (container, object) {
     var url = this._swiftUrl + '/' + container + '/' + object;
-    return this._$http.get(url, {headers: this._headers});
+    var config = {headers: this._headers, transformResponse: []};
+    return this._$http.get(url, config);
 };
 
 SwiftClient.prototype.headObject = function (container, object) {
