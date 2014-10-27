@@ -54,6 +54,8 @@ function SwiftSimulator($httpBackend) {
         .respond(this.listContainers.bind(this));
     $httpBackend.whenGET(this.listRegex)
         .respond(this.listObjects.bind(this));
+    $httpBackend.whenPUT(this.listRegex)
+        .respond(this.createContainer.bind(this));
 
     $httpBackend.whenGET(this.objRegex)
         .respond(this.getObject.bind(this));
@@ -149,6 +151,17 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
     });
     results.sort(byProperty('name'));
     return [200, results];
+};
+
+SwiftSimulator.prototype.createContainer = function(method, url, data) {
+    var match = url.match(this.listRegex);
+    var name = match[1];
+    if (this.data[name]) {
+        return [202, null];
+    } else {
+        this.addContainer(name);
+        return [201, null];
+    }
 };
 
 SwiftSimulator.prototype.deleteObject = function(method, url, data) {
