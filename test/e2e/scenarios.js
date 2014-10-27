@@ -162,6 +162,18 @@ describe('Container listing', function () {
         expect(createBtn.isEnabled()).toBe(false);
         expect(help.isDisplayed()).toBe(true);
     });
+
+    it('should create container when pressing enter', function () {
+        var rows = by.repeater('container in containers');
+        var names = element.all(rows.column('container.name'));
+        var openBtn = $('.btn[ng-click="create()"]');
+        var input = $('.modal-body input');
+        browser.get('index.html#/');
+
+        openBtn.click();
+        input.sendKeys('foo', protractor.Key.ENTER);
+        expect(names.getText()).toEqual(['foo']);
+    });
 });
 
 

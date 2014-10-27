@@ -20,6 +20,7 @@ globals:
   inject: false
   module: false
   browser: false
+  protractor: false
 
   element: false
   by: false
