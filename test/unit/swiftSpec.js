@@ -169,6 +169,29 @@ describe('Swift request types', function() {
     });
 });
 
+describe('headObject', function () {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    it('should not transform response', function () {
+        this.$httpBackend.expect('HEAD', '/v1/AUTH_abc/cont/foo')
+            .respond(202, 'not really JSON',
+                     {'Content-Type': 'application/json'});
+
+        var req = this.$swift.headObject('cont', 'foo');
+        req.success(function (data, status, headers, config) {
+            expect(config.transformResponse).toEqual([]);
+        });
+        this.$httpBackend.flush();
+    });
+});
+
 describe('getObject', function () {
     beforeEach(module('swiftBrowser.swift'));
     beforeEach(inject(function ($httpBackend, $swift) {
