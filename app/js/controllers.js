@@ -308,7 +308,7 @@ angular.module('swiftBrowser.controllers',
                     }
                 };
 
-                $scope.show = function () {
+                $scope.edit = function () {
                     var opts = {templateUrl: 'partials/edit-modal.html',
                                 controller: 'EditModalCtrl',
                                 resolve: {

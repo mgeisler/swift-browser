@@ -696,7 +696,7 @@ describe('Object metadata', function () {
 });
 
 describe('Object content', function () {
-    var showBtn = $('a[ng-click="show()"]');
+    var editBtn = $('a[ng-click="edit()"]');
 
     beforeEach(function () {
         SwiftMock.loadAngularMocks();
@@ -711,7 +711,7 @@ describe('Object content', function () {
             }
         });
         browser.get('index.html#/foo/bar.html');
-        showBtn.click();
+        editBtn.click();
     });
 
     function callEditorMethod (method) {
@@ -745,7 +745,7 @@ describe('Object content', function () {
         setValue('<b>Hi!</b>\n');
         saveBtn.click();
         closeBtn.click();
-        showBtn.click();
+        editBtn.click();
         expect(getValue()).toEqual('<b>Hi!</b>\n');
     });
 
