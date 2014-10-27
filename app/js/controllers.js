@@ -51,20 +51,6 @@ function mkToggleAll($scope, key, allSelected) {
     };
 }
 
-function mkDownloadLink($scope, key) {
-    return function() {
-        var collection = $scope[key];
-        var name = null;
-        collection.some(function (item) {
-            if (item.selected) {
-                name = item.name;
-            }
-            return item.selected;
-        });
-        return name;
-    };
-}
-
 angular.module('swiftBrowser.controllers',
                ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
     .controller('RootCtrl', [
@@ -110,7 +96,6 @@ angular.module('swiftBrowser.controllers',
             $scope.allSelected = mkAllSelected($scope, 'items');
             $scope.toggleAll = mkToggleAll($scope, 'items', $scope.allSelected);
             $scope.nothingSelected = mkNothingSelected($scope, 'items');
-            $scope.downloadLink = mkDownloadLink($scope, 'items');
 
             $scope.delete = function () {
                 var scope = $scope.$new(true);
