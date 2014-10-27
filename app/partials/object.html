@@ -36,7 +36,7 @@
     <th>Value</th>
     <th class="remove"></th>
   </tr>
-  <tr ng-repeat="header in headers.sys">
+  <tr ng-repeat="header in headers.sys" class="{{ header.name }}">
     <td>
       <p ng-if="!header.added" class="form-control-static">
         {{ header.name }}
@@ -75,7 +75,7 @@
     <th>Value</th>
     <th class="remove"></th>
   </tr>
-  <tr ng-repeat="header in headers.meta">
+  <tr ng-repeat="header in headers.meta" class="{{ header.name }}">
     <td>
       <p ng-if="!header.added" class="form-control-static">
         {{ header.name }}

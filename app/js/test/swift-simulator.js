@@ -210,26 +210,23 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
     });
 };
 
-SwiftSimulator.prototype.putObject = function(method, url, data) {
+SwiftSimulator.prototype.putObject = function(method, url, data, headers) {
+    var postObject = this.postObject.bind(this);
     return this.findContainerOr404(url, function (cont, contName, objName) {
         var lastModified = data.lastModifiedDate || new Date();
-        var contentLength = data.size || data.length;
         var object = {headers: {'Last-Modified': lastModified.toISOString(),
-                                'Content-Length': contentLength,
-                                'Content-Type': 'application/octet-stream'}};
+                                'Content-Length': data.size,
+                                'Content-Type': data.type}};
+        var reader = new FileReader();
+        reader.onload = function () {
+            object.content = reader.result;
+            object.headers.ETag = SparkMD5.hash(reader.result);
+        };
+        reader.readAsText(data);
 
-        if (angular.isString(data)) {
-            object.content = data;
-            object.headers.ETag = SparkMD5.hash(data);
-        } else {
-            var reader = new FileReader();
-            reader.onload = function () {
-                object.content = reader.result;
-                object.headers.ETag = SparkMD5.hash(reader.result);
-            };
-            reader.readAsText(data);
-        }
         cont.objects[objName] = object;
+        // Update object headers
+        postObject(method, url, data, headers);
         return [201, null];
     });
 };

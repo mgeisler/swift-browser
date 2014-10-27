@@ -170,8 +170,9 @@ angular.module('swiftBrowser.controllers',
                                     title: file.name,
                                     bytes: file.size};
                         file.uploadPct = 0;
+                        var headers = {'content-type': file.type};
                         var upload = $swift.uploadObject(container, name,
-                                                         file);
+                                                         file, headers);
                         upload.progress(function (evt) {
                             if (evt.lengthComputable) {
                                 var frac = evt.loaded / evt.total;
@@ -237,6 +238,21 @@ angular.module('swiftBrowser.controllers',
                 $scope.breadcrumbs.push(crumb);
             }
 
+            function flatten(headers) {
+                var flattened = {};
+                headers.sys.forEach(function (header) {
+                    if (header.editable) {
+                        flattened[header.name] = header.value;
+                    }
+                });
+                headers.meta.forEach(function (header) {
+                    if (header.name) {
+                        flattened[header.name] = header.value;
+                    }
+                });
+                return flattened;
+            }
+
             var params = {prefix: name, delimiter: '/'};
             $swift.listObjects(container, params).then(function (result) {
                 var redirect = result.data.some(function (item) {
@@ -257,17 +273,7 @@ angular.module('swiftBrowser.controllers',
                     $scope.headers = angular.copy(headers);
                 };
                 $scope.save = function() {
-                    var flattened = {};
-                    $scope.headers.sys.forEach(function (header) {
-                        if (header.editable) {
-                            flattened[header.name] = header.value;
-                        }
-                    });
-                    $scope.headers.meta.forEach(function (header) {
-                        if (header.name) {
-                            flattened[header.name] = header.value;
-                        }
-                    });
+                    var flattened = flatten($scope.headers);
                     var req = $swift.postObject(container, name, flattened);
                     req.then(function (result) {
                         $scope.headers.meta.forEach(function (header) {
@@ -302,19 +308,12 @@ angular.module('swiftBrowser.controllers',
                 };
 
                 $scope.show = function () {
-                    var mime = null;
-                    $scope.headers.sys.some(function (header) {
-                        if (header.name == 'content-type') {
-                            mime = header.value;
-                            return true;
-                        }
-                    });
                     var opts = {templateUrl: 'partials/edit-modal.html',
                                 controller: 'EditModalCtrl',
                                 resolve: {
                                     container: valueFn(container),
                                     name: valueFn(name),
-                                    mime: valueFn(mime)
+                                    headers: valueFn(flatten($scope.headers))
                                 },
                                 size: 'lg'};
                     $modal.open(opts);
@@ -367,9 +366,9 @@ angular.module('swiftBrowser.controllers',
     ])
     .controller('EditModalCtrl', [
         '$swift', '$q', '$timeout', '$scope', '$modalInstance',
-        'container', 'name', 'mime',
+        'container', 'name', 'headers',
         function ($swift, $q, $timeout, $scope, $modalInstance,
-                  container, name, mime) {
+                  container, name, headers) {
             // To prevent a blank editor showing, we need to
             // refresh it after opening the modal. We will
             // capture the editor here and refresh it below.
@@ -384,7 +383,7 @@ angular.module('swiftBrowser.controllers',
             };
             $scope.save = function () {
                 var upload = $swift.uploadObject(
-                    container, name, $scope.editor.content
+                    container, name, $scope.editor.content, headers
                 );
                 upload.then(function () {
                     $scope.form.$setPristine();
@@ -399,6 +398,7 @@ angular.module('swiftBrowser.controllers',
                 pendingEditor.promise.then(function (editor) {
                     $timeout(function () {
                         var CodeMirror = window.CodeMirror;
+                        var mime = headers['content-type'];
                         var info = CodeMirror.findModeByMIME(mime);
                         if (info) {
                             CodeMirror.autoLoadMode(editor, info.mode);

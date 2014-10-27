@@ -2,6 +2,7 @@
 
 var SwiftMock = require('../swift-mock.js');
 var path = require('path');
+var fs = require('fs');
 var tmp = require('tmp');
 var Q = require('q');
 
@@ -416,6 +417,58 @@ describe('Object listing', function () {
         });
     });
 
+    it('should set Content-Length correctly for uploaded files', function () {
+        SwiftMock.addContainer('foo');
+        browser.get('index.html#/foo/');
+        $('.btn[ng-click="upload()"]').click();
+
+        var sizes = $$('td:nth-child(4)');
+
+        // Two files with a known sort order
+        var tmpX = mktemp({prefix: 'x'});
+        var tmpY = mktemp({prefix: 'y'});
+        Q.all([tmpX, tmpY]).spread(function (x, y) {
+            var buf = new Buffer(1234);
+            var bytesWritten = fs.writeSync(x[1], buf, 0, buf.length);
+            expect(bytesWritten).toEqual(buf.length);
+
+            uploadFile(x[0]);
+            uploadFile(y[0]);
+            expect(sizes.getText()).toEqual(['1.2 KB', '0.0 B']);
+
+            $('.btn[ng-click="uploadFiles()"]').click();
+            $('.btn[ng-click="$dismiss()"]').click();
+
+            var contentLength = $('.content-length td:nth-child(2)');
+            $$('td a').first().click();
+            expect(contentLength.getText()).toEqual('1234');
+
+            $$('.breadcrumb a').last().click();
+
+            $$('td a').last().click();
+            expect(contentLength.getText()).toEqual('0');
+        });
+    });
+
+    it('should set Content-Type correctly for uploaded files', function () {
+        SwiftMock.addContainer('foo');
+        browser.get('index.html#/foo/');
+        $('.btn[ng-click="upload()"]').click();
+
+        var rows = by.repeater('file in files');
+        var types = element.all(rows.column('file.type'));
+
+        mktemp({postfix: '.html'}).spread(function (filename) {
+            uploadFile(filename);
+            expect(types.getText()).toEqual(['text/html']);
+            $('.btn[ng-click="uploadFiles()"]').click();
+            $('.btn[ng-click="$dismiss()"]').click();
+
+            $('td a').click();
+            var input = $('.content-type').$('input');
+            expect(input.getAttribute('value')).toEqual('text/html');
+        });
+    });
 });
 
 describe('Listing a pseudo-directory', function () {
@@ -600,7 +653,8 @@ describe('Object content', function () {
             'bar.html': {
                 headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Type': 'text/html'
+                    'Content-Type': 'text/html',
+                    'X-Object-Meta-Foo': 'bar',
                 },
                 content: 'Hello <i>World</i>\n'
             }
@@ -642,6 +696,25 @@ describe('Object content', function () {
         closeBtn.click();
         showBtn.click();
         expect(getValue()).toEqual('<b>Hi!</b>\n');
+    });
+
+    it('should preserve Content-Type after edit', function () {
+        setValue('<b>Hi!</b>\n');
+        saveBtn.click();
+        closeBtn.click();
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+        var contentType = $('.content-type input');
+        expect(contentType.getAttribute('value')).toEqual('text/html');
+    });
+
+    it('should preserve custom metadata after edit', function () {
+        setValue('<b>Hi!</b>\n');
+        saveBtn.click();
+        closeBtn.click();
+        $$('.breadcrumb a').last().click();
+        $('td a').click();
+        expect($('.x-object-meta-foo').isPresent()).toBe(true);
     });
 
     it('should enable save button when editing', function () {

@@ -104,12 +104,21 @@ SwiftClient.prototype.deleteDirectory = function (container, subdir) {
     });
 };
 
-SwiftClient.prototype.uploadObject = function (container, object, data) {
+SwiftClient.prototype.uploadObject = function (container, object, data,
+                                               headers) {
     var url = this._swiftUrl + '/' + container + '/' + object;
+    if (angular.isString(data)) {
+        // Firefox will unconditionally add a charset=UTF-8 to the
+        // Content-Type header when making a PUT request with a
+        // string. Sending a blob instead disables this behavior.
+        data = new Blob([data]);
+    }
+    headers = angular.extend({'content-type': 'application/octet-stream'},
+                             headers, this._headers);
     var config = {method: 'put',
                   url: url,
                   data: data,
-                  headers: this._headers};
+                  headers: headers};
     return this._$upload.http(config);
 };
 

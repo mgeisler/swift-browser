@@ -161,7 +161,8 @@ describe('Swift request types', function() {
     });
 
     it('should send PUT request when uploading an objct', function() {
-        this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar', 'data')
+        var blob = new Blob(['data']);
+        this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar', blob)
             .respond(201, null);
         this.$swift.uploadObject('cont', 'foo/bar', 'data');
         this.$httpBackend.flush();
@@ -212,5 +213,37 @@ describe('postObject', function () {
         this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo', null, check)
             .respond(202, null);
         this.$swift.postObject('cont', 'foo', {});
+    });
+});
+
+describe('uploadObject', function () {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    it('should send custom headers', function () {
+        var headers = {'Content-Type': 'text/plain',
+                       'X-Foo': 'some value'};
+        function check(allHeaders) {
+            return (allHeaders['Content-Type'] == 'text/plain' &&
+                    allHeaders['X-Foo'] == 'some value');
+        }
+        this.$httpBackend.expect('PUT', '/v1/AUTH_abc/cont/foo', null, check)
+            .respond(201, null);
+        this.$swift.uploadObject('cont', 'foo', null, headers);
+        this.$httpBackend.flush();
+    });
+
+    it('should send strings as Blobs', function () {
+        var blob = new Blob(['string data']);
+        this.$httpBackend.expect('PUT', '/v1/AUTH_abc/cont/foo', blob)
+            .respond(201, null);
+        this.$swift.uploadObject('cont', 'foo', 'string data');
+        this.$httpBackend.flush();
     });
 });
