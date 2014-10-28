@@ -81,7 +81,11 @@ SwiftClient.prototype.getObject = function (container, object) {
 
 SwiftClient.prototype.headObject = function (container, object) {
     var url = this._swiftUrl + '/' + container + '/' + object;
-    return this._$http.head(url, {headers: this._headers});
+    //  Firefox will return a response body for the HEAD request if it
+    //  has one in its cache. We must therefore clear the
+    //  transformResponse to avoid interpreting the response body.
+    var config = {headers: this._headers, transformResponse: []};
+    return this._$http.head(url, config);
 };
 
 SwiftClient.prototype.postObject = function (container, object, headers) {
