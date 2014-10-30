@@ -30,7 +30,7 @@ Configuration
 
 You can add a configuration file named `config.json` to configure the
 authentication type and URL endpoint. The default is to authenticate
-using LiteAuth:
+using [LiteAuth][]:
 
     {
         "auth": {
@@ -96,6 +96,7 @@ Other Swift File Managers
 [OpenStack Swift]: http://docs.openstack.org/developer/swift/
 [Bower]: http://bower.io/
 [npm]: https://www.npmjs.org/
+[LiteAuth]: https://github.com/zerovm/liteauth
 [cors]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 [swift-cors]: http://blog.yunak.eu/2013/07/24/keystone_cors/
 [Swift Explorer]: http://www.619.io/swift-explorer
