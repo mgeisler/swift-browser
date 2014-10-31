@@ -109,19 +109,6 @@ module.exports = function (grunt) {
             }
         },
 
-        concat: {
-            coverage: {
-                src: ['coverage/lcov.info', 'coverage/e2e/lcov.info'],
-                dest: 'coverage/merged.info'
-            }
-        },
-
-        coveralls: {
-            target: {
-                src: 'coverage/merged.info'
-            }
-        },
-
         clean: {
             build: {
                 src: ['<%= build.dir %>']
