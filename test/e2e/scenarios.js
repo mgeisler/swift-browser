@@ -618,7 +618,7 @@ describe('Object metadata', function () {
         ]);
         expect(options.get(0).isSelected()).toBe(true);
         options.get(1).click();
-        input.sendKeys('attachement');
+        input.sendKeys('attachment');
 
         expect(saveBtn.isEnabled()).toBe(true);
         saveBtn.click();
