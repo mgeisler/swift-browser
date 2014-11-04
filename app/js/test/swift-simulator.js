@@ -56,6 +56,8 @@ function SwiftSimulator($httpBackend) {
         .respond(this.listObjects.bind(this));
     $httpBackend.whenPUT(this.listRegex)
         .respond(this.createContainer.bind(this));
+    $httpBackend.whenDELETE(this.listRegex)
+        .respond(this.deleteContainer.bind(this));
 
     $httpBackend.whenGET(this.objRegex)
         .respond(this.getObject.bind(this));
@@ -161,6 +163,23 @@ SwiftSimulator.prototype.createContainer = function(method, url, data) {
     } else {
         this.addContainer(name);
         return [201, null];
+    }
+};
+
+SwiftSimulator.prototype.deleteContainer = function(method, url) {
+    var match = url.match(this.listRegex);
+    var name = match[1];
+    var container = this.data[name];
+    if (!container) {
+        return [404, 'Container "' + name + '" not found'];
+    }
+
+    if (Object.keys(container.objects).length > 0) {
+        /* Container is not empty */
+        return [409, null];
+    } else {
+        delete this.data[name];
+        return [204, null];
     }
 };
 

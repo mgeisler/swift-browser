@@ -70,6 +70,34 @@ describe('createContainer', function () {
     });
 });
 
+describe('deleteContainer', function () {
+    beforeEach(SwiftMock.loadAngularMocks);
+    beforeEach(function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+        browser.get('index.html#/');
+    });
+    var callDeleteContainer = callSwiftMethod('deleteContainer');
+
+    it('should return 204 for an existing container', function () {
+        browser.get('index.html#/');
+        var data = callDeleteContainer('foo');
+        expect(data.then(select('status'))).toEqual(204);
+    });
+
+    it('should return 404 for a non-existing container', function () {
+        browser.get('index.html#/');
+        var data = callDeleteContainer('no-such-container');
+        expect(data.then(select('status'))).toEqual(404);
+    });
+});
+
 describe('listObjects', function () {
     beforeEach(SwiftMock.loadAngularMocks);
     var callListObjects = callSwiftMethod('listObjects');
