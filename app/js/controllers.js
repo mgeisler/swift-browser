@@ -78,6 +78,38 @@ angular.module('swiftBrowser.controllers',
                 });
             };
 
+            $scope.delete = function () {
+                var scope = $scope.$new(true);
+                scope.containers = [];
+                $scope.containers.forEach(function (container, idx) {
+                    if (container.selected) {
+                        var copy = angular.copy(container);
+                        copy.idx = idx;
+                        scope.containers.push(copy);
+                    }
+                });
+                scope.updateOrderBy = mkUpdateOrderBy(scope);
+                scope.updateOrderBy('name');
+                scope.allSelected = mkAllSelected(scope, 'containers');
+                scope.toggleAll = mkToggleAll(scope, 'containers',
+                                              scope.allSelected);
+                scope.nothingSelected = mkNothingSelected(scope, 'containers');
+
+                var opt = {templateUrl: 'partials/delete-container-modal.html',
+                           scope: scope};
+                var inst = $modal.open(opt);
+                inst.result.then(function () {
+                    scope.containers.forEach(function (container) {
+                        if (container.selected) {
+                            var req = $swift.deleteContainer(container.name);
+                            req.then(function () {
+                                delete $scope.containers[container.idx];
+                            });
+                        }
+                    });
+                });
+            };
+
             $swift.listContainers().then(function (result) {
                 $scope.containers = result.data;
             });

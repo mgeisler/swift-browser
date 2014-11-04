@@ -174,6 +174,42 @@ describe('Container listing', function () {
         input.sendKeys('foo', protractor.Key.ENTER);
         expect(names.getText()).toEqual(['foo']);
     });
+
+    describe('deleting containers', function () {
+        var deleteBtn = $('.btn[ng-click="delete()"]');
+        var closeBtn = $('.btn[ng-click="$close()"]');
+        var toggles = element.all(by.model('container.selected'));
+
+        it('should succeed with empty container', function () {
+            SwiftMock.addContainer('foo');
+            browser.get('index.html#/');
+
+            toggles.first().click();
+            deleteBtn.click();
+            closeBtn.click();
+            expect(toggles.count()).toBe(0);
+        });
+
+        it('should succeed with non-empty container', function () {
+            SwiftMock.setObjects('foo', {
+                'x.txt': {headers: {
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 10,
+                    'Content-Type': 'text/plain'
+                }},
+                'nested/y.txt': {headers: {
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Length': 20,
+                    'Content-Type': 'text/plain'
+                }}
+            });
+            browser.get('index.html#/');
+            toggles.first().click();
+            deleteBtn.click();
+            closeBtn.click();
+            expect(toggles.count()).toBe(0);
+        });
+    });
 });
 
 
