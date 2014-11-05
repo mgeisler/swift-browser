@@ -28,7 +28,7 @@ module.exports = function(config){
 
     frameworks: ['jasmine'],
 
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'Firefox'],
 
     urlRoot: '/v1/AUTH_abc/container/',
 
