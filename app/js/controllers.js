@@ -238,7 +238,7 @@ angular.module('swiftBrowser.controllers',
 
             var params = {prefix: prefix, delimiter: '/'};
             $swift.listObjects(container, params).then(function (result) {
-                $scope.items = $.map(result.data, function (item) {
+                $scope.items = result.data.map(function (item) {
                     var parts = (item.subdir || item.name).split('/');
 
                     if (item.subdir) {
