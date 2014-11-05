@@ -161,8 +161,7 @@ describe('Swift request types', function() {
     });
 
     it('should send PUT request when uploading an objct', function() {
-        var blob = new Blob(['data']);
-        this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar', blob)
+        this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar')
             .respond(201, null);
         this.$swift.uploadObject('cont', 'foo/bar', 'data');
         this.$httpBackend.flush();
@@ -287,8 +286,10 @@ describe('uploadObject', function () {
     });
 
     it('should send strings as Blobs', function () {
-        var blob = new Blob(['string data']);
-        this.$httpBackend.expect('PUT', '/v1/AUTH_abc/cont/foo', blob)
+        function checkType(data) {
+            return data instanceof Blob;
+        }
+        this.$httpBackend.expect('PUT', '/v1/AUTH_abc/cont/foo', checkType)
             .respond(201, null);
         this.$swift.uploadObject('cont', 'foo', 'string data');
         this.$httpBackend.flush();
