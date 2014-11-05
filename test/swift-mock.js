@@ -10,6 +10,7 @@ exports.loadAngularMocks = function () {
         ];
         srcs.forEach(function (src) {
             var script = document.createElement('script');
+            script.async = false;
             script.src = src;
             document.body.appendChild(script);
         });
