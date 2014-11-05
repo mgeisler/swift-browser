@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <h3 class="modal-title">
+    Deleting {{ containers | selected | length }} containers
+  </h3>
+</div>
+
+<div class="modal-body">
+  <p>Are you use you want to delete these containers?</p>
+
+  <table class="table table-condensed">
+    <tr>
+      <th class="toggle">
+        <input type="checkbox" ng-checked="allSelected()"
+               ng-click="toggleAll()">
+      </th>
+      <th ng-click="updateOrderBy('name')">
+        Name <span ng-class="sortCls.name"></span>
+      </th>
+      <th ng-click="updateOrderBy('bytes')" class="size">
+        Size <span ng-class="sortCls.bytes"></span>
+      </th>
+      <th ng-click="updateOrderBy('count')" class="count">
+        Count <span ng-class="sortCls.count"></span>
+      </th>
+    </tr>
+    <tr ng-repeat="container in containers | orderBy:orderProp">
+      <td><input type="checkbox" ng-model="container.selected"></td>
+      <td>{{ container.name }}</td>
+      <td class="text-right" sb-format-bytes count="container.bytes"></td>
+      <td class="text-right">{{ container.count | number }} objects</td>
+    </tr>
+  </table>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" ng-click="$close()"
+          ng-disabled="nothingSelected()">
+    Delete {{ containers | selected | length }} containers
+  </button>
+  <button type="button" class="btn btn-primary" ng-click="$dismiss()">
+    Cancel
+  </button>
+</div>

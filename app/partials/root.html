@@ -10,6 +10,9 @@
   <div class="btn-group">
     <button type="button" ng-click="create()"
             class="btn btn-default">Create</button>
+    <button type="button" ng-click="delete()"
+            ng-disabled="nothingSelected()"
+            class="btn btn-default">Delete</button>
   </div>
 </div>
 
@@ -29,7 +32,7 @@
       Count <span ng-class="sortCls.count"></span>
     </th>
   </tr>
-  <tr ng-repeat="container in containers | orderBy:orderProp">
+  <tr ng-repeat="container in containers | notUndefined | orderBy:orderProp">
     <td><input type="checkbox" ng-model="container.selected"></td>
     <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>
     <td class="text-right" sb-format-bytes count="container.bytes"></td>

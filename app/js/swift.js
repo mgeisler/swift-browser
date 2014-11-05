@@ -68,6 +68,15 @@ SwiftClient.prototype.createContainer = function (container) {
     return this._$http.put(url, {headers: this._headers});
 };
 
+SwiftClient.prototype.deleteContainer = function (container) {
+    var url = this._swiftUrl + '/' + container;
+    var httpDeleteContainer = this._$http.delete.bind(
+        this, url, {headers: this._headers}
+    );
+    var result = this.deleteDirectory(container, '');
+    return result.then(httpDeleteContainer);
+};
+
 SwiftClient.prototype.listObjects = function (container, params) {
     var url = this._swiftUrl + '/' + container;
     return this._$http.get(url, {params: params, headers: this._headers});

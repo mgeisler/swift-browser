@@ -314,3 +314,28 @@ describe('uploadObject', function () {
         reader.readAsText(blob);
     });
 });
+
+describe('deleteContainer', function () {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    it('should send delete objects first', function() {
+        var objects = [{name: 'foo'}, {name: 'nested/bar'}];
+        this.$httpBackend.expectGET('/v1/AUTH_abc/cont?prefix=')
+            .respond(200, objects);
+        this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo')
+            .respond(204, null);
+        this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/nested/bar')
+            .respond(204, null);
+        this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont')
+            .respond(204, null);
+        this.$swift.deleteContainer('cont');
+        this.$httpBackend.flush();
+    });
+});
