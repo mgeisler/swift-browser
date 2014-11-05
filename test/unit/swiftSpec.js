@@ -294,4 +294,23 @@ describe('uploadObject', function () {
         this.$swift.uploadObject('cont', 'foo', 'string data');
         this.$httpBackend.flush();
     });
+
+    it('should send correct data', function (done) {
+        var blob;
+        function save(data) {
+            blob = data;
+            return true;
+        }
+        this.$httpBackend.expect('PUT', '/v1/AUTH_abc/cont/foo', save)
+            .respond(201, null);
+        this.$swift.uploadObject('cont', 'foo', 'string data');
+        this.$httpBackend.flush();
+
+        var reader = new FileReader();
+        reader.onload = function () {
+            expect(this.result).toEqual('string data');
+            done();
+        };
+        reader.readAsText(blob);
+    });
 });
