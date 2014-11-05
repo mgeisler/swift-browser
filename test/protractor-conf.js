@@ -1,21 +1,21 @@
 'use strict';
 
 exports.config = {
-  allScriptsTimeout: 11000,
+    allScriptsTimeout: 11000,
 
-  specs: [
-    'e2e/*.js'
-  ],
+    specs: [
+        'e2e/*.js'
+    ],
 
-  capabilities: {
-    'browserName': 'firefox'
-  },
+    capabilities: {
+        'browserName': 'firefox'
+    },
 
-  baseUrl: 'http://localhost:8000/app/',
+    baseUrl: 'http://localhost:8000/app/',
 
-  framework: 'jasmine',
+    framework: 'jasmine',
 
-  jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000
-  }
+    jasmineNodeOpts: {
+        defaultTimeoutInterval: 30000
+    }
 };
