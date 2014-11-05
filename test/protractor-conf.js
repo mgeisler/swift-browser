@@ -17,6 +17,9 @@ exports.config = {
         var width = 640;
         var height = 480;
         browser.driver.manage().window().setSize(width, height);
+
+        var SwiftMock = require('./swift-mock.js');
+        beforeEach(SwiftMock.loadAngularMocks);
     },
 
     framework: 'jasmine',

@@ -36,10 +36,6 @@ function select(prop) {
 }
 
 describe('Test isolation', function() {
-    beforeEach(function () {
-        SwiftMock.loadAngularMocks();
-    });
-
     it('should show foo container', function () {
         SwiftMock.addContainer('foo');
         browser.get('index.html#/');
@@ -53,7 +49,6 @@ describe('Test isolation', function() {
 });
 
 describe('createContainer', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     var callCreateContainer = callSwiftMethod('createContainer');
 
     it('should return 201 for a new container', function () {
@@ -71,7 +66,6 @@ describe('createContainer', function () {
 });
 
 describe('deleteContainer', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
@@ -99,7 +93,6 @@ describe('deleteContainer', function () {
 });
 
 describe('listObjects', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     var callListObjects = callSwiftMethod('listObjects');
 
     it('should return 200 for an existing container', function () {
@@ -134,7 +127,6 @@ describe('listObjects', function () {
 });
 
 describe('deleteObject', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     var callDeleteObject = callSwiftMethod('deleteObject');
 
     it('should return 204 for an existing object', function () {
@@ -166,8 +158,6 @@ describe('deleteObject', function () {
 });
 
 describe('deleteDirectory', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
-
     it('should return an array with deletion results', function () {
         SwiftMock.setObjects('foo', {
             'bar/a.txt': {headers: {
@@ -199,7 +189,6 @@ describe('deleteDirectory', function () {
 });
 
 describe('headObject', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
@@ -235,7 +224,6 @@ describe('headObject', function () {
 });
 
 describe('getObject', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {
@@ -279,7 +267,6 @@ describe('getObject', function () {
 });
 
 describe('postObject', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
