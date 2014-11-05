@@ -106,6 +106,16 @@ SwiftClient.prototype.postObject = function (container, object, headers) {
     return this._$http.post(url, null, {headers: headers});
 };
 
+SwiftClient.prototype.copyObject = function (srcCont, srcObj, dstCont, dstObj) {
+    var url = this._swiftUrl + '/' + srcCont + '/' + srcObj;
+    // Explicitly unset the Content-Type header in order to avoid
+    // sending a default Content-Type with the request.
+    var headers = {'content-type': undefined,
+                   'destination': dstCont + '/' + dstObj};
+    angular.extend(headers, this._headers);
+    return this._$http({method: 'COPY', url: url, headers: headers});
+};
+
 SwiftClient.prototype.deleteObject = function (container, object) {
     var url = this._swiftUrl + '/' + container + '/' + object;
     return this._$http.delete(url, {headers: this._headers});
