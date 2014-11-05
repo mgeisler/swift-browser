@@ -2,17 +2,17 @@
   "name": "swift-browser",
   "private": true,
   "dependencies": {
-    "angular": "~1.3",
-    "angular-bootstrap": "~0.11",
-    "angular-mocks": "~1.3",
-    "angular-ui-codemirror": "~0.1.6",
-    "angular-ui-router": "~0.2",
-    "bootstrap": "~3.2",
-    "codemirror": "~4.7.0",
-    "jquery": "~2.1",
-    "ng-file-upload": "~1.6"
+    "angular": "1.3.0",
+    "angular-bootstrap": "0.11.2",
+    "angular-mocks": "1.3.0",
+    "angular-ui-codemirror": "0.1.6",
+    "angular-ui-router": "0.2.11",
+    "bootstrap": "3.2.0",
+    "codemirror": "4.7.0",
+    "jquery": "2.1.1",
+    "ng-file-upload": "1.6.12"
   },
   "devDependencies": {
-    "spark-md5": "~0.0.5"
+    "spark-md5": "0.0.5"
   }
 }
