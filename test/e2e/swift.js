@@ -332,3 +332,69 @@ describe('postObject', function () {
         expect(headers.then(select('content-type'))).toEqual('text/plain');
     });
 });
+
+describe('copyObject', function () {
+    beforeEach(function () {
+        SwiftMock.setObjects('src', {
+            'foo': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'image/png',
+                'Content-Disposition': 'attachment',
+                'Content-Encoding': 'gzip',
+                'X-Object-Meta-Key': 'custom metadata'
+            }}
+        });
+        SwiftMock.addContainer('dst');
+        browser.get('index.html#/');
+    });
+    var callCopyObject = callSwiftMethod('copyObject');
+    var callHeadObject = callSwiftMethod('headObject');
+    var callListObjects = callSwiftMethod('listObjects');
+
+    it('should return 201 for an existing source object', function () {
+        var result = callCopyObject('src', 'foo', 'dst', 'bar');
+        expect(result.then(select('status'))).toEqual(201);
+    });
+
+    it('should return 404 for a non-existing source object', function () {
+        var result = callCopyObject('src', 'no-such-object', 'dst', 'bar');
+        expect(result.then(select('status'))).toEqual(404);
+    });
+
+    it('should return 404 for a non-existing source container', function () {
+        var result = callCopyObject('no-such-container', 'foo', 'dst', 'bar');
+        expect(result.then(select('status'))).toEqual(404);
+    });
+
+    it('should return 404 for a non-existing destination', function () {
+        var result = callCopyObject('src', 'foo', 'no-such-container', 'bar');
+        expect(result.then(select('status'))).toEqual(404);
+    });
+
+    it('should insert object in container', function () {
+        callCopyObject('src', 'foo', 'dst', 'bar');
+        var result = callListObjects('dst');
+        expect(result.then(select('data'))).toEqual([{
+            'last_modified': '2014-08-16T13:33:21.000Z',
+            bytes: 20,
+            hash: '401b30e3b8b5d629635a5c613cdb7919',
+            name: 'bar',
+            'content_type': 'image/png'
+        }]);
+    });
+
+    it('should preserve custom metadata', function () {
+        callCopyObject('src', 'foo', 'dst', 'bar');
+        var headers = callHeadObject('dst', 'bar').then(select('headers'));
+        var metadata = headers.then(select('x-object-meta-key'));
+        expect(metadata).toEqual('custom metadata');
+    });
+
+    it('should keep Content-Type header unchanged', function () {
+        callCopyObject('src', 'foo', 'dst', 'bar');
+        var headers = callHeadObject('dst', 'bar').then(select('headers'));
+        expect(headers.then(select('content-type'))).toEqual('image/png');
+    });
+});

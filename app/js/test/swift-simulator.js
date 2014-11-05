@@ -69,6 +69,8 @@ function SwiftSimulator($httpBackend) {
         .respond(this.deleteObject.bind(this));
     $httpBackend.whenPUT(this.objRegex)
         .respond(this.putObject.bind(this));
+    $httpBackend.when('COPY', this.objRegex)
+        .respond(this.copyObject.bind(this));
 
     $httpBackend.whenGET(/.*/).passThrough();
 }
@@ -259,6 +261,21 @@ SwiftSimulator.prototype.putObject = function(method, url, data, headers) {
         cont.objects[objName] = object;
         // Update object headers
         postObject(method, url, data, headers);
+        return [201, null];
+    });
+};
+
+SwiftSimulator.prototype.copyObject = function(method, url, data, headers) {
+    var dst = headers.destination;
+    var slash = dst.indexOf('/');
+    var dstContName = dst.slice(0, slash);
+    var dstObjName = dst.slice(slash + 1);
+    var dstCont = this.data[dstContName];
+    if (!dstCont) {
+        return [404, 'Container "' + name + '" not found'];
+    }
+    return this.findObjectOr404(url, function (container, object) {
+        dstCont[dstObjName] = angular.copy(object);
         return [201, null];
     });
 };
