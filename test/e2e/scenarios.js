@@ -17,7 +17,8 @@ describe('my app', function() {
 
 function uploadFile(path) {
     browser.executeScript(function () {
-        $('#file-1').removeClass('hidden');
+        var file = document.getElementById('file-1');
+        angular.element(file).removeClass('hidden');
     }).then(function () {
         $('#file-1').sendKeys(path);
     });
@@ -749,7 +750,8 @@ describe('Object content', function () {
             args = JSON.stringify(args);
             function script(method, args) {
                 args = JSON.parse(args);
-                var editor = $('.CodeMirror')[0].CodeMirror;
+                var elms = document.getElementsByClassName('CodeMirror');
+                var editor = elms[0].CodeMirror;
                 return editor[method].apply(editor, args);
             }
             return browser.driver.executeScript(script, method, args);

@@ -5,7 +5,6 @@ env:
 
 globals:
   angular: false
-  $: false
 
 rules:
   quotes: 0
