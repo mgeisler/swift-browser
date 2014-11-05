@@ -24,8 +24,6 @@ function uploadFile(path) {
 }
 
 describe('Container listing', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
-
     describe('should be sortable', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
@@ -214,8 +212,6 @@ describe('Container listing', function () {
 
 
 describe('Object listing', function () {
-    beforeEach(SwiftMock.loadAngularMocks);
-
     describe('should be sortable', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
@@ -560,7 +556,6 @@ describe('Object listing', function () {
 
 describe('Listing a pseudo-directory', function () {
     it('should add traling slash', function() {
-        SwiftMock.loadAngularMocks();
         SwiftMock.setObjects('foo', {
             'bar/baz.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
@@ -577,7 +572,6 @@ describe('Listing a pseudo-directory', function () {
 
 describe('Object metadata', function () {
     beforeEach(function () {
-        SwiftMock.loadAngularMocks();
         SwiftMock.setObjects('foo', {
             'bar/baz.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
@@ -735,7 +729,6 @@ describe('Object content', function () {
     var editBtn = $('a[ng-click="edit()"]');
 
     beforeEach(function () {
-        SwiftMock.loadAngularMocks();
         SwiftMock.setObjects('foo', {
             'bar.html': {
                 headers: {

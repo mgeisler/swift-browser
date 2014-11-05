@@ -1,21 +1,30 @@
 'use strict';
 
 exports.config = {
-  allScriptsTimeout: 11000,
+    allScriptsTimeout: 11000,
 
-  specs: [
-    'e2e/*.js'
-  ],
+    specs: [
+        'e2e/*.js'
+    ],
 
-  capabilities: {
-    'browserName': 'firefox'
-  },
+    capabilities: {
+        'browserName': 'firefox'
+    },
 
-  baseUrl: 'http://localhost:8000/app/',
+    baseUrl: 'http://localhost:8000/app/',
 
-  framework: 'jasmine',
+    onPrepare: function () {
+        var width = 640;
+        var height = 480;
+        browser.driver.manage().window().setSize(width, height);
 
-  jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000
-  }
+        var SwiftMock = require('./swift-mock.js');
+        beforeEach(SwiftMock.loadAngularMocks);
+    },
+
+    framework: 'jasmine',
+
+    jasmineNodeOpts: {
+        defaultTimeoutInterval: 30000
+    }
 };
