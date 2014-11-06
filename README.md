@@ -7,7 +7,7 @@ Swift Browser
 JavaScript based UI for [OpenStack Swift][].
 
 Deployment
-----------
+==========
 
 Deployment is simple: if you got this file from a release tarball or
 zip file, then you simply need to upload all files in this folder to
@@ -37,7 +37,7 @@ page in your browser (use the instructions above).
 
 
 Configuration
--------------
+=============
 
 You can add a configuration file named `config.json` to configure the
 authentication type and URL endpoint. The default is to authenticate
@@ -61,7 +61,7 @@ Browser like this:
     }
 
 Same-Origin Restrictions
-------------------------
+========================
 
 For Swift Browser to do Keystone authentication, you will need to make
 sure that the browser can send AJAX requests to Keystone. Typically,
@@ -90,13 +90,13 @@ So to make Swift Browser talk to Keystone, you need to either
   any origin). Please see this [blog post][swift-cors] for details.
 
 Supported Browsers
-------------------
+==================
 
 We support IE 10+ and test with Firefox and Chrome.
 
 
 Other Swift File Managers
--------------------------
+=========================
 
 * [Swift Explorer][]: implemented in Java.
 
