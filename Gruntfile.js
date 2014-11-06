@@ -94,6 +94,9 @@ module.exports = function(grunt) {
         clean: {
             build: {
                 src: ['<%= build.dir %>']
+            },
+            post_build: {
+                src: ['.tmp']
             }
         },
 
@@ -115,7 +118,6 @@ module.exports = function(grunt) {
                      src: [
                          'index.html',
                          'partials/*.html',
-                         'js/*.js',
                          'css/*.css'
                      ],
                      dest: '<%= build.dir %>/<%= build.name %>'},
@@ -166,6 +168,20 @@ module.exports = function(grunt) {
             }
         },
 
+        useminPrepare: {
+            html: 'app/index.html',
+            options: {
+                dest: '<%= build.dir %>/<%= build.name %>'
+            }
+        },
+        filerev: {
+            build: {
+                src: '<%= build.dir %>/<%= build.name %>/js/*.js'
+            }
+        },
+        usemin: {
+            html: '<%= build.dir %>/<%= build.name %>/index.html'
+        }
     });
 
     grunt.registerTask('update-webdriver', ['exec:webdriver']);
@@ -174,6 +190,14 @@ module.exports = function(grunt) {
         'copy:e2e', 'instrument', 'protractor_coverage', 'makeReport'
     ]);
     grunt.registerTask('build', [
-        'clean:build', 'copy:build', 'compress'
+        'clean:build',
+        'copy:build',
+        'useminPrepare',
+        'concat:generated',
+        'uglify:generated',
+        'filerev:build',
+        'usemin',
+        'compress',
+        'clean:post_build'
     ]);
 };
