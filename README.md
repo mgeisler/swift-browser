@@ -95,6 +95,21 @@ Supported Browsers
 We support IE 10+ and test with Firefox and Chrome.
 
 
+Release History
+===============
+
+0.1.0: 2014-11-06
+-----------------
+
+First release with a basic feature set:
+
+* Keystone and LiteAuth authentication.
+* Can browse containers and pseudo-directories.
+* Can create and delete containers.
+* Can edit object content and metadata.
+* Can upload and delete objects.
+
+
 Other Swift File Managers
 =========================
 
