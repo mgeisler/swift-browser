@@ -1,5 +1,7 @@
 /* eslint-env node */
 module.exports = function(grunt) {
+    require('load-grunt-tasks')(grunt);
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -44,17 +46,35 @@ module.exports = function(grunt) {
                 }
             }
         },
+        compress: {
+            options: {
+                pretty: true,
+                level: 6
+            },
+            'build-tar': {
+                options: {
+                    archive: '<%= build.dir %>/<%= build.name %>.tar.gz'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= build.dir %>',
+                    src: '<%= build.name %>/**'
+                }]
+            },
+            'build-zip': {
+                options: {
+                    archive: '<%= build.dir %>/<%= build.name %>.zip'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= build.dir %>',
+                    src: '<%= build.name %>/**'
+                }]
+            }
+        },
         exec: {
             webdriver: {
                 cmd: "node_modules/.bin/webdriver-manager update"
-            },
-            'build-tar': {
-                cwd: '<%= build.dir %>',
-                cmd: 'tar -czf <%= build.name %>.tar.gz <%= build.name %>'
-            },
-            'build-zip': {
-                cwd: '<%= build.dir %>',
-                cmd: 'zip -qr <%= build.name %>.zip <%= build.name %>'
             }
         },
 
@@ -154,18 +174,6 @@ module.exports = function(grunt) {
         'copy:e2e', 'instrument', 'protractor_coverage', 'makeReport'
     ]);
     grunt.registerTask('build', [
-        'clean:build', 'copy:build', 'exec:build-tar', 'exec:build-zip'
+        'clean:build', 'copy:build', 'compress'
     ]);
-
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-coveralls');
-    grunt.loadNpmTasks('grunt-eslint');
-    grunt.loadNpmTasks('grunt-exec');
-    grunt.loadNpmTasks('grunt-istanbul');
-    grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-protractor-coverage');
-    grunt.loadNpmTasks('grunt-protractor-runner');
 };
