@@ -43,7 +43,7 @@
 
 <div class="modal-footer">
   <button type="button" class="btn btn-default pull-left"
-          onclick="$('#file-1').click()">Select File</button>
+          onclick="document.getElementById('file-1').click()">Select File</button>
   <button type="button" class="btn btn-primary" ng-click="uploadFiles()"
           ng-disabled="disableUpload()">Upload</button>
   <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
