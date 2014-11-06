@@ -9,9 +9,21 @@ JavaScript based UI for [OpenStack Swift][].
 Deployment
 ----------
 
-To deploy the Swift browser, you first need to pull in the
-dependencies. These are managed using [Bower][], as client-side
-dependency manager. You run Bower via [npm][]:
+Deployment is simple: if you got this file from a release tarball or
+zip file, then you simply need to upload all files in this folder to
+Swift. That will look like this:
+
+    $ swift post swift-browser
+    $ swift post -r '.r:*' swift-browser
+    $ swift upload swift-browser .
+
+Then load the `index.html` page in your browser. You will be asked for
+your credentials if needed. After logging in, you will see a container
+listing. Deployment is now done.
+
+If you cloned the repository you need to install dependencies before
+you can deploy Swift Browser. These are managed using [Bower][]. You
+can run Bower via [npm][]:
 
     $ npm install
 
@@ -21,9 +33,8 @@ install` for you to download AngularJS and other libraries needed.
 
 When the command is done, the `app/` folder will be ready for upload.
 Simply upload it to your Swift installation and load the `index.html`
-page in your browser. Provided you have read access to Swift, you
-should see a container listing and be able to browse the containers
-and pseudo-directories.
+page in your browser (use the instructions above).
+
 
 Configuration
 -------------
