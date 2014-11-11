@@ -98,6 +98,12 @@ We support IE 10+ and test with Firefox and Chrome.
 Release History
 ===============
 
+Next Version
+------------
+
+* [#157][]: concatenate and minify JavaScript and CSS files. The index
+  page is now loaded with 7 requests (down from 23 requests).
+
 0.1.0: 2014-11-06
 -----------------
 
@@ -128,3 +134,5 @@ Other Swift File Managers
 [Swift Explorer]: http://www.619.io/swift-explorer
 [django-swiftbrowser]: https://github.com/cschwede/django-swiftbrowser
 [swift-ui]: https://github.com/fanatic/swift-ui
+
+[#157]: https://github.com/zerovm/swift-browser/issues/157
