@@ -200,4 +200,34 @@ module.exports = function(grunt) {
         'compress',
         'clean:post_build'
     ]);
+    grunt.registerTask('e2e-build', 'Run E2E tests on build', function () {
+        var base = 'http://localhost:8000/<%= build.dir %>/<%= build.name %>/';
+        grunt.config.merge({
+            protractor: {
+                options: {
+                    args: {
+                        baseUrl: base
+                    }
+                }
+            },
+            copy: {
+                extra: {
+                    files: [{
+                        expand: true,
+                        cwd: 'app',
+                        src: [
+                            'bower_components/angular-mocks/angular-mocks.js',
+                            'bower_components/spark-md5/spark-md5.js',
+                            'js/test/swift-simulator.js'
+                        ],
+                        dest: '<%= build.dir %>/<%= build.name %>'
+                    }]
+                }
+            }
+        });
+
+        grunt.task.run('build');
+        grunt.task.run('copy:extra');
+        grunt.task.run('protractor');
+    });
 };
