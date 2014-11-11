@@ -6,8 +6,9 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         build: {
-            dir: 'build',
-            name: '<%= pkg.name %>-<%= pkg.version %>'
+            base: 'build',
+            name: '<%= pkg.name %>-<%= pkg.version %>',
+            dir: '<%= build.base %>/<%= build.name %>'
         },
 
         connect: {
@@ -53,21 +54,21 @@ module.exports = function(grunt) {
             },
             'build-tar': {
                 options: {
-                    archive: '<%= build.dir %>/<%= build.name %>.tar.gz'
+                    archive: '<%= build.dir %>.tar.gz'
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= build.dir %>',
+                    cwd: '<%= build.base %>',
                     src: '<%= build.name %>/**'
                 }]
             },
             'build-zip': {
                 options: {
-                    archive: '<%= build.dir %>/<%= build.name %>.zip'
+                    archive: '<%= build.dir %>.zip'
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= build.dir %>',
+                    cwd: '<%= build.base %>',
                     src: '<%= build.name %>/**'
                 }]
             }
@@ -112,7 +113,7 @@ module.exports = function(grunt) {
                          'README.md',
                          'LICENSE'
                      ],
-                     dest: '<%= build.dir %>/<%= build.name %>'},
+                     dest: '<%= build.dir %>'},
                     {expand: true,
                      cwd: 'app',
                      src: [
@@ -120,7 +121,7 @@ module.exports = function(grunt) {
                          'partials/*.html',
                          'css/*.css'
                      ],
-                     dest: '<%= build.dir %>/<%= build.name %>'},
+                     dest: '<%= build.dir %>'},
                     {expand: true,
                      cwd: 'app/bower_components',
                      src: [
@@ -138,7 +139,7 @@ module.exports = function(grunt) {
                          'angular-ui-codemirror/ui-codemirror.js',
                          'angular-bootstrap/ui-bootstrap-tpls.js'
                      ],
-                     dest: '<%= build.dir %>/<%= build.name %>/bower_components'}
+                     dest: '<%= build.dir %>/bower_components'}
                 ]
             }
         },
@@ -171,16 +172,16 @@ module.exports = function(grunt) {
         useminPrepare: {
             html: 'app/index.html',
             options: {
-                dest: '<%= build.dir %>/<%= build.name %>'
+                dest: '<%= build.dir %>'
             }
         },
         filerev: {
             build: {
-                src: '<%= build.dir %>/<%= build.name %>/js/*.js'
+                src: '<%= build.dir %>/js/*.js'
             }
         },
         usemin: {
-            html: '<%= build.dir %>/<%= build.name %>/index.html'
+            html: '<%= build.dir %>/index.html'
         }
     });
 
@@ -201,7 +202,7 @@ module.exports = function(grunt) {
         'clean:post_build'
     ]);
     grunt.registerTask('e2e-build', 'Run E2E tests on build', function () {
-        var base = 'http://localhost:8000/<%= build.dir %>/<%= build.name %>/';
+        var base = 'http://localhost:8000/<%= build.dir %>/';
         grunt.config.merge({
             protractor: {
                 options: {
@@ -220,7 +221,7 @@ module.exports = function(grunt) {
                             'bower_components/spark-md5/spark-md5.js',
                             'js/test/swift-simulator.js'
                         ],
-                        dest: '<%= build.dir %>/<%= build.name %>'
+                        dest: '<%= build.dir %>'
                     }]
                 }
             }
