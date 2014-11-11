@@ -5,6 +5,7 @@ npm-debug.log
 app/config.json
 
 build/
+.tmp/
 
 *~
 *.orig

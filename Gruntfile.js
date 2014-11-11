@@ -95,9 +95,6 @@ module.exports = function(grunt) {
         clean: {
             build: {
                 src: ['<%= build.dir %>']
-            },
-            post_build: {
-                src: ['.tmp']
             }
         },
 
@@ -198,8 +195,7 @@ module.exports = function(grunt) {
         'uglify:generated',
         'filerev:build',
         'usemin',
-        'compress',
-        'clean:post_build'
+        'compress'
     ]);
     grunt.registerTask('e2e-build', 'Run E2E tests on build', function () {
         var base = 'http://localhost:8000/<%= build.dir %>/';
