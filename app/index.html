@@ -6,9 +6,13 @@
   <title>Swift Browser</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- build:css css/bower_components.css -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
+  <!-- endbuild -->
+  <!-- build:css css/app.css -->
   <link rel="stylesheet" href="css/app.css">
+  <!-- endbuild -->
 </head>
 <body>
 
@@ -22,9 +26,7 @@
     </div>
   </div>
 
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
+  <!-- build:js js/bower_components.js -->
   <script src="bower_components/codemirror/lib/codemirror.js"></script>
   <script src="bower_components/codemirror/mode/meta.js"></script>
   <script src="bower_components/codemirror/addon/mode/loadmode.js"></script>
@@ -34,6 +36,8 @@
   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <!-- endbuild -->
+  <!-- build:js js/swift-browser.js -->
   <script src="js/swift.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
@@ -42,5 +46,6 @@
   <script src="js/directives.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/config.js"></script>
+  <!-- endbuild -->
 </body>
 </html>

@@ -12,5 +12,6 @@ script:
   - grunt eslint
   - grunt karma:travis
   - grunt coverage
+  - grunt e2e-build
 after_script:
   - grunt concat:coverage coveralls
