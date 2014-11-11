@@ -115,16 +115,13 @@ module.exports = function(grunt) {
                      cwd: 'app',
                      src: [
                          'index.html',
-                         'partials/*.html',
-                         'css/*.css'
+                         'partials/*.html'
                      ],
                      dest: '<%= build.dir %>'},
                     {expand: true,
                      cwd: 'app/bower_components',
                      src: [
-                         'bootstrap/dist/css/bootstrap.css',
                          'bootstrap/dist/fonts/*',
-                         'codemirror/lib/codemirror.css',
                          'codemirror/mode/**/*.js',
                          '!codemirror/mode/**/test.js'
                      ],
@@ -166,7 +163,10 @@ module.exports = function(grunt) {
         },
         filerev: {
             build: {
-                src: '<%= build.dir %>/js/*.js'
+                src: [
+                    '<%= build.dir %>/js/*.js',
+                    '<%= build.dir %>/css/*.css'
+                ]
             }
         },
         usemin: {
@@ -184,6 +184,7 @@ module.exports = function(grunt) {
         'copy:build',
         'useminPrepare',
         'concat:generated',
+        'cssmin:generated',
         'uglify:generated',
         'filerev:build',
         'usemin',
