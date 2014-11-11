@@ -125,16 +125,8 @@ module.exports = function(grunt) {
                          'bootstrap/dist/css/bootstrap.css',
                          'bootstrap/dist/fonts/*',
                          'codemirror/lib/codemirror.css',
-                         'codemirror/lib/codemirror.js',
                          'codemirror/mode/**/*.js',
-                         '!codemirror/mode/**/test.js',
-                         'codemirror/addon/mode/loadmode.js',
-                         'ng-file-upload/angular-file-upload-html5-shim.js',
-                         'angular/angular.js',
-                         'ng-file-upload/angular-file-upload.js',
-                         'angular-ui-router/release/angular-ui-router.js',
-                         'angular-ui-codemirror/ui-codemirror.js',
-                         'angular-bootstrap/ui-bootstrap-tpls.js'
+                         '!codemirror/mode/**/test.js'
                      ],
                      dest: '<%= build.dir %>/bower_components'}
                 ]
