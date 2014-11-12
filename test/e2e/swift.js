@@ -397,4 +397,11 @@ describe('copyObject', function () {
         var headers = callHeadObject('dst', 'bar').then(select('headers'));
         expect(headers.then(select('content-type'))).toEqual('image/png');
     });
+
+    it('should remove Content-Disposition and Content-Encoding', function () {
+        callCopyObject('src', 'foo', 'dst', 'bar');
+        var headers = callHeadObject('dst', 'bar').then(select('headers'));
+        expect(headers.then(select('content-disposition'))).toBeUndefined();
+        expect(headers.then(select('content-encoding'))).toBeUndefined();
+    });
 });

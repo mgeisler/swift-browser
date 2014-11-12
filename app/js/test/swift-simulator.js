@@ -275,7 +275,11 @@ SwiftSimulator.prototype.copyObject = function(method, url, data, headers) {
         return [404, 'Container "' + name + '" not found'];
     }
     return this.findObjectOr404(url, function (container, object) {
-        dstCont[dstObjName] = angular.copy(object);
+        var copy = angular.copy(object);
+        // Swift bug: https://bugs.launchpad.net/swift/+bug/1391826
+        delete copy.headers['content-disposition'];
+        delete copy.headers['content-encoding'];
+        dstCont.objects[dstObjName] = copy;
         return [201, null];
     });
 };
