@@ -48,6 +48,29 @@ describe('Test isolation', function() {
     });
 });
 
+describe('listContainers', function () {
+    var callListContainers = callSwiftMethod('listContainers');
+    var callUploadObject = callSwiftMethod('uploadObject');
+
+    it('should correctly update byte count after putObject', function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 1000,
+                'Content-Type': 'text/plain'
+            }}
+        });
+        browser.get('index.html#/');
+
+        callUploadObject('foo', 'a.txt', 'new length', {});
+        var containers = callListContainers().then(select('data'));
+        var container = containers.then(select(0));
+        var bytes = container.then(select('bytes'));
+        expect(bytes).toEqual(10);
+    });
+});
+
 describe('createContainer', function () {
     var callCreateContainer = callSwiftMethod('createContainer');
 
