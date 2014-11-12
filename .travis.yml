@@ -3,6 +3,7 @@ node_js:
   - 0.10
 before_install:
   - npm install -g grunt-cli
+  - sudo pip install codecov
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -14,4 +15,4 @@ script:
   - grunt coverage
   - grunt e2e-build
 after_script:
-  - grunt concat:coverage coveralls
+  - codecov
