@@ -11,9 +11,12 @@
 
 <div class="btn-toolbar" role="toolbar">
   <div class="btn-group">
-    <a class="btn btn-default" ng-click="upload()">Upload</a>
-    <a class="btn btn-default"
-       ng-click="delete()" ng-disabled="nothingSelected()">Delete</a>
+    <button type="button" class="btn btn-default"
+            ng-click="upload()">Upload</button>
+    <button type="button" class="btn btn-default"
+            ng-click="delete()" ng-disabled="nothingSelected()">Delete</button>
+    <button type="button" class="btn btn-default"
+            ng-click="copy()" ng-disabled="nothingSelected()">Copy</button>
   </div>
 </div>
 

@@ -226,6 +226,21 @@ angular.module('swiftBrowser.controllers',
                 };
             };
 
+            $scope.copy = function () {
+                var opt = {
+                    templateUrl: 'partials/copy-modal.html',
+                    controller: 'CopyModalCtrl',
+                    resolve: {
+                        container: valueFn(container),
+                        prefix: valueFn(prefix),
+                        items: valueFn($scope.items.filter(function (item) {
+                            return item.selected;
+                        }))
+                    }
+                };
+                $modal.open(opt);
+            };
+
             $scope.breadcrumbs = [{name: '', title: 'Root'}];
 
             var prefixes = prefix.split('/');
@@ -441,5 +456,43 @@ angular.module('swiftBrowser.controllers',
                     });
                 });
             });
+        }
+    ])
+    .controller('CopyModalCtrl', [
+        '$swift', '$scope', '$modalInstance', 'container', 'prefix', 'items',
+        function ($swift, $scope, $modalInstance, container, prefix, items) {
+            $scope.items = angular.copy(items);
+            $scope.updateOrderBy = mkUpdateOrderBy($scope);
+            $scope.updateOrderBy('name');
+            $scope.disableCopy = function () {
+                return $scope.items.every(function (item) {
+                    return item.copied;
+                });
+            };
+
+            $scope.destContainer = container;
+            $swift.listContainers().then(function (result) {
+                $scope.containers = result.data;
+            });
+            $scope.directory = prefix;
+            $scope.copyObjects = function () {
+                $scope.items.forEach(function (item) {
+                    function nonEmpty (part) {
+                        return part.length > 0;
+                    }
+                    var destDir = $scope.directory;
+                    // Remove leading, trailing, and double slashes
+                    destDir = destDir.split('/').filter(nonEmpty).join('/');
+                    var destName = destDir + '/' + item.title;
+                    var req = $swift.copyObject(
+                        container, item.name, $scope.destContainer, destName
+                    );
+                    req.then(function () {
+                        item.copied = true;
+                    }, function () {
+                        item.copied = false;
+                    });
+                });
+            };
         }
     ]);

@@ -69,6 +69,8 @@ function SwiftSimulator($httpBackend) {
         .respond(this.deleteObject.bind(this));
     $httpBackend.whenPUT(this.objRegex)
         .respond(this.putObject.bind(this));
+    $httpBackend.when('COPY', this.objRegex)
+        .respond(this.copyObject.bind(this));
 
     $httpBackend.whenGET(/.*/).passThrough();
 }
@@ -105,7 +107,7 @@ SwiftSimulator.prototype.listContainers = function(method, url, data) {
         var result = {count: 0, bytes: 0, name: name};
         angular.forEach(container.objects, function (object) {
             result.count += 1;
-            result.bytes += object.headers['Content-Length'];
+            result.bytes += object.headers['content-length'];
         });
         results.push(result);
     });
@@ -140,12 +142,12 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
                     subdirs[subdir] = true;
                 }
             } else {
-                var lastModified = new Date(object.headers['Last-Modified']);
+                var lastModified = new Date(object.headers['last-modified']);
                 results.push({
-                    'hash': object.headers.ETag,
-                    'content_type': object.headers['Content-Type'],
+                    'hash': object.headers.etag,
+                    'content_type': object.headers['content-type'],
                     'last_modified': lastModified.toISOString(),
-                    'bytes': object.headers['Content-Length'],
+                    'bytes': object.headers['content-length'],
                     'name': name
                 });
             }
@@ -236,7 +238,7 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
         var d = new Date();
         // Convert from local timezone to UTC timezone
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-        newHeaders['Last-Modified'] = d.toUTCString();
+        newHeaders['last-modified'] = d.toUTCString();
         object.headers = newHeaders;
         return [202, null];
     });
@@ -246,19 +248,38 @@ SwiftSimulator.prototype.putObject = function(method, url, data, headers) {
     var postObject = this.postObject.bind(this);
     return this.findContainerOr404(url, function (cont, contName, objName) {
         var lastModified = data.lastModifiedDate || new Date();
-        var object = {headers: {'Last-Modified': lastModified.toISOString(),
-                                'Content-Length': data.size,
-                                'Content-Type': data.type}};
+        var object = {headers: {'last-modified': lastModified.toISOString(),
+                                'content-length': data.size,
+                                'content-type': data.type}};
         var reader = new FileReader();
         reader.onload = function () {
             object.content = reader.result;
-            object.headers.ETag = SparkMD5.hash(reader.result);
+            object.headers.etag = SparkMD5.hash(reader.result);
         };
         reader.readAsText(data);
 
         cont.objects[objName] = object;
         // Update object headers
         postObject(method, url, data, headers);
+        return [201, null];
+    });
+};
+
+SwiftSimulator.prototype.copyObject = function(method, url, data, headers) {
+    var dst = headers.destination;
+    var slash = dst.indexOf('/');
+    var dstContName = dst.slice(0, slash);
+    var dstObjName = dst.slice(slash + 1);
+    var dstCont = this.data[dstContName];
+    if (!dstCont) {
+        return [404, 'Container "' + name + '" not found'];
+    }
+    return this.findObjectOr404(url, function (container, object) {
+        var copy = angular.copy(object);
+        // Swift bug: https://bugs.launchpad.net/swift/+bug/1391826
+        delete copy.headers['content-disposition'];
+        delete copy.headers['content-encoding'];
+        dstCont.objects[dstObjName] = copy;
         return [201, null];
     });
 };
@@ -273,11 +294,16 @@ SwiftSimulator.prototype.setObjects = function(container, objects) {
     }
     angular.forEach(objects, function (object, name) {
         if (object.content) {
-            object.headers.ETag = SparkMD5.hash(object.content);
-            object.headers['Content-Length'] = object.content.length;
+            object.headers.etag = SparkMD5.hash(object.content);
+            object.headers['content-length'] = object.content.length;
         } else {
             object.content = '';
         }
+        var newHeaders = {};
+        angular.forEach(object.headers, function (value, name) {
+            newHeaders[name.toLowerCase()] = value;
+        });
+        object.headers = newHeaders;
     });
     this.data[container].objects = objects;
 };

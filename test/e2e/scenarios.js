@@ -183,6 +183,7 @@ describe('Container listing', function () {
             SwiftMock.addContainer('foo');
             browser.get('index.html#/');
 
+            expect(deleteBtn.isEnabled()).toBe(false);
             toggles.first().click();
             deleteBtn.click();
             closeBtn.click();
@@ -370,6 +371,7 @@ describe('Object listing', function () {
         var checkboxes = $$('td:nth-child(1) input');
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
+        expect(deleteBtn.isEnabled()).toBe(false);
         checkboxes.get(0).click();
         checkboxes.get(2).click();
         deleteBtn.click();
@@ -553,6 +555,57 @@ describe('Object listing', function () {
             expect(input.getAttribute('value')).toEqual('text/html');
         });
     });
+
+    it('should allow copying files', function () {
+        SwiftMock.setObjects('foo', {
+            'nested/x.txt': {headers: {
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+        SwiftMock.addContainer('bar');
+        browser.get('index.html#/foo/nested/');
+
+        var checkboxes = $$('td:nth-child(1) input');
+        var names = $$('td:nth-child(2)');
+        var openCopyModalBtn = $('.btn[ng-click="copy()"]');
+        var copyBtn = $('div.modal .btn[ng-click="copyObjects()"]');
+        var closeBtn = $('div.modal .btn[ng-click="$dismiss()"]');
+        var modalTitle = $('div.modal h3');
+        var modalNames = $$('div.modal td:nth-child(1)');
+        var successes = $$('div.modal td:nth-child(3) .glyphicon-ok');
+        var containers = element.all(
+            by.options('c.name as c.name for c in containers')
+        );
+        var destDirectory = element(by.model('directory'));
+
+        expect(openCopyModalBtn.isEnabled()).toBe(false);
+        checkboxes.click();
+        openCopyModalBtn.click();
+
+        expect(modalTitle.getText()).toEqual('Copying 1 objects');
+        expect(modalNames.getText()).toEqual(['x.txt']);
+        expect(containers.getText()).toEqual(['bar', 'foo']);
+        expect(containers.get(1).isSelected()).toBe(true);
+        expect(destDirectory.getAttribute('value')).toEqual('nested/');
+        expect(copyBtn.isEnabled()).toBe(true);
+
+        containers.get(0).click();
+        destDirectory.clear();
+        destDirectory.sendKeys('copied');
+
+        copyBtn.click();
+        expect(successes.count()).toBe(1);
+        expect(copyBtn.isEnabled()).toBe(false);
+
+        closeBtn.click();
+        $$('.breadcrumb a').first().click();
+        $$('td a').first().click(); // index.html#/bar/
+        expect(names.getText()).toEqual(['copied/']);
+        $$('td a').first().click(); // enter index.html#/bar/copied/
+        expect(names.getText()).toEqual(['x.txt']);
+    });
 });
 
 describe('Listing a pseudo-directory', function () {
@@ -727,7 +780,7 @@ describe('Object metadata', function () {
 });
 
 describe('Object content', function () {
-    var editBtn = $('a[ng-click="edit()"]');
+    var editBtn = $('.btn[ng-click="edit()"]');
 
     beforeEach(function () {
         SwiftMock.setObjects('foo', {

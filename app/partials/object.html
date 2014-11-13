@@ -15,8 +15,8 @@
        ng-href="../{{ container }}/{{ name }}">Open</a>
     <a class="btn btn-default" download
        ng-href="../{{ container }}/{{ name }}">Download</a>
-    <a class="btn btn-default"
-       ng-click="edit()">Edit</a>
+    <button type="button" class="btn btn-default"
+            ng-click="edit()">Edit</button>
   </div>
 </div>
 
@@ -34,7 +34,7 @@
   <tr>
     <th class="header-name">Name</th>
     <th>Value</th>
-    <th class="remove"></th>
+    <th class="icon"></th>
   </tr>
   <tr ng-repeat="header in headers.sys" class="{{ header.name }}">
     <td>
@@ -52,7 +52,7 @@
       <input ng-if="header.editable" class="form-control"
              ng-model="header.value">
     </td>
-    <td class="remove">
+    <td class="icon">
       <a ng-if="header.removable" class="text-danger" href
          ng-click="remove('sys', $index)">
         <span class="glyphicon glyphicon-trash"></span>
@@ -73,7 +73,7 @@
   <tr>
     <th class="header-name">Name</th>
     <th>Value</th>
-    <th class="remove"></th>
+    <th class="icon"></th>
   </tr>
   <tr ng-repeat="header in headers.meta" class="{{ header.name }}">
     <td>
@@ -86,7 +86,7 @@
     <td>
       <input class="form-control" ng-model="header.value">
     </td>
-    <td class="remove">
+    <td class="icon">
       <a class="text-danger" href ng-click="remove('meta', $index)">
         <span class="glyphicon glyphicon-trash"></span>
       </a>

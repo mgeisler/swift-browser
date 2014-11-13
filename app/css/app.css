@@ -20,11 +20,11 @@ th.type {
     width: 8em;
 }
 
-th.remove {
+th.icon {
     width: 24px;
 }
 
-td.remove {
+td.icon {
     vertical-align: middle !important;
 }
 

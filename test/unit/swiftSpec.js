@@ -262,6 +262,39 @@ describe('postObject', function () {
     });
 });
 
+describe('copyObject', function () {
+    beforeEach(module('swiftBrowser.swift'));
+    beforeEach(inject(function ($httpBackend, $swift) {
+        this.$httpBackend = $httpBackend;
+        this.$swift = $swift;
+    }));
+    afterEach(function () {
+        this.$httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    it('should set Destination header', function () {
+        function check(headers) {
+            return headers.destination == 'y/bar';
+        }
+        this.$httpBackend.expect('COPY', '/v1/AUTH_abc/x/foo', null, check)
+            .respond(202, null);
+        this.$swift.copyObject('x', 'foo', 'y', 'bar');
+        this.$httpBackend.flush();
+    });
+
+    it('should not add a Content-Type header', function () {
+        function check(headers) {
+            var names = Object.keys(headers);
+            return names.every(function (name) {
+                return name.toLowerCase() != 'content-type';
+            });
+        }
+        this.$httpBackend.expect('COPY', '/v1/AUTH_abc/x/foo', null, check)
+            .respond(202, null);
+        this.$swift.copyObject('x', 'foo', 'y', 'bar');
+    });
+});
+
 describe('uploadObject', function () {
     beforeEach(module('swiftBrowser.swift'));
     beforeEach(inject(function ($httpBackend, $swift) {
