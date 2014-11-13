@@ -183,6 +183,7 @@ describe('Container listing', function () {
             SwiftMock.addContainer('foo');
             browser.get('index.html#/');
 
+            expect(deleteBtn.isEnabled()).toBe(false);
             toggles.first().click();
             deleteBtn.click();
             closeBtn.click();
@@ -370,6 +371,7 @@ describe('Object listing', function () {
         var checkboxes = $$('td:nth-child(1) input');
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
+        expect(deleteBtn.isEnabled()).toBe(false);
         checkboxes.get(0).click();
         checkboxes.get(2).click();
         deleteBtn.click();
@@ -727,7 +729,7 @@ describe('Object metadata', function () {
 });
 
 describe('Object content', function () {
-    var editBtn = $('a[ng-click="edit()"]');
+    var editBtn = $('.btn[ng-click="edit()"]');
 
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
