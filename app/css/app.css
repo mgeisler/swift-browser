@@ -20,7 +20,7 @@ th.type {
     width: 8em;
 }
 
-th.remove {
+th.remove, th.status {
     width: 24px;
 }
 

@@ -1,0 +1,53 @@
+<div class="modal-header">
+  <h3 class="modal-title">Copying {{ items | length }} objects</h3>
+</div>
+
+<div class="modal-body">
+
+  <p>Copy these objects:</p>
+
+  <table class="table table-condensed">
+    <tr>
+      <th ng-click="updateOrderBy('name')">
+        Name <span ng-class="sortCls.name"></span>
+      </th>
+      <th ng-click="updateOrderBy('bytes')" class="size">
+        Size <span ng-class="sortCls.bytes"></span>
+      </th>
+      <th class="remove"></th>
+    </tr>
+    <tr ng-repeat="item in items | orderBy:orderProp">
+      <td>{{ item.title }}</td>
+      <td class="text-right" sb-format-bytes count="item.bytes"></td>
+      <td>
+        <span ng-if="item.copied === true"
+              class="glyphicon glyphicon-ok text-success"></span>
+        <span ng-if="item.copied === false"
+              class="glyphicon glyphicon-remove text-danger"></span>
+      </td>
+    </tr>
+  </table>
+
+  <p>Destination container and pseudo-directory:</p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <select class="form-control" ng-model="destContainer"
+              ng-options="c.name as c.name for c in containers"></select>
+    </div>
+    <div class="col-sm-8">
+      <div class="input-group">
+        <span class="input-group-addon"><b>/</b></span>
+        <input class="form-control" type="text" ng-model="directory">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="copyObjects()"
+          ng-disabled="disableCopy()">
+    Copy {{ items | length }} objects
+  </button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+</div>
