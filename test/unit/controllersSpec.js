@@ -2,7 +2,7 @@
 
 /* jasmine specs for controllers go here */
 
-describe('RootCtrl', function (){
+describe('RootCtrl', function () {
     beforeEach(module('swiftBrowser.controllers'));
 
     beforeEach(inject(function ($controller) {
@@ -29,7 +29,7 @@ describe('RootCtrl', function (){
 });
 
 
-describe('ContainerCtrl', function (){
+describe('ContainerCtrl', function () {
     beforeEach(module('swiftBrowser.controllers'));
 
     function setupCtrl(params) {

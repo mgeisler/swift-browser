@@ -2,7 +2,7 @@
 
 var coverage = require('./karma-coverage.conf.js');
 
-module.exports = function (config){
+module.exports = function (config) {
   coverage(config);
 
   config.set({

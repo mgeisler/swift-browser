@@ -21,6 +21,7 @@ rules:
   - 2
   - always
   - { checkFunctionKeyword: true }
+  space-before-blocks: 2
   space-unary-word-ops: 2
   brace-style: 2
   comma-style: 2
