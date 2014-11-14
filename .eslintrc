@@ -21,6 +21,9 @@ rules:
   space-unary-word-ops: 2
   brace-style: 2
   comma-style: 2
+  func-style:
+  - 2
+  - declaration
   no-lonely-if: 2
   no-trailing-spaces: 2
   max-len: 2
