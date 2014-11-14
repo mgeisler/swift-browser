@@ -26,7 +26,6 @@ describe('RootCtrl', function(){
     it('should set sort order', function() {
         expect(this.scope.orderProp).toEqual('name');
     });
-
 });
 
 
@@ -95,8 +94,6 @@ describe('ContainerCtrl', function(){
         $httpBackend.flush();
         expect(this.scope.items).toEqual(items);
     }));
-
-
 });
 
 describe('ObjectCtrl', function () {

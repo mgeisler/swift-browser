@@ -33,7 +33,6 @@ describe('Authentication state', function() {
         $httpBackend.flush();
         expect($auth.state).toEqual('auth-done');
     });
-
 });
 
 
