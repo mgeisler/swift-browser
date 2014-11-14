@@ -37,7 +37,7 @@ AuthService.prototype.requestAuth = function (config) {
  * Changes state to 'auth-started' immediately and to 'auth-done' when
  * successfully authenticated.
  */
-AuthService.prototype.authenticate = function(type, credentials) {
+AuthService.prototype.authenticate = function (type, credentials) {
     this.state = 'auth-started';
     var that = this;
     var authPromise = this.$swift.auth(type, credentials);
@@ -57,7 +57,7 @@ AuthService.prototype.authenticate = function(type, credentials) {
  * Open a login modal dialog. When submitted, authentication will be
  * attempted.
  */
-AuthService.prototype.openModal = function() {
+AuthService.prototype.openModal = function () {
     var that = this;
     this.$config.get(function (conf) {
         var scope = that.$rootScope.$new();

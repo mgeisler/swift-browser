@@ -1,7 +1,7 @@
 'use strict';
 
 
-describe('Swift LiteAuth authentication', function() {
+describe('Swift LiteAuth authentication', function () {
     var credentials = {
         authUrl: '/auth/url',
         authUser: 'user',
@@ -18,12 +18,12 @@ describe('Swift LiteAuth authentication', function() {
         this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
-    it('should not be logged in', function() {
+    it('should not be logged in', function () {
         expect(this.$swift._headers).toEqual({});
     });
 
     describe('when logging in', function () {
-        it('should send X-Auth-User and X-Auth-Key', function() {
+        it('should send X-Auth-User and X-Auth-Key', function () {
             function check(headers) {
                 return (headers['X-Auth-User'] == 'user' &&
                         headers['X-Auth-Key'] == 'key');
@@ -34,7 +34,7 @@ describe('Swift LiteAuth authentication', function() {
             this.$swift.auth('liteauth', credentials);
         });
 
-        it('should set X-Auth-Token', function() {
+        it('should set X-Auth-Token', function () {
             var headers = {'X-Auth-Token': 'a token',
                            'X-Storage-Url': 'http://swift'};
 
@@ -48,7 +48,7 @@ describe('Swift LiteAuth authentication', function() {
         });
     });
 
-    it('should send X-Auth-Token with requests', function() {
+    it('should send X-Auth-Token with requests', function () {
         var headers = {'X-Auth-Token': 'a token',
                        'X-Storage-Url': 'http://swift'};
 
@@ -67,7 +67,7 @@ describe('Swift LiteAuth authentication', function() {
     });
 });
 
-describe('Swift Keystone authentication', function() {
+describe('Swift Keystone authentication', function () {
     var credentials = {
         authUrl: '/tokens',
         authTenant: 'tenant',
@@ -95,7 +95,7 @@ describe('Swift Keystone authentication', function() {
             }
         };
 
-        it('should POST tenant, username, and password', function() {
+        it('should POST tenant, username, and password', function () {
             var loginRequest = {auth: {
                 tenantName: 'tenant',
                 passwordCredentials: {
@@ -108,7 +108,7 @@ describe('Swift Keystone authentication', function() {
             this.$swift.auth('keystone', credentials);
         });
 
-        it('should set X-Auth-Token', function() {
+        it('should set X-Auth-Token', function () {
             this.$httpBackend.expectPOST('/tokens')
                 .respond(200, loginResponse);
             this.$swift.auth('keystone', credentials);
@@ -121,7 +121,7 @@ describe('Swift Keystone authentication', function() {
 });
 
 
-describe('Swift request types', function() {
+describe('Swift request types', function () {
     beforeEach(module('swiftBrowser.swift'));
     beforeEach(inject(function ($httpBackend, $swift) {
         this.$httpBackend = $httpBackend;
@@ -131,21 +131,21 @@ describe('Swift request types', function() {
         this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
-    it('should send GET request when listing objects', function() {
+    it('should send GET request when listing objects', function () {
         this.$httpBackend.expectGET('/v1/AUTH_abc/cont')
             .respond(200, []);
         this.$swift.listObjects('cont');
         this.$httpBackend.flush();
     });
 
-    it('should send HEAD request when getting metadata', function() {
+    it('should send HEAD request when getting metadata', function () {
         this.$httpBackend.expect('HEAD', '/v1/AUTH_abc/cont/foo/bar')
             .respond(202, null);
         this.$swift.headObject('cont', 'foo/bar');
         this.$httpBackend.flush();
     });
 
-    it('should send POST request when setting metadata', function() {
+    it('should send POST request when setting metadata', function () {
         this.$httpBackend.expect('POST', '/v1/AUTH_abc/cont/foo/bar')
             .respond(202, null);
         var headers = {'Content-Type': 'text/plain'};
@@ -153,14 +153,14 @@ describe('Swift request types', function() {
         this.$httpBackend.flush();
     });
 
-    it('should send DELETE request when deleting an objct', function() {
+    it('should send DELETE request when deleting an objct', function () {
         this.$httpBackend.expectDELETE('/v1/AUTH_abc/cont/foo/bar')
             .respond(204, null);
         this.$swift.deleteObject('cont', 'foo/bar');
         this.$httpBackend.flush();
     });
 
-    it('should send PUT request when uploading an objct', function() {
+    it('should send PUT request when uploading an objct', function () {
         this.$httpBackend.expectPUT('/v1/AUTH_abc/cont/foo/bar')
             .respond(201, null);
         this.$swift.uploadObject('cont', 'foo/bar', 'data');
@@ -358,7 +358,7 @@ describe('deleteContainer', function () {
         this.$httpBackend.verifyNoOutstandingExpectation();
     });
 
-    it('should send delete objects first', function() {
+    it('should send delete objects first', function () {
         var objects = [{name: 'foo'}, {name: 'nested/bar'}];
         this.$httpBackend.expectGET('/v1/AUTH_abc/cont?prefix=')
             .respond(200, objects);

@@ -35,7 +35,7 @@ function select(prop) {
     };
 }
 
-describe('Test isolation', function() {
+describe('Test isolation', function () {
     it('should show foo container', function () {
         SwiftMock.addContainer('foo');
         browser.get('index.html#/');

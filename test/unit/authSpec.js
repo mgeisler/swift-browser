@@ -6,7 +6,7 @@ var credentials = {
     authKey: 'key'
 };
 
-describe('Authentication state', function() {
+describe('Authentication state', function () {
     var $httpBackend, $auth;
 
     beforeEach(module('swiftBrowser.auth'));
@@ -16,16 +16,16 @@ describe('Authentication state', function() {
         $auth = _$auth_;
     }));
 
-    it('should start as "auth-done"', function() {
+    it('should start as "auth-done"', function () {
         expect($auth.state).toEqual('auth-done');
     });
 
-    it('should switch to "auth-requested"', function() {
+    it('should switch to "auth-requested"', function () {
         $auth.requestAuth({});
         expect($auth.state).toEqual('auth-requested');
     });
 
-    it('should switch to "auth-started"', function() {
+    it('should switch to "auth-started"', function () {
         $httpBackend.whenGET('/auth/url').respond(200);
 
         $auth.authenticate('liteauth', credentials);
@@ -36,7 +36,7 @@ describe('Authentication state', function() {
 });
 
 
-describe('Request headers', function() {
+describe('Request headers', function () {
     var $httpBackend, $auth, $q;
 
     beforeEach(module('swiftBrowser.auth'));
@@ -50,7 +50,7 @@ describe('Request headers', function() {
         $httpBackend.verifyNoOutstandingExpectation();
     });
 
-    it('should be updated to include X-Auth-Token', function() {
+    it('should be updated to include X-Auth-Token', function () {
         $httpBackend.expectGET('/auth/url')
             .respond(200, null, {'X-Auth-Token': 'a token'});
         $httpBackend.expectGET('/foo')

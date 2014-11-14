@@ -14,7 +14,7 @@ config(function () {
     window.CodeMirror.modeURL = 'bower_components/codemirror/mode/%N/%N.js';
 }).
 config(['$stateProvider', '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider) {
+    function ($stateProvider, $urlRouterProvider) {
     $stateProvider.state('root', {
         url: '/',
         templateUrl: 'partials/root.html',
@@ -37,9 +37,9 @@ config(['$stateProvider', '$urlRouterProvider',
     });
     $urlRouterProvider.otherwise('/');
 }])
-.factory('sessionRecoverer', ['$injector', function($injector) {
+.factory('sessionRecoverer', ['$injector', function ($injector) {
     return {
-        responseError: function(response) {
+        responseError: function (response) {
             if (response.status == 401) {
                 var $auth = $injector.get('$auth');
                 return $auth.requestAuth(response.config);
@@ -48,6 +48,6 @@ config(['$stateProvider', '$urlRouterProvider',
         }
     };
 }])
-.config(['$httpProvider', function($httpProvider) {
+.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.interceptors.push('sessionRecoverer');
 }]);

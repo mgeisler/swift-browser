@@ -33,7 +33,7 @@ function accountUrl() {
     return path.split('/').slice(0, 3).join('/');
 }
 
-window.getFromInjector = function(service) {
+window.getFromInjector = function (service) {
     var html = document.querySelector('html');
     var injector = angular.element(html).injector();
     return injector.get(service);
@@ -75,7 +75,7 @@ function SwiftSimulator($httpBackend) {
     $httpBackend.whenGET(/.*/).passThrough();
 }
 
-SwiftSimulator.prototype.reset = function() {
+SwiftSimulator.prototype.reset = function () {
     this.data = {};
 };
 
@@ -101,7 +101,7 @@ SwiftSimulator.prototype.findObjectOr404 = function (url, callback) {
     });
 };
 
-SwiftSimulator.prototype.listContainers = function() {
+SwiftSimulator.prototype.listContainers = function () {
     var results = [];
     angular.forEach(this.data, function (container, name) {
         var result = {count: 0, bytes: 0, name: name};
@@ -115,7 +115,7 @@ SwiftSimulator.prototype.listContainers = function() {
     return [200, results];
 };
 
-SwiftSimulator.prototype.listObjects = function(method, url) {
+SwiftSimulator.prototype.listObjects = function (method, url) {
     var params = {prefix: '', delimiter: null};
     var match = url.match(this.listRegex);
     var contName = match[1];
@@ -157,7 +157,7 @@ SwiftSimulator.prototype.listObjects = function(method, url) {
     return [200, results];
 };
 
-SwiftSimulator.prototype.createContainer = function(method, url) {
+SwiftSimulator.prototype.createContainer = function (method, url) {
     var match = url.match(this.listRegex);
     var name = match[1];
     if (this.data[name]) {
@@ -168,7 +168,7 @@ SwiftSimulator.prototype.createContainer = function(method, url) {
     }
 };
 
-SwiftSimulator.prototype.deleteContainer = function(method, url) {
+SwiftSimulator.prototype.deleteContainer = function (method, url) {
     var match = url.match(this.listRegex);
     var name = match[1];
     var container = this.data[name];
@@ -185,26 +185,26 @@ SwiftSimulator.prototype.deleteContainer = function(method, url) {
     }
 };
 
-SwiftSimulator.prototype.deleteObject = function(method, url) {
+SwiftSimulator.prototype.deleteObject = function (method, url) {
     return this.findObjectOr404(url, function (cont, obj, contName, name) {
         delete cont.objects[name];
         return [204, null];
     });
 };
 
-SwiftSimulator.prototype.headObject = function(method, url) {
+SwiftSimulator.prototype.headObject = function (method, url) {
     return this.findObjectOr404(url, function (container, object) {
         return [200, null, object.headers];
     });
 };
 
-SwiftSimulator.prototype.getObject = function(method, url) {
+SwiftSimulator.prototype.getObject = function (method, url) {
     return this.findObjectOr404(url, function (container, object) {
         return [200, object.content, object.headers];
     });
 };
 
-SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
+SwiftSimulator.prototype.postObject = function (method, url, data, headers) {
     return this.findObjectOr404(url, function (container, object) {
         var editableHeaders = [
             'content-type',
@@ -244,7 +244,7 @@ SwiftSimulator.prototype.postObject = function(method, url, data, headers) {
     });
 };
 
-SwiftSimulator.prototype.putObject = function(method, url, data, headers) {
+SwiftSimulator.prototype.putObject = function (method, url, data, headers) {
     var postObject = this.postObject.bind(this);
     return this.findContainerOr404(url, function (cont, contName, objName) {
         var lastModified = data.lastModifiedDate || new Date();
@@ -265,7 +265,7 @@ SwiftSimulator.prototype.putObject = function(method, url, data, headers) {
     });
 };
 
-SwiftSimulator.prototype.copyObject = function(method, url, data, headers) {
+SwiftSimulator.prototype.copyObject = function (method, url, data, headers) {
     var dst = headers.destination;
     var slash = dst.indexOf('/');
     var dstContName = dst.slice(0, slash);
@@ -284,11 +284,11 @@ SwiftSimulator.prototype.copyObject = function(method, url, data, headers) {
     });
 };
 
-SwiftSimulator.prototype.addContainer = function(name) {
+SwiftSimulator.prototype.addContainer = function (name) {
     this.data[name] = {objects: {}};
 };
 
-SwiftSimulator.prototype.setObjects = function(container, objects) {
+SwiftSimulator.prototype.setObjects = function (container, objects) {
     if (!this.data[container]) {
         this.addContainer(container);
     }

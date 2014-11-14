@@ -3,12 +3,12 @@
 /* Directives */
 
 angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
-    directive('sbVersion', ['version', function(version) {
-        return function(scope, elm) {
+    directive('sbVersion', ['version', function (version) {
+        return function (scope, elm) {
             elm.text(version);
         };
     }]).
-    directive('sbFormatBytes', ['bytesFilter', function(bytesFilter) {
+    directive('sbFormatBytes', ['bytesFilter', function (bytesFilter) {
         return {
             restrict: 'AE',
             scope: {
