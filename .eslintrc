@@ -17,6 +17,7 @@ rules:
   - always
   eqeqeq: 0
   space-in-brackets: 2
+  space-in-parens: 2
   space-after-keywords:
   - 2
   - always
