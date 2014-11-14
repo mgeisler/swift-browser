@@ -13,8 +13,7 @@ angular.module('swiftBrowser', [
 config(function () {
     window.CodeMirror.modeURL = 'bower_components/codemirror/mode/%N/%N.js';
 }).
-config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
+config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider.state('root', {
         url: '/',
         templateUrl: 'partials/root.html',
@@ -36,8 +35,8 @@ config(['$stateProvider', '$urlRouterProvider',
         controller: 'ObjectCtrl'
     });
     $urlRouterProvider.otherwise('/');
-}])
-.factory('sessionRecoverer', ['$injector', function ($injector) {
+})
+.factory('sessionRecoverer', function ($injector) {
     return {
         responseError: function (response) {
             if (response.status == 401) {
@@ -47,7 +46,7 @@ config(['$stateProvider', '$urlRouterProvider',
             throw response;
         }
     };
-}])
-.config(['$httpProvider', function ($httpProvider) {
+})
+.config(function ($httpProvider) {
     $httpProvider.interceptors.push('sessionRecoverer');
-}]);
+});
