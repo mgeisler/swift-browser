@@ -3,8 +3,8 @@
 /* Filters */
 
 angular.module('swiftBrowser.filters', []).
-  filter('bytes', function() {
-      return function(input) {
+  filter('bytes', function () {
+      return function (input) {
           var number = parseInt(input);
           if (isNaN(number)) {
               return input;
@@ -20,23 +20,23 @@ angular.module('swiftBrowser.filters', []).
           return number.toFixed(1) + ' ' + unit;
       };
   }).
-  filter('notUndefined', function() {
-      return function(items) {
-          return items.filter(function(item) {
+  filter('notUndefined', function () {
+      return function (items) {
+          return items.filter(function (item) {
               return item !== undefined;
           });
       };
   }).
-  filter('selected', function() {
-      return function(items) {
-          return items.filter(function(item) {
+  filter('selected', function () {
+      return function (items) {
+          return items.filter(function (item) {
               // item can be undefined if it is deleted
               return item && item.selected;
           });
       };
   }).
-  filter('length', function() {
-      return function(items) {
+  filter('length', function () {
+      return function (items) {
           return items.length;
       };
   });

@@ -9,7 +9,7 @@ function valueFn (value) {
 }
 
 function mkUpdateOrderBy($scope) {
-    return function(column) {
+    return function (column) {
         var rev = column == $scope.orderProp;
         $scope.sortCls = {};
         $scope.sortCls[column] = 'sort-' + (rev ? 'desc' : 'asc');
@@ -33,7 +33,7 @@ function mkAllSelected($scope, key) {
 }
 
 function mkNothingSelected($scope, key) {
-    return function() {
+    return function () {
         var collection = $scope[key];
         return !collection.some(function (item) {
             return item.selected;
@@ -42,7 +42,7 @@ function mkNothingSelected($scope, key) {
 }
 
 function mkToggleAll($scope, key, allSelected) {
-    return function() {
+    return function () {
         var collection = $scope[key];
         var newValue = !allSelected();
         collection.forEach(function (item) {
@@ -55,7 +55,7 @@ angular.module('swiftBrowser.controllers',
                ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
     .controller('RootCtrl', [
         '$scope', '$swift', '$modal',
-        function($scope, $swift, $modal) {
+        function ($scope, $swift, $modal) {
             $scope.containers = [];
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
@@ -117,7 +117,7 @@ angular.module('swiftBrowser.controllers',
     ])
     .controller('ContainerCtrl', [
         '$scope', '$swift', '$stateParams', '$location', '$modal',
-        function($scope, $swift, $stateParams, $location, $modal) {
+        function ($scope, $swift, $stateParams, $location, $modal) {
             var container = $stateParams.container;
             var prefix = $stateParams.prefix || '';
             $scope.container = container;
@@ -172,7 +172,7 @@ angular.module('swiftBrowser.controllers',
                 var scope = $scope.$new(true);
                 scope.files = [];
                 scope.path = container + '/' + prefix;
-                scope.fileSelected = function(elm) {
+                scope.fileSelected = function (elm) {
                     // Since fileSelected is called from a non-Angular
                     // event handler, we need to inform the scope
                     // about the update. Otherwise the update won't be
@@ -185,7 +185,7 @@ angular.module('swiftBrowser.controllers',
                         }
                     });
                 };
-                scope.remove = function(idx) {
+                scope.remove = function (idx) {
                     scope.files.splice(idx, 1);
                 };
 
@@ -193,7 +193,7 @@ angular.module('swiftBrowser.controllers',
                            scope: scope};
                 $modal.open(opt);
 
-                scope.uploadFiles = function() {
+                scope.uploadFiles = function () {
                     scope.files.forEach(function (file) {
                         if (file.uploadPct == 100) {
                             return;
@@ -212,14 +212,14 @@ angular.module('swiftBrowser.controllers',
                                 file.uploadPct = parseInt(100.0 * frac);
                             }
                         });
-                        upload.success(function() {
+                        upload.success(function () {
                             $scope.items.push(item);
                             file.uploadPct = 100;
                         });
                     });
                 };
 
-                scope.disableUpload = function() {
+                scope.disableUpload = function () {
                     return scope.files.every(function (file) {
                         return file.uploadPct != null;
                     });
@@ -271,9 +271,7 @@ angular.module('swiftBrowser.controllers',
     ])
     .controller('ObjectCtrl', [
         '$scope', '$stateParams', '$swift', '$location', '$modal',
-        '$timeout', '$q',
-        function ($scope, $stateParams, $swift, $location, $modal,
-                  $timeout, $q) {
+        function ($scope, $stateParams, $swift, $location, $modal) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -320,10 +318,10 @@ angular.module('swiftBrowser.controllers',
                 $scope.reset = function () {
                     $scope.headers = angular.copy(headers);
                 };
-                $scope.save = function() {
+                $scope.save = function () {
                     var flattened = flatten($scope.headers);
                     var req = $swift.postObject(container, name, flattened);
-                    req.then(function (result) {
+                    req.then(function () {
                         $scope.headers.meta.forEach(function (header) {
                             header.added = false;
                         });

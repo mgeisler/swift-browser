@@ -2,18 +2,18 @@
 
 /* jasmine specs for controllers go here */
 
-describe('RootCtrl', function(){
+describe('RootCtrl', function () {
     beforeEach(module('swiftBrowser.controllers'));
 
-    beforeEach(inject(function($controller) {
+    beforeEach(inject(function ($controller) {
         this.scope = {};
         $controller('RootCtrl', {$scope: this.scope});
     }));
 
-    it('should list containers', inject(function($httpBackend) {
+    it('should list containers', inject(function ($httpBackend) {
         var containers = [
-            {"count": 10, "bytes": 1234, "name": "foo"},
-            {"count": 20, "bytes": 2345, "name": "bar"},
+            {count: 10, bytes: 1234, name: 'foo'},
+            {count: 20, bytes: 2345, name: 'bar'},
         ];
         $httpBackend.whenGET('/v1/AUTH_abc')
             .respond(200, containers);
@@ -23,35 +23,34 @@ describe('RootCtrl', function(){
         expect(this.scope.containers).toEqual(containers);
     }));
 
-    it('should set sort order', function() {
+    it('should set sort order', function () {
         expect(this.scope.orderProp).toEqual('name');
     });
-
 });
 
 
-describe('ContainerCtrl', function(){
+describe('ContainerCtrl', function () {
     beforeEach(module('swiftBrowser.controllers'));
 
     function setupCtrl(params) {
-        inject(function($controller) {
+        inject(function ($controller) {
             this.scope = {};
             $controller('ContainerCtrl',
                         {$scope: this.scope, $stateParams: params});
         });
     }
 
-    it('should set sort order', function() {
+    it('should set sort order', function () {
         setupCtrl({container: 'cont'});
         expect(this.scope.orderProp).toEqual('name');
     });
 
-    it('should set container', function() {
+    it('should set container', function () {
         setupCtrl({container: 'cont'});
         expect(this.scope.container).toEqual('cont');
     });
 
-    it('should create breadcrumbs', function() {
+    it('should create breadcrumbs', function () {
         setupCtrl({container: 'cont',
                    prefix: 'foo/bar/'});
         expect(this.scope.breadcrumbs).toEqual([
@@ -62,29 +61,29 @@ describe('ContainerCtrl', function(){
         ]);
     });
 
-    it('should query container', inject(function($httpBackend) {
+    it('should query container', inject(function ($httpBackend) {
         setupCtrl({container: 'cont',
                    prefix: 'foo/'});
 
         var reply = [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+            {hash: '401b30e3b8b5d629635a5c613cdb7919',
+             'last_modified': '2014-08-16T13:33:21.848400',
              bytes: 10,
-             name: "foo/x.txt",
-             'content_type': "text/plain"},
-            {subdir: "foo/bar/"},
+             name: 'foo/x.txt',
+             'content_type': 'text/plain'},
+            {subdir: 'foo/bar/'},
         ];
 
         var items = [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+            {hash: '401b30e3b8b5d629635a5c613cdb7919',
+             'last_modified': '2014-08-16T13:33:21.848400',
              bytes: 10,
-             name: "foo/x.txt",
-             title: "x.txt",
-             'content_type': "text/plain"},
-            {name: "foo/bar/",
-             title: "bar/",
-             bytes: "\u2014",
+             name: 'foo/x.txt',
+             title: 'x.txt',
+             'content_type': 'text/plain'},
+            {name: 'foo/bar/',
+             title: 'bar/',
+             bytes: '\u2014',
              subdir: true},
         ];
 
@@ -95,14 +94,12 @@ describe('ContainerCtrl', function(){
         $httpBackend.flush();
         expect(this.scope.items).toEqual(items);
     }));
-
-
 });
 
 describe('ObjectCtrl', function () {
     beforeEach(module('swiftBrowser.controllers'));
 
-    beforeEach(inject(function($controller, $httpBackend) {
+    beforeEach(inject(function ($controller, $httpBackend) {
         this.scope = {};
         var stateParams = {container: 'cont',
                            name: 'foo/bar.txt'};
@@ -132,15 +129,15 @@ describe('ObjectCtrl', function () {
         $httpBackend.flush();
     }));
 
-    it('should set container', function() {
+    it('should set container', function () {
         expect(this.scope.container).toEqual('cont');
     });
 
-    it('should set name', function() {
+    it('should set name', function () {
         expect(this.scope.name).toEqual('foo/bar.txt');
     });
 
-    it('should set system headers', function() {
+    it('should set system headers', function () {
         expect(this.scope.headers.sys).toEqual([
             {name: 'content-length', value: '10'},
             {name: 'content-type', value: 'text/plain', editable: true},

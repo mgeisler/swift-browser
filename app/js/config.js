@@ -3,7 +3,7 @@
 /* Service for fetching application config.
  */
 function ConfigService($http) {
-    this.defaults = {auth: {"type": 'liteauth',
+    this.defaults = {auth: {type: 'liteauth',
                             url: '/auth/v1.0'}};
     this.conf = $http.get('config.json');
 }

@@ -8,10 +8,10 @@ var Q = require('q');
 
 var mktemp = Q.nfbind(tmp.file);
 
-describe('my app', function() {
-    it('should redirect to /#/ when fragment is empty', function() {
+describe('my app', function () {
+    it('should redirect to /#/ when fragment is empty', function () {
         browser.get('index.html');
-        expect(browser.getLocationAbsUrl()).toEqual("/");
+        expect(browser.getLocationAbsUrl()).toEqual('/');
     });
 });
 
@@ -609,7 +609,7 @@ describe('Object listing', function () {
 });
 
 describe('Listing a pseudo-directory', function () {
-    it('should add traling slash', function() {
+    it('should add traling slash', function () {
         SwiftMock.setObjects('foo', {
             'bar/baz.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
@@ -620,7 +620,7 @@ describe('Listing a pseudo-directory', function () {
         browser.get('index.html#/foo/bar');
 
         var url = browser.getLocationAbsUrl();
-        expect(url).toEqual("/foo/bar/");
+        expect(url).toEqual('/foo/bar/');
     });
 });
 

@@ -8,7 +8,7 @@ exports.config = {
     ],
 
     capabilities: {
-        'browserName': 'firefox'
+        browserName: 'firefox'
     },
 
     baseUrl: 'http://localhost:8000/app/',

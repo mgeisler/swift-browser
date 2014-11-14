@@ -35,7 +35,7 @@ function select(prop) {
     };
 }
 
-describe('Test isolation', function() {
+describe('Test isolation', function () {
     it('should show foo container', function () {
         SwiftMock.addContainer('foo');
         browser.get('index.html#/');
@@ -134,11 +134,11 @@ describe('listObjects', function () {
             return [result.status, result.data];
         });
         expect(data).toEqual([200, [{
-            hash: "401b30e3b8b5d629635a5c613cdb7919",
-            'last_modified': "2014-08-16T13:33:21.000Z",
+            hash: '401b30e3b8b5d629635a5c613cdb7919',
+            'last_modified': '2014-08-16T13:33:21.000Z',
             bytes: 20,
-            name: "a.txt",
-            'content_type': "text/plain"
+            name: 'a.txt',
+            'content_type': 'text/plain'
         }]]);
     });
 

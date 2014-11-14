@@ -39,11 +39,11 @@ SwiftClient.prototype.liteauth = function (swiftAuth) {
 
 SwiftClient.prototype.keystone = function (swiftAuth) {
     var self = this;
-    var payload = {'auth': {
-        'tenantName': swiftAuth.authTenant,
-        'passwordCredentials': {
-            'username': swiftAuth.authUsername,
-            'password': swiftAuth.authPassword
+    var payload = {auth: {
+        tenantName: swiftAuth.authTenant,
+        passwordCredentials: {
+            username: swiftAuth.authUsername,
+            password: swiftAuth.authPassword
         }
     }};
     var req = this._$http.post(swiftAuth.authUrl, payload);

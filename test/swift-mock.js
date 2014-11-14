@@ -15,24 +15,24 @@ exports.loadAngularMocks = function () {
             document.body.appendChild(script);
         });
     });
-    browser.addMockModule('swiftBrowserE2E', function() {
-        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+    browser.addMockModule('swiftBrowserE2E', function () {
+        angular.module('swiftBrowserE2E').run(function (swiftSim) {
             swiftSim.reset();
         });
     });
 };
 
-exports.addContainer = function(name) {
-    browser.addMockModule('swiftBrowserE2E', function(name) {
-        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+exports.addContainer = function (name) {
+    browser.addMockModule('swiftBrowserE2E', function (name) {
+        angular.module('swiftBrowserE2E').run(function (swiftSim) {
             swiftSim.addContainer(name);
         });
     }, name);
 };
 
-exports.setObjects = function(container, objects) {
-    browser.addMockModule('swiftBrowserE2E', function(container, jsonObjects) {
-        angular.module('swiftBrowserE2E').run(function(swiftSim) {
+exports.setObjects = function (container, objects) {
+    browser.addMockModule('swiftBrowserE2E', function (container, jsonObjects) {
+        angular.module('swiftBrowserE2E').run(function (swiftSim) {
             swiftSim.setObjects(container, JSON.parse(jsonObjects));
         });
     }, container, JSON.stringify(objects));
