@@ -15,10 +15,6 @@ rules:
   global-strict:
   - 2
   - always
-  no-unused-vars:
-  - 2
-  - vars: all
-    args: none
   eqeqeq: 0
   space-in-brackets: 2
   space-after-keywords: 2

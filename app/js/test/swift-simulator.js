@@ -101,7 +101,7 @@ SwiftSimulator.prototype.findObjectOr404 = function (url, callback) {
     });
 };
 
-SwiftSimulator.prototype.listContainers = function(method, url, data) {
+SwiftSimulator.prototype.listContainers = function() {
     var results = [];
     angular.forEach(this.data, function (container, name) {
         var result = {count: 0, bytes: 0, name: name};
@@ -115,7 +115,7 @@ SwiftSimulator.prototype.listContainers = function(method, url, data) {
     return [200, results];
 };
 
-SwiftSimulator.prototype.listObjects = function(method, url, data) {
+SwiftSimulator.prototype.listObjects = function(method, url) {
     var params = {prefix: '', delimiter: null};
     var match = url.match(this.listRegex);
     var contName = match[1];
@@ -157,7 +157,7 @@ SwiftSimulator.prototype.listObjects = function(method, url, data) {
     return [200, results];
 };
 
-SwiftSimulator.prototype.createContainer = function(method, url, data) {
+SwiftSimulator.prototype.createContainer = function(method, url) {
     var match = url.match(this.listRegex);
     var name = match[1];
     if (this.data[name]) {
@@ -185,20 +185,20 @@ SwiftSimulator.prototype.deleteContainer = function(method, url) {
     }
 };
 
-SwiftSimulator.prototype.deleteObject = function(method, url, data) {
+SwiftSimulator.prototype.deleteObject = function(method, url) {
     return this.findObjectOr404(url, function (cont, obj, contName, name) {
         delete cont.objects[name];
         return [204, null];
     });
 };
 
-SwiftSimulator.prototype.headObject = function(method, url, data) {
+SwiftSimulator.prototype.headObject = function(method, url) {
     return this.findObjectOr404(url, function (container, object) {
         return [200, null, object.headers];
     });
 };
 
-SwiftSimulator.prototype.getObject = function(method, url, data) {
+SwiftSimulator.prototype.getObject = function(method, url) {
     return this.findObjectOr404(url, function (container, object) {
         return [200, object.content, object.headers];
     });
@@ -292,7 +292,7 @@ SwiftSimulator.prototype.setObjects = function(container, objects) {
     if (!this.data[container]) {
         this.addContainer(container);
     }
-    angular.forEach(objects, function (object, name) {
+    angular.forEach(objects, function (object) {
         if (object.content) {
             object.headers.etag = SparkMD5.hash(object.content);
             object.headers['content-length'] = object.content.length;

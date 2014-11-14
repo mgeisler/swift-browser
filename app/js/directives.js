@@ -4,7 +4,7 @@
 
 angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
     directive('sbVersion', ['version', function(version) {
-        return function(scope, elm, attrs) {
+        return function(scope, elm) {
             elm.text(version);
         };
     }]).
@@ -14,7 +14,7 @@ angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
             scope: {
                 count: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 var formatted = bytesFilter(scope.count);
                 var parts = formatted.split(' ');
                 scope.number = parts[0];

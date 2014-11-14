@@ -271,9 +271,7 @@ angular.module('swiftBrowser.controllers',
     ])
     .controller('ObjectCtrl', [
         '$scope', '$stateParams', '$swift', '$location', '$modal',
-        '$timeout', '$q',
-        function ($scope, $stateParams, $swift, $location, $modal,
-                  $timeout, $q) {
+        function ($scope, $stateParams, $swift, $location, $modal) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -323,7 +321,7 @@ angular.module('swiftBrowser.controllers',
                 $scope.save = function() {
                     var flattened = flatten($scope.headers);
                     var req = $swift.postObject(container, name, flattened);
-                    req.then(function (result) {
+                    req.then(function () {
                         $scope.headers.meta.forEach(function (header) {
                             header.added = false;
                         });
