@@ -12,8 +12,8 @@ describe('RootCtrl', function(){
 
     it('should list containers', inject(function($httpBackend) {
         var containers = [
-            {"count": 10, "bytes": 1234, "name": "foo"},
-            {"count": 20, "bytes": 2345, "name": "bar"},
+            {count: 10, bytes: 1234, name: 'foo'},
+            {count: 20, bytes: 2345, name: 'bar'},
         ];
         $httpBackend.whenGET('/v1/AUTH_abc')
             .respond(200, containers);
@@ -67,24 +67,24 @@ describe('ContainerCtrl', function(){
                    prefix: 'foo/'});
 
         var reply = [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+            {hash: '401b30e3b8b5d629635a5c613cdb7919',
+             'last_modified': '2014-08-16T13:33:21.848400',
              bytes: 10,
-             name: "foo/x.txt",
-             'content_type': "text/plain"},
-            {subdir: "foo/bar/"},
+             name: 'foo/x.txt',
+             'content_type': 'text/plain'},
+            {subdir: 'foo/bar/'},
         ];
 
         var items = [
-            {hash: "401b30e3b8b5d629635a5c613cdb7919",
-             'last_modified': "2014-08-16T13:33:21.848400",
+            {hash: '401b30e3b8b5d629635a5c613cdb7919',
+             'last_modified': '2014-08-16T13:33:21.848400',
              bytes: 10,
-             name: "foo/x.txt",
-             title: "x.txt",
-             'content_type': "text/plain"},
-            {name: "foo/bar/",
-             title: "bar/",
-             bytes: "\u2014",
+             name: 'foo/x.txt',
+             title: 'x.txt',
+             'content_type': 'text/plain'},
+            {name: 'foo/bar/',
+             title: 'bar/',
+             bytes: '\u2014',
              subdir: true},
         ];
 

@@ -11,7 +11,7 @@ var mktemp = Q.nfbind(tmp.file);
 describe('my app', function() {
     it('should redirect to /#/ when fragment is empty', function() {
         browser.get('index.html');
-        expect(browser.getLocationAbsUrl()).toEqual("/");
+        expect(browser.getLocationAbsUrl()).toEqual('/');
     });
 });
 
@@ -620,7 +620,7 @@ describe('Listing a pseudo-directory', function () {
         browser.get('index.html#/foo/bar');
 
         var url = browser.getLocationAbsUrl();
-        expect(url).toEqual("/foo/bar/");
+        expect(url).toEqual('/foo/bar/');
     });
 });
 

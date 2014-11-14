@@ -23,7 +23,7 @@ describe('filter', function() {
     }));
 
     it('should parse strings as numbers', inject(function(bytesFilter) {
-        expect(bytesFilter("123")).toEqual("123.0 B");
+        expect(bytesFilter('123')).toEqual('123.0 B');
     }));
   });
 

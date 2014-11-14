@@ -13,7 +13,7 @@ function byProperty(prop) {
 }
 
 function escape(string) {
-    return string.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
+    return string.replace(/([.*+?^${}()|\[\]\/\\])/g, '\\$1');
 }
 
 function parseQueryString(qs) {
@@ -34,7 +34,7 @@ function accountUrl() {
 }
 
 window.getFromInjector = function(service) {
-    var html = document.querySelector("html");
+    var html = document.querySelector('html');
     var injector = angular.element(html).injector();
     return injector.get(service);
 };
