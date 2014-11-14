@@ -144,11 +144,11 @@ SwiftSimulator.prototype.listObjects = function(method, url) {
             } else {
                 var lastModified = new Date(object.headers['last-modified']);
                 results.push({
-                    'hash': object.headers.etag,
+                    hash: object.headers.etag,
                     'content_type': object.headers['content-type'],
                     'last_modified': lastModified.toISOString(),
-                    'bytes': object.headers['content-length'],
-                    'name': name
+                    bytes: object.headers['content-length'],
+                    name: name
                 });
             }
         }
