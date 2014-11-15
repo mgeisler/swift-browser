@@ -152,4 +152,4 @@ SwiftClient.prototype.uploadObject = function (container, object, data,
 };
 
 angular.module('swiftBrowser.swift', ['angularFileUpload'])
-    .service('$swift', ['$http', '$q', '$upload', SwiftClient]);
+    .service('$swift', SwiftClient);

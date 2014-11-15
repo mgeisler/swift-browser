@@ -32,4 +32,4 @@ ConfigService.prototype.get = function (callback) {
 };
 
 angular.module('swiftBrowser.config', [])
-    .service('$config', ['$http', ConfigService]);
+    .service('$config', ConfigService);

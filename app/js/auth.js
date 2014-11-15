@@ -74,5 +74,4 @@ AuthService.prototype.openModal = function () {
 angular.module('swiftBrowser.auth', ['swiftBrowser.swift',
                                      'swiftBrowser.config',
                                      'ui.bootstrap'])
-    .service('$auth', ['$q', '$swift', '$http', '$modal', '$rootScope',
-                       '$config', AuthService]);
+    .service('$auth', AuthService);
