@@ -3,12 +3,12 @@
 /* Directives */
 
 angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
-    directive('sbVersion', ['version', function (version) {
+    directive('sbVersion', function (version) {
         return function (scope, elm) {
             elm.text(version);
         };
-    }]).
-    directive('sbFormatBytes', ['bytesFilter', function (bytesFilter) {
+    }).
+    directive('sbFormatBytes', function (bytesFilter) {
         return {
             restrict: 'AE',
             scope: {
@@ -22,4 +22,4 @@ angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
             },
             template: '{{number}} <span class="unit">{{unit}}</span>'
         };
-    }]);
+    });

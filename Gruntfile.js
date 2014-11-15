@@ -1,6 +1,34 @@
 /* eslint-env node */
+
+var path = require('path');
+
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
+
+    // Generate a configuration that simply runs ngAnnotate on all
+    // input files.
+    var ngAnnotateStep = {
+        name: 'ngAnnotate',
+        createConfig: function (context) {
+            var cfg = {files: []};
+            context.inFiles.forEach(function (file) {
+                context.outFiles.push(file);
+                var src = path.join(context.inDir, file);
+                var dest = path.join(context.outDir, file);
+                cfg.files.push({src: [src], dest: dest});
+            });
+            return cfg;
+        }
+    };
+
+    // The same as defaultBlockReplacements.js in
+    // grunt-usemin/lib/fileprocessor
+    function ngAnnotateReplacement (block) {
+        var defer = block.defer ? 'defer ' : '';
+        var async = block.async ? 'async ' : '';
+        return ('<script ' + defer + async +
+                'src="' + block.dest + '"><\/script>');
+    }
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -155,9 +183,23 @@ module.exports = function (grunt) {
             }
         },
 
+        ngAnnotate: {
+            options: {
+                singleQuotes: true
+            }
+        },
+
         useminPrepare: {
             html: 'app/index.html',
             options: {
+                flow: {
+                    steps: {
+                        js: ['concat', 'uglifyjs'],
+                        css: ['concat', 'cssmin'],
+                        ngannotate: [ngAnnotateStep, 'concat', 'uglifyjs']
+                    },
+                    post: []
+                },
                 dest: '<%= build.dir %>'
             }
         },
@@ -170,7 +212,12 @@ module.exports = function (grunt) {
             }
         },
         usemin: {
-            html: '<%= build.dir %>/index.html'
+            html: '<%= build.dir %>/index.html',
+            options: {
+                blockReplacements: {
+                    ngannotate: ngAnnotateReplacement
+                }
+            }
         }
     });
 
@@ -183,6 +230,7 @@ module.exports = function (grunt) {
         'clean:build',
         'copy:build',
         'useminPrepare',
+        'ngAnnotate:generated',
         'concat:generated',
         'cssmin:generated',
         'uglify:generated',
