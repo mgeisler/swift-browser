@@ -112,7 +112,8 @@ angular.module('swiftBrowser.controllers',
                 $scope.containers = result.data;
             });
         })
-    .controller('ContainerCtrl', function ($scope, $swift, $stateParams, $location, $modal) {
+    .controller('ContainerCtrl', function ($scope, $swift, $stateParams,
+                                           $location, $modal) {
             var container = $stateParams.container;
             var prefix = $stateParams.prefix || '';
             $scope.container = container;
@@ -263,7 +264,8 @@ angular.module('swiftBrowser.controllers',
                 });
             });
         })
-    .controller('ObjectCtrl', function ($scope, $stateParams, $swift, $location, $modal) {
+    .controller('ObjectCtrl', function ($scope, $stateParams, $swift,
+                                        $location, $modal) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -401,7 +403,8 @@ angular.module('swiftBrowser.controllers',
                 });
             });
         })
-    .controller('EditModalCtrl', function ($swift, $q, $timeout, $scope, $modalInstance,
+    .controller('EditModalCtrl', function ($swift, $q, $timeout, $scope,
+                                           $modalInstance,
                   container, name, headers) {
             // To prevent a blank editor showing, we need to
             // refresh it after opening the modal. We will
@@ -443,7 +446,8 @@ angular.module('swiftBrowser.controllers',
                 });
             });
         })
-    .controller('CopyModalCtrl', function ($swift, $scope, $modalInstance, container, prefix, items) {
+    .controller('CopyModalCtrl', function ($swift, $scope, $modalInstance,
+                                           container, prefix, items) {
             $scope.items = angular.copy(items);
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
