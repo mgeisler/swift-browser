@@ -1,5 +1,7 @@
 /* eslint-env node */
 
+'use strict';
+
 var path = require('path');
 
 module.exports = function (grunt) {
@@ -48,7 +50,7 @@ module.exports = function (grunt) {
             }
         },
         eslint: {
-            target: ['app/js', 'test'],
+            target: ['*.js', 'app/js', 'test'],
             options: {
                 config: '.eslintrc'
             }
@@ -70,7 +72,7 @@ module.exports = function (grunt) {
         },
         protractor: {
             all: {
-                options :{
+                options: {
                     configFile: 'test/protractor-conf.js'
                 }
             }
@@ -103,7 +105,7 @@ module.exports = function (grunt) {
         },
         exec: {
             webdriver: {
-                cmd: "node_modules/.bin/webdriver-manager update"
+                cmd: 'node_modules/.bin/webdriver-manager update'
             }
         },
 
@@ -157,18 +159,19 @@ module.exports = function (grunt) {
         instrument: {
             files: 'app/js/**/*.js',
             options: {
-                basePath: "coverage/instrumented"
+                basePath: 'coverage/instrumented'
             }
         },
-        protractor_coverage: {
+        'protractor_coverage': {
             e2e: {
                 options: {
                     coverageDir: 'coverage',
                     args: {
-                        baseUrl: 'http://localhost:8000/coverage/instrumented/app/',
+                        baseUrl: ('http://localhost:8000/' +
+                                  'coverage/instrumented/app/'),
                         specs: ['test/e2e/*.js']
                     },
-                    configFile: 'test/protractor-conf.js',
+                    configFile: 'test/protractor-conf.js'
                 }
             }
         },
