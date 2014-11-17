@@ -141,10 +141,7 @@ module.exports = function (grunt) {
                      dest: '<%= build.dir %>'},
                     {expand: true,
                      cwd: 'app',
-                     src: [
-                         'index.html',
-                         'partials/*.html'
-                     ],
+                     src: ['index.html'],
                      dest: '<%= build.dir %>'},
                     {expand: true,
                      cwd: 'app/bower_components',
@@ -189,6 +186,18 @@ module.exports = function (grunt) {
             }
         },
 
+        angularTemplateCache: {
+            options: {
+                module: 'swiftBrowser'
+            },
+            build: {
+                src: 'partials/*.html',
+                dest: path.join('<%= useminPrepare.options.staging %>',
+                                ngAnnotateStep.name, 'js/partials.js'),
+                cwd: 'app'
+            }
+        },
+
         useminPrepare: {
             html: 'app/index.html',
             options: {
@@ -200,7 +209,8 @@ module.exports = function (grunt) {
                     },
                     post: []
                 },
-                dest: '<%= build.dir %>'
+                dest: '<%= build.dir %>',
+                staging: '.tmp'
             }
         },
         filerev: {
@@ -231,6 +241,7 @@ module.exports = function (grunt) {
         'copy:build',
         'useminPrepare',
         'ngAnnotate:generated',
+        'angularTemplateCache:build',
         'concat:generated',
         'cssmin:generated',
         'uglify:generated',
