@@ -98,11 +98,36 @@ We support IE 10+ and test with Firefox and Chrome.
 Release History
 ===============
 
-Next Version
-------------
+0.2.0: 2014-11-17
+-----------------
 
-* [#157][]: concatenate and minify JavaScript and CSS files. The index
-  page is now loaded with 7 requests (down from 23 requests).
+This release adds support for copying objects and deleting containers.
+Furthermore, the JavaScript and CSS files are now concatenated and
+minified, resulting in a faster load. Issues closed since 0.1.0:
+
+* [#176][]: Fix Bootstrap fonts missing in minified build.
+
+* [#164][]: Run E2E tests on minified JavaScript.
+
+* [#163][]: Test page speed using online tools.
+
+* [#157][]: Use grunt-usemin to concat and minimize assets.
+
+* [#155][]: Use load-grunt-tasks to simplify Gruntfile
+
+* [#154][]: Use grunt-contrib-compress to create release tarball and
+  zip file.
+
+* [#120][]: Look at using a CDN for third-party dependencies.
+
+* [#95][]: Concatenate HTML templates into a single file for
+  production deployment.
+
+* [#53][]: Implement copy operation.
+
+* [#37][]: Add support for deleting containers.
+
+* [#20][]: Look at using ng-annotate.
 
 0.1.0: 2014-11-06
 -----------------
@@ -135,4 +160,14 @@ Other Swift File Managers
 [django-swiftbrowser]: https://github.com/cschwede/django-swiftbrowser
 [swift-ui]: https://github.com/fanatic/swift-ui
 
+[#176]: https://github.com/zerovm/swift-browser/issues/176
+[#164]: https://github.com/zerovm/swift-browser/issues/164
+[#163]: https://github.com/zerovm/swift-browser/issues/163
 [#157]: https://github.com/zerovm/swift-browser/issues/157
+[#155]: https://github.com/zerovm/swift-browser/issues/155
+[#154]: https://github.com/zerovm/swift-browser/issues/154
+[#120]: https://github.com/zerovm/swift-browser/issues/120
+[#95]: https://github.com/zerovm/swift-browser/issues/95
+[#53]: https://github.com/zerovm/swift-browser/issues/53
+[#37]: https://github.com/zerovm/swift-browser/issues/37
+[#20]: https://github.com/zerovm/swift-browser/issues/20
