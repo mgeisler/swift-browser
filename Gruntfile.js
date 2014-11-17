@@ -146,11 +146,17 @@ module.exports = function (grunt) {
                     {expand: true,
                      cwd: 'app/bower_components',
                      src: [
-                         'bootstrap/dist/fonts/*',
                          'codemirror/mode/**/*.js',
                          '!codemirror/mode/**/test.js'
                      ],
-                     dest: '<%= build.dir %>/bower_components'}
+                     dest: '<%= build.dir %>/bower_components'},
+                    /* The Bootstrap CSS references the fonts as
+                     * ../fonts, so put them in the correct place
+                     * relative to the concatenated CSS. */
+                    {expand: true,
+                     flatten: true,
+                     src: 'app/bower_components/bootstrap/dist/fonts/*',
+                     dest: '<%= build.dir %>/fonts'}
                 ]
             }
         },
