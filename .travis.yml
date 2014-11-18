@@ -14,4 +14,5 @@ script:
   - grunt coverage
   - grunt e2e-build
 after_script:
-  - grunt concat:coverage coveralls
+  - sudo pip install codecov
+  - codecov
