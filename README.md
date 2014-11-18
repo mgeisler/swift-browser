@@ -2,7 +2,7 @@ Swift Browser
 =============
 
 [![Build Status](https://travis-ci.org/zerovm/swift-browser.svg?branch=master)](https://travis-ci.org/zerovm/swift-browser)
-[![Coverage Status](https://img.shields.io/coveralls/zerovm/swift-browser.svg)](https://coveralls.io/r/zerovm/swift-browser)
+[![Coverage Status](https://codecov.io/github/zerovm/swift-browser/coverage.svg?branch=master)](https://codecov.io/github/zerovm/swift-browser?branch=master)
 
 JavaScript based UI for [OpenStack Swift][].
 
