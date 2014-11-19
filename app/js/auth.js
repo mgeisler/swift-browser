@@ -71,7 +71,7 @@ AuthService.prototype.openModal = function () {
     });
 };
 
-angular.module('swiftBrowser.auth', ['swiftBrowser.swift',
-                                     'swiftBrowser.config',
-                                     'ui.bootstrap'])
-    .service('$auth', AuthService);
+var mod = angular.module('swiftBrowser.auth', [
+    'swiftBrowser.swift', 'swiftBrowser.config', 'ui.bootstrap'
+]);
+mod.service('$auth', AuthService);

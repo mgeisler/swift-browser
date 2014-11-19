@@ -51,9 +51,11 @@ function mkToggleAll($scope, key, allSelected) {
     };
 }
 
-angular.module('swiftBrowser.controllers',
-               ['swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'])
-    .controller('RootCtrl', function ($scope, $swift, $modal) {
+var mod = angular.module('swiftBrowser.controllers', [
+    'swiftBrowser.swift', 'ui.bootstrap', 'ui.codemirror'
+]);
+
+mod.controller('RootCtrl', function ($scope, $swift, $modal) {
             $scope.containers = [];
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
@@ -111,9 +113,10 @@ angular.module('swiftBrowser.controllers',
             $swift.listContainers().then(function (result) {
                 $scope.containers = result.data;
             });
-        })
-    .controller('ContainerCtrl', function ($scope, $swift, $stateParams,
-                                           $location, $modal) {
+});
+
+mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
+                                          $location, $modal) {
             var container = $stateParams.container;
             var prefix = $stateParams.prefix || '';
             $scope.container = container;
@@ -263,9 +266,10 @@ angular.module('swiftBrowser.controllers',
                     }
                 });
             });
-        })
-    .controller('ObjectCtrl', function ($scope, $stateParams, $swift,
-                                        $location, $modal) {
+});
+
+mod.controller('ObjectCtrl', function ($scope, $stateParams, $swift,
+                                       $location, $modal) {
             var container = $stateParams.container;
             var name = $stateParams.name;
 
@@ -402,9 +406,10 @@ angular.module('swiftBrowser.controllers',
                     });
                 });
             });
-        })
-    .controller('EditModalCtrl', function ($swift, $q, $timeout, $scope,
-                                           $modalInstance,
+});
+
+mod.controller('EditModalCtrl', function ($swift, $q, $timeout, $scope,
+                                          $modalInstance,
                   container, name, headers) {
             // To prevent a blank editor showing, we need to
             // refresh it after opening the modal. We will
@@ -445,9 +450,10 @@ angular.module('swiftBrowser.controllers',
                     });
                 });
             });
-        })
-    .controller('CopyModalCtrl', function ($swift, $scope, $modalInstance,
-                                           container, prefix, items) {
+});
+
+mod.controller('CopyModalCtrl', function ($swift, $scope, $modalInstance,
+                                          container, prefix, items) {
             $scope.items = angular.copy(items);
             $scope.updateOrderBy = mkUpdateOrderBy($scope);
             $scope.updateOrderBy('name');
@@ -481,4 +487,4 @@ angular.module('swiftBrowser.controllers',
                     });
                 });
             };
-        });
+});

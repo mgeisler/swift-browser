@@ -2,18 +2,20 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('swiftBrowser', [
+var mod = angular.module('swiftBrowser', [
   'ui.router',
   'swiftBrowser.filters',
   'swiftBrowser.services',
   'swiftBrowser.directives',
   'swiftBrowser.controllers',
   'swiftBrowser.auth'
-]).
-config(function () {
+]);
+
+mod.config(function () {
     window.CodeMirror.modeURL = 'bower_components/codemirror/mode/%N/%N.js';
-}).
-config(function ($stateProvider, $urlRouterProvider) {
+});
+
+mod.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider.state('root', {
         url: '/',
         templateUrl: 'partials/root.html',
@@ -35,8 +37,9 @@ config(function ($stateProvider, $urlRouterProvider) {
         controller: 'ObjectCtrl'
     });
     $urlRouterProvider.otherwise('/');
-})
-.factory('sessionRecoverer', function ($injector) {
+});
+
+mod.factory('sessionRecoverer', function ($injector) {
     return {
         responseError: function (response) {
             if (response.status == 401) {
@@ -46,7 +49,8 @@ config(function ($stateProvider, $urlRouterProvider) {
             throw response;
         }
     };
-})
-.config(function ($httpProvider) {
+});
+
+mod.config(function ($httpProvider) {
     $httpProvider.interceptors.push('sessionRecoverer');
 });

@@ -2,13 +2,15 @@
 
 /* Directives */
 
-angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
-    directive('sbVersion', function (version) {
+var mod = angular.module('swiftBrowser.directives', ['swiftBrowser.auth']);
+
+mod.directive('sbVersion', function (version) {
         return function (scope, elm) {
             elm.text(version);
         };
-    }).
-    directive('sbFormatBytes', function (bytesFilter) {
+});
+
+mod.directive('sbFormatBytes', function (bytesFilter) {
         return {
             restrict: 'AE',
             scope: {
@@ -22,4 +24,4 @@ angular.module('swiftBrowser.directives', ['swiftBrowser.auth']).
             },
             template: '{{number}} <span class="unit">{{unit}}</span>'
         };
-    });
+});

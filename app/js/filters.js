@@ -2,8 +2,9 @@
 
 /* Filters */
 
-angular.module('swiftBrowser.filters', []).
-  filter('bytes', function () {
+var mod = angular.module('swiftBrowser.filters', []);
+
+mod.filter('bytes', function () {
       return function (input) {
           var number = parseInt(input);
           if (isNaN(number)) {
@@ -19,24 +20,27 @@ angular.module('swiftBrowser.filters', []).
 
           return number.toFixed(1) + ' ' + unit;
       };
-  }).
-  filter('notUndefined', function () {
+});
+
+mod.filter('notUndefined', function () {
       return function (items) {
           return items.filter(function (item) {
               return item !== undefined;
           });
       };
-  }).
-  filter('selected', function () {
+});
+
+mod.filter('selected', function () {
       return function (items) {
           return items.filter(function (item) {
               // item can be undefined if it is deleted
               return item && item.selected;
           });
       };
-  }).
-  filter('length', function () {
+});
+
+mod.filter('length', function () {
       return function (items) {
           return items.length;
       };
-  });
+});
