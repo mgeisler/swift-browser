@@ -116,6 +116,14 @@ module.exports = function (grunt) {
         },
 
         preprocess: {
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: 'app',
+                    src: ['index.html'],
+                    dest: '<%= build.dir %>'
+                }]
+            },
             mock: {
                 src: 'app/index.html',
                 dest: 'app/mock.html',
@@ -139,10 +147,6 @@ module.exports = function (grunt) {
                          'README.md',
                          'LICENSE'
                      ],
-                     dest: '<%= build.dir %>'},
-                    {expand: true,
-                     cwd: 'app',
-                     src: ['index.html'],
                      dest: '<%= build.dir %>'},
                     {expand: true,
                      cwd: 'app/bower_components',
@@ -246,6 +250,7 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build', [
         'clean:build',
+        'preprocess:build',
         'copy:build',
         'useminPrepare',
         'ngAnnotate:generated',
