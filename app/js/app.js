@@ -3,12 +3,12 @@
 
 // Declare app level module which depends on filters, and services
 var mod = angular.module('swiftBrowser', [
-  'ui.router',
-  'swiftBrowser.filters',
-  'swiftBrowser.services',
-  'swiftBrowser.directives',
-  'swiftBrowser.controllers',
-  'swiftBrowser.auth'
+    'ui.router',
+    'swiftBrowser.filters',
+    'swiftBrowser.services',
+    'swiftBrowser.directives',
+    'swiftBrowser.controllers',
+    'swiftBrowser.auth'
 ]);
 
 mod.config(function () {
