@@ -32,6 +32,12 @@ module.exports = function (grunt) {
                 'src="' + block.dest + '"><\/script>');
     }
 
+    // Simply return the raw block, removing the extra whitespace
+    // inserted in front of it.
+    function passThrough (block) {
+        return block.raw.join('\n').trim();
+    }
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -135,6 +141,14 @@ module.exports = function (grunt) {
             }
         },
 
+        'gh-pages': {
+            options: {
+                base: '<%= build.dir %>',
+                clone: '.tmp/gh-pages'
+            },
+            src: '**/*'
+        },
+
         copy: {
             e2e: {
                 src: ['app/**/*', '!**/*.orig', '!**/*~'],
@@ -173,6 +187,14 @@ module.exports = function (grunt) {
                         'bower_components/spark-md5/spark-md5.js',
                         'js/test/*.js'
                     ],
+                    dest: '<%= build.dir %>'
+                }]
+            },
+            partials: {
+                files: [{
+                    expand: true,
+                    cwd: 'app',
+                    src: 'partials/*.html',
                     dest: '<%= build.dir %>'
                 }]
             }
@@ -243,6 +265,9 @@ module.exports = function (grunt) {
                     '<%= build.dir %>/js/*.js',
                     '<%= build.dir %>/css/*.css'
                 ]
+            },
+            mock: {
+                src: '<%= build.dir %>/js/bower_components.js'
             }
         },
         usemin: {
@@ -292,4 +317,30 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('mock', ['preprocess:mock']);
+
+    grunt.registerTask('publish-gh-pages', 'Publish mock version', function () {
+        // Copy files instead of annotating them
+        ngAnnotateStep.name = 'copy';
+        grunt.config.set('build.name', 'mock');
+        grunt.config.set('preprocess.mock.dest', '<%= build.dir %>/index.html');
+        grunt.config.set('useminPrepare.html', 'app/mock.html');
+        grunt.config.set('usemin.options.blockReplacements',
+                         {ngannotate: passThrough});
+        grunt.config.set('useminPrepare.options.flow.steps.ngannotate',
+                         [ngAnnotateStep]);
+
+        grunt.task.run('clean:build');
+        grunt.task.run('preprocess:mock');
+        grunt.task.run('copy:build');
+        grunt.task.run('copy:mock');
+        grunt.task.run('copy:partials');
+        grunt.task.run('useminPrepare');
+        grunt.task.run('copy:generated');
+        grunt.task.run('concat:generated');
+        grunt.task.run('cssmin:generated');
+        grunt.task.run('uglify:generated');
+        grunt.task.run('filerev:mock');
+        grunt.task.run('usemin');
+        grunt.task.run('gh-pages');
+    });
 };
