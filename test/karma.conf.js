@@ -1,22 +1,31 @@
 'use strict';
 
+var path = require('path');
+
 module.exports = function (config) {
+  function prefix(str, files) {
+    return files.map(function (f) {
+      return path.join(str, f);
+    });
+  }
+
   config.set({
     basePath: '../',
-    files: [
-      'app/bower_components/codemirror/lib/codemirror.js',
-      'app/bower_components/codemirror/mode/meta.js',
-      'app/bower_components/codemirror/addon/mode/loadmode.js',
-      'app/bower_components/ng-file-upload/angular-file-upload-html5-shim.js',
-      'app/bower_components/angular/angular.js',
-      'app/bower_components/ng-file-upload/angular-file-upload.js',
-      'app/bower_components/angular-ui-router/release/angular-ui-router.js',
-      'app/bower_components/angular-ui-codemirror/ui-codemirror.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+    files: prefix('app/bower_components', [
+      'codemirror/lib/codemirror.js',
+      'codemirror/mode/meta.js',
+      'codemirror/addon/mode/loadmode.js',
+      'ng-file-upload/angular-file-upload-html5-shim.js',
+      'angular/angular.js',
+      'ng-file-upload/angular-file-upload.js',
+      'angular-ui-router/release/angular-ui-router.js',
+      'angular-ui-codemirror/ui-codemirror.js',
+      'angular-mocks/angular-mocks.js',
+      'angular-bootstrap/ui-bootstrap-tpls.js',
+    ]).concat([
       'app/js/*.js',
       'test/unit/**/*.js'
-    ],
+    ]),
     // Files created by Emacs FlyCheck
     exclude: ['**/flycheck_*.js'],
     autoWatch: true,
