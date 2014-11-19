@@ -250,6 +250,7 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
         $scope.breadcrumbs.push(crumb);
     }
 
+    $scope.finishedLoading = false;
     function chunkedListObjects($scope, container, params) {
         var req = $swift.listObjects(container, params);
         req.then(function (result) {
@@ -272,6 +273,8 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
                 params.marker = last.subdir || last.name;
                 params.limit = Math.min(2 * params.limit, 128);
                 chunkedListObjects($scope, container, params);
+            } else {
+                $scope.finishedLoading = true;
             }
         });
     }
