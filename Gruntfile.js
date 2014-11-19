@@ -115,6 +115,18 @@ module.exports = function (grunt) {
             }
         },
 
+        preprocess: {
+            mock: {
+                src: 'app/index.html',
+                dest: 'app/mock.html',
+                options: {
+                    context: {
+                        MOCK: true
+                    }
+                }
+            }
+        },
+
         copy: {
             e2e: {
                 src: ['app/**/*', '!**/*.orig', '!**/*~'],
@@ -275,4 +287,6 @@ module.exports = function (grunt) {
         grunt.task.run('copy:extra');
         grunt.task.run('protractor');
     });
+
+    grunt.registerTask('mock', ['preprocess:mock']);
 };
