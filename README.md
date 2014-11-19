@@ -89,6 +89,24 @@ So to make Swift Browser talk to Keystone, you need to either
   allow API requests from the origin where Swift is running (or from
   any origin). Please see this [blog post][swift-cors] for details.
 
+Testing
+=======
+
+For testing purposes, you can try the browser with a simulated Swift
+backend. Run
+
+    $ grunt mock start
+
+to generate `app/mock.html` and also start the development web server.
+Loading
+
+    http://localhost:8000/app/mock.html
+
+in your browser will now show the mocked test environment. You will be
+working on an in-memory database which reflects the changes you make
+until you reload the page. Navigating using the in-page links is okay
+since that doesn't trigger a full page reload.
+
 Supported Browsers
 ==================
 

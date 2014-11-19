@@ -29,6 +29,12 @@
     </div>
   </div>
 
+  <!-- @ifdef MOCK !>
+  <script>
+    // Defer bootstrap so we can mock $httpBackend
+    window.name = 'NG_DEFER_BOOTSTRAP!' + window.name;
+  </script>
+  <!-- @endif -->
   <!-- build:js js/bower_components.js -->
   <script src="bower_components/codemirror/lib/codemirror.js"></script>
   <script src="bower_components/codemirror/mode/meta.js"></script>
@@ -51,5 +57,11 @@
   <script src="js/config.js"></script>
   <script src="js/partials.js"></script>
   <!-- endbuild -->
+  <!-- @ifdef MOCK !>
+  <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+  <script src="bower_components/spark-md5/spark-md5.js"></script>
+  <script src="js/test/swift-simulator.js"></script>
+  <script src="js/test/mock-env.js"></script>
+  <!-- @endif -->
 </body>
 </html>
