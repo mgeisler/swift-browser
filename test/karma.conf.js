@@ -2,9 +2,7 @@
 
 module.exports = function (config) {
   config.set({
-
     basePath: '../',
-
     files: [
       'app/bower_components/codemirror/lib/codemirror.js',
       'app/bower_components/codemirror/mode/meta.js',
@@ -19,18 +17,12 @@ module.exports = function (config) {
       'app/js/*.js',
       'test/unit/**/*.js'
     ],
-
     // Files created by Emacs FlyCheck
     exclude: ['**/flycheck_*.js'],
-
     autoWatch: true,
-
     frameworks: ['jasmine'],
-
     browsers: ['Chrome', 'Firefox'],
-
     urlRoot: '/v1/AUTH_abc/container/',
-
     plugins: [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
@@ -38,6 +30,5 @@ module.exports = function (config) {
             ],
 
     reporters: ['progress'],
-
   });
 };
