@@ -62,6 +62,36 @@ window.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'text/html'
             }, content: html.join('\n')}
         });
+
+        /* Simple linear congruential random generator */
+        var rand = (function () {
+            var state = 1;
+            var a = 31;
+            var c = 11;
+            var m = 50;
+            return function () {
+                state = (a * state + c) % m;
+                return state;
+            };
+        })();
+
+        var large = {};
+        for (var i = 0; i < 1234; i++) {
+            var r = rand();
+            var xs = new Array(r + 1).join('x');
+            var content = [
+                'This is object ' + i + '.',
+                '',
+                'Here are: ' + r + " x's: " + xs + '.'
+            ];
+            large['o-' + i] = {
+                headers: {
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                    'Content-Type': 'text/plain'
+                }, content: content.join('\n')
+            };
+        }
+        swiftSim.setObjects('large', large);
     });
     angular.resumeBootstrap(['swiftBrowserE2E']);
 });
