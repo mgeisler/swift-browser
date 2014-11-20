@@ -171,7 +171,7 @@ module.exports = function (grunt) {
                     src: [
                         'bower_components/angular-mocks/angular-mocks.js',
                         'bower_components/spark-md5/spark-md5.js',
-                        'js/test/swift-simulator.js'
+                        'js/test/*.js'
                     ],
                     dest: '<%= build.dir %>'
                 }]
