@@ -19,6 +19,14 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
+        <!-- @ifdef MOCK !>
+        <div class="alert alert-info h5">
+          <p><i>This is a mock version of Swift Browser.</i> You are working
+            on an in-memory database which will reflect the changes
+            you make until you reload the page.</p>
+        </div>
+        <!-- @endif -->
+
         <div ui-view></div>
         <hr>
         <p>
