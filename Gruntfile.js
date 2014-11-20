@@ -163,6 +163,18 @@ module.exports = function (grunt) {
                      src: 'app/bower_components/bootstrap/dist/fonts/*',
                      dest: '<%= build.dir %>/fonts'}
                 ]
+            },
+            mock: {
+                files: [{
+                    expand: true,
+                    cwd: 'app',
+                    src: [
+                        'bower_components/angular-mocks/angular-mocks.js',
+                        'bower_components/spark-md5/spark-md5.js',
+                        'js/test/swift-simulator.js'
+                    ],
+                    dest: '<%= build.dir %>'
+                }]
             }
         },
         instrument: {
@@ -271,25 +283,11 @@ module.exports = function (grunt) {
                         baseUrl: base
                     }
                 }
-            },
-            copy: {
-                extra: {
-                    files: [{
-                        expand: true,
-                        cwd: 'app',
-                        src: [
-                            'bower_components/angular-mocks/angular-mocks.js',
-                            'bower_components/spark-md5/spark-md5.js',
-                            'js/test/swift-simulator.js'
-                        ],
-                        dest: '<%= build.dir %>'
-                    }]
-                }
             }
         });
 
         grunt.task.run('build');
-        grunt.task.run('copy:extra');
+        grunt.task.run('copy:mock');
         grunt.task.run('protractor');
     });
 
