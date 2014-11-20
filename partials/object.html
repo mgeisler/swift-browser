@@ -1,0 +1,104 @@
+<div class="page-header">
+  <h1>{{ name }}</h1>
+</div>
+
+<ol class="breadcrumb">
+  <li ng-repeat="crumb in breadcrumbs" ng-class="{active: $last}">
+    <a ng-if="!$last" href="#/{{ crumb.name }}">{{ crumb.title }}</a>
+    <span ng-if="$last">{{ crumb.title }}</span>
+  </li>
+</ol>
+
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group">
+    <a class="btn btn-default"
+       ng-href="../{{ container }}/{{ name }}">Open</a>
+    <a class="btn btn-default" download
+       ng-href="../{{ container }}/{{ name }}">Download</a>
+    <button type="button" class="btn btn-default"
+            ng-click="edit()">Edit</button>
+  </div>
+</div>
+
+<form name="form">
+
+<h2>System Headers</h2>
+
+<p>
+  <button type="button" class="btn btn-default" ng-click="add('sys')">
+    Add new header
+  </button>
+</p>
+
+<table class="table table-striped">
+  <tr>
+    <th class="header-name">Name</th>
+    <th>Value</th>
+    <th class="icon"></th>
+  </tr>
+  <tr ng-repeat="header in headers.sys" class="{{ header.name }}">
+    <td>
+      <p ng-if="!header.added" class="form-control-static">
+        {{ header.name }}
+      </p>
+      <select ng-if="header.added" class="form-control" ng-model="header.name"
+              ng-options="name for name in removableHeaders">
+      </select>
+    </td>
+    <td>
+      <p ng-if="!header.editable" class="form-control-static">
+        {{ header.value }}
+      </p>
+      <input ng-if="header.editable" class="form-control"
+             ng-model="header.value">
+    </td>
+    <td class="icon">
+      <a ng-if="header.removable" class="text-danger" href
+         ng-click="remove('sys', $index)">
+        <span class="glyphicon glyphicon-trash"></span>
+      </a>
+    </td>
+  </tr>
+</table>
+
+<h2>Custom Metadata</h2>
+
+<p>
+  <button type="button" class="btn btn-default" ng-click="add('meta')">
+    Add new header
+  </button>
+</p>
+
+<table class="table table-striped">
+  <tr>
+    <th class="header-name">Name</th>
+    <th>Value</th>
+    <th class="icon"></th>
+  </tr>
+  <tr ng-repeat="header in headers.meta" class="{{ header.name }}">
+    <td>
+      <p ng-if="!header.added" class="form-control-static">
+        {{ header.name }}
+      </p>
+      <input ng-if="header.added" class="form-control"
+             ng-model="header.name">
+    </td>
+    <td>
+      <input class="form-control" ng-model="header.value">
+    </td>
+    <td class="icon">
+      <a class="text-danger" href ng-click="remove('meta', $index)">
+        <span class="glyphicon glyphicon-trash"></span>
+      </a>
+    </td>
+  </tr>
+</table>
+
+</form>
+
+<div>
+  <button type="button" class="btn btn-primary" ng-click="save()"
+          ng-disabled="form.$pristine">Save</button>
+  <button type="button" class="btn btn-default" ng-click="reset()"
+          ng-disabled="form.$pristine">Reset</button>
+</div>

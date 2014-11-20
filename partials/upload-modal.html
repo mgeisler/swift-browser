@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h3 class="modal-title">Uploading to {{ path }}</h3>
+</div>
+
+<div class="modal-body">
+  <table class="table table-condensed">
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th class="type">Type</th>
+      <th class="size">Size</th>
+      <th class="icon"></th>
+    </tr>
+    <tr ng-repeat="file in files">
+      <td>{{ file.name }}</td>
+      <td>
+        <div class="upload progress" ng-hide="!file.uploadPct">
+          <div class="progress-bar" role="progressbar"
+               aria-valuenow="{{ file.uploadPct }}"
+               aria-valuemin="0" aria-valuemax="100"
+               ng-style="{width: file.uploadPct + '%'}">
+            {{ file.uploadPct }}%
+          </div>
+        </div>
+      </td>
+      <td>{{ file.type }}</td>
+      <td class="text-right" sb-format-bytes count="file.size"></td>
+      <td>
+        <a class="text-danger" href ng-click="remove($index)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </a>
+      </td>
+    </tr>
+    <tr ng-hide="files.length > 0">
+      <td colspan="5">
+        <i>No files selected…</i>
+      </td>
+    </tr>
+  </table>
+  <input class="hidden" type="file" id="file-1" multiple
+         onchange="angular.element(this).scope().fileSelected(this)" >
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default pull-left"
+          onclick="document.getElementById('file-1').click()">Select File</button>
+  <button type="button" class="btn btn-primary" ng-click="uploadFiles()"
+          ng-disabled="disableUpload()">Upload</button>
+  <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+</div>

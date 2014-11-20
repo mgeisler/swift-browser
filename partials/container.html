@@ -1,0 +1,41 @@
+<div class="page-header">
+  <h1>Listing</h1>
+</div>
+
+<ol class="breadcrumb">
+  <li ng-repeat="crumb in breadcrumbs" ng-class="{active: $last}">
+    <a ng-if="!$last" href="#/{{ crumb.name }}">{{ crumb.title }}</a>
+    <span ng-if="$last">{{ crumb.title }}</span>
+  </li>
+</ol>
+
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default"
+            ng-click="upload()">Upload</button>
+    <button type="button" class="btn btn-default"
+            ng-click="delete()" ng-disabled="nothingSelected()">Delete</button>
+    <button type="button" class="btn btn-default"
+            ng-click="copy()" ng-disabled="nothingSelected()">Copy</button>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <tr>
+    <th class="toggle">
+      <input type="checkbox" ng-checked="allSelected()"
+             ng-click="toggleAll()">
+    </th>
+    <th ng-click="updateOrderBy('name')">
+      Name <span ng-class="sortCls.name"></span>
+    </th>
+    <th ng-click="updateOrderBy('bytes')" class="size">
+      Size <span ng-class="sortCls.bytes"></span>
+    </th>
+  </tr>
+  <tr ng-repeat="item in items | notUndefined | orderBy:orderProp">
+    <td><input type="checkbox" ng-model="item.selected"></td>
+    <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
+    <td class="text-right" sb-format-bytes count="item.bytes"></td>
+  </tr>
+</table>

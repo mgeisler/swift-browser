@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h3 class="modal-title">Create Container</h3>
+</div>
+
+<form class="form-horizontal" role="form" name="form" novalidate>
+  <div class="modal-body">
+    <div class="form-group"
+         ng-class="{'has-error': form.$dirty && form.name.$invalid}">
+      <label class="col-sm-2 control-label" for="name">Name</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="name" name="name"
+               ng-model="name" required ng-pattern="/^[^\/]+$/">
+        <span class="help-block" ng-show="form.name.$error.pattern">
+          Name cannot contain a slash.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" ng-click="$close(name)"
+            ng-disabled="form.$invalid">Create</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">
+      Cancel
+    </button>
+  </div>
+</form>

@@ -1,0 +1,41 @@
+<div class="page-header">
+  <h1>Swift Containers</h1>
+</div>
+
+<ol class="breadcrumb">
+  <li class="active">Root</li>
+</ol>
+
+<div class="btn-toolbar" role="toolbar">
+  <div class="btn-group">
+    <button type="button" ng-click="create()"
+            class="btn btn-default">Create</button>
+    <button type="button" ng-click="delete()"
+            ng-disabled="nothingSelected()"
+            class="btn btn-default">Delete</button>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <tr>
+    <th class="toggle">
+      <input type="checkbox" ng-checked="allSelected()"
+             ng-click="toggleAll()">
+    </th>
+    <th ng-click="updateOrderBy('name')">
+      Name <span ng-class="sortCls.name"></span>
+    </th>
+    <th ng-click="updateOrderBy('bytes')" class="size">
+      Size <span ng-class="sortCls.bytes"></span>
+    </th>
+    <th ng-click="updateOrderBy('count')" class="count">
+      Count <span ng-class="sortCls.count"></span>
+    </th>
+  </tr>
+  <tr ng-repeat="container in containers | notUndefined | orderBy:orderProp">
+    <td><input type="checkbox" ng-model="container.selected"></td>
+    <td><a href="#/{{ container.name }}/">{{ container.name }}</a></td>
+    <td class="text-right" sb-format-bytes count="container.bytes"></td>
+    <td class="text-right">{{ container.count | number }} objects</td>
+  </tr>
+</table>
