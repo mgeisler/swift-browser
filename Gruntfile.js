@@ -144,7 +144,9 @@ module.exports = function (grunt) {
         'gh-pages': {
             options: {
                 base: '<%= build.dir %>',
-                clone: '.tmp/gh-pages'
+                clone: '.tmp/gh-pages',
+                message: ('Auto-generated commit based on ' +
+                          '<%= gitinfo.local.branch.current.shortSHA %>')
             },
             src: '**/*'
         },
@@ -329,6 +331,7 @@ module.exports = function (grunt) {
         grunt.config.set('useminPrepare.options.flow.steps.ngannotate',
                          [ngAnnotateStep]);
 
+        grunt.task.run('gitinfo');
         grunt.task.run('clean:build');
         grunt.task.run('preprocess:mock');
         grunt.task.run('copy:build');
