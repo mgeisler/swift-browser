@@ -308,5 +308,5 @@ SwiftSimulator.prototype.setObjects = function (container, objects) {
     this.data[container].objects = objects;
 };
 
-angular.module('swiftBrowserE2E', ['ngMockE2E'])
-    .service('swiftSim', SwiftSimulator);
+var mod = angular.module('swiftBrowserE2E', ['ngMockE2E']);
+mod.service('swiftSim', SwiftSimulator);

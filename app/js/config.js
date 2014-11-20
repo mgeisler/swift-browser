@@ -31,5 +31,5 @@ ConfigService.prototype.get = function (callback) {
     this.conf.then(success, error);
 };
 
-angular.module('swiftBrowser.config', [])
-    .service('$config', ConfigService);
+var mod = angular.module('swiftBrowser.config', []);
+mod.service('$config', ConfigService);
