@@ -141,6 +141,11 @@ module.exports = function (grunt) {
             }
         },
 
+        /* The useminPrepare:html task will trigger expansion of the
+           message template below, and this fails if we don't define a
+           dummy value. */
+        gitinfo: {local: {branch: {current: {shortSHA: 'unknown'}}}},
+
         'gh-pages': {
             options: {
                 base: '<%= build.dir %>',
