@@ -99,6 +99,25 @@ window.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'text/plain'
             }, content: 'Maybe we could short-circuit the directories?\n'}
         });
+
+        swiftSim.setObjects('funny names', {
+            '   leading spaces': {headers: {
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Type': 'text/plain'
+            }, content: ''},
+            'trailing spaces   ': {headers: {
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Type': 'text/plain'
+            }, content: ''},
+            'Danish word: blåbærgrød': {headers: {
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Type': 'text/plain'
+            }, content: 'This word means "blueberry porridge".\n'},
+            'Japanese word: ブルーベリー': {headers: {
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Type': 'text/plain'
+            }, content: 'Google Translate says this means "blueberry".\n'}
+        });
     });
     angular.resumeBootstrap(['swiftBrowserE2E']);
 });
