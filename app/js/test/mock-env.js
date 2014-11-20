@@ -92,6 +92,13 @@ window.addEventListener('DOMContentLoaded', function () {
             };
         }
         swiftSim.setObjects('large', large);
+
+        swiftSim.setObjects('deep', {
+            'this/is/a/deeply/nested/object.txt': {headers: {
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Type': 'text/plain'
+            }, content: 'Maybe we could short-circuit the directories?\n'}
+        });
     });
     angular.resumeBootstrap(['swiftBrowserE2E']);
 });
