@@ -29,9 +29,13 @@ function callSwiftMethod(method) {
     };
 }
 
-function select(prop) {
+function select(/* props, ... */) {
+    var props = arguments;
     return function (result) {
-        return result[prop];
+        for (var i = 0; i < props.length; i++) {
+            result = result[props[i]];
+        }
+        return result;
     };
 }
 
@@ -64,10 +68,8 @@ describe('listContainers', function () {
         browser.get('index.html#/');
 
         callUploadObject('foo', 'a.txt', 'new length', {});
-        var containers = callListContainers().then(select('data'));
-        var container = containers.then(select(0));
-        var bytes = container.then(select('bytes'));
-        expect(bytes).toEqual(10);
+        var result = callListContainers();
+        expect(result.then(select('data', 0, 'bytes'))).toEqual(10);
     });
 });
 
@@ -167,7 +169,7 @@ describe('listObjects', function () {
         browser.get('index.html#/');
         var data = callListObjects('foo', {limit: 1}).then(select('data'));
         expect(data.then(select('length'))).toBe(1);
-        expect(data.then(select('0')).then(select('name'))).toEqual('a.txt');
+        expect(data.then(select(0, 'name'))).toEqual('a.txt');
     });
 });
 
