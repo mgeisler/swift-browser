@@ -150,6 +150,38 @@ describe('listObjects', function () {
         expect(result.then(select('status'))).toBe(404);
     });
 
+    it('should sort results', function () {
+        /* The property order here seems to determine the iteration
+         * order later. We therefore test with the 'bbb/x.txt'
+         * property set before the 'aaa' property. */
+        SwiftMock.setObjects('foo', {
+            'bbb/x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'aaa': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var result = callListObjects('foo', {delimiter: '/'});
+        expect(result.then(select('data'))).toEqual([
+            {'last_modified': '2014-08-16T13:33:21.000Z',
+             bytes: 20,
+             hash: '401b30e3b8b5d629635a5c613cdb7919',
+             name: 'aaa',
+             'content_type': 'text/plain'},
+            {subdir: 'bbb/'}
+        ]);
+    });
+
+
     it('should respect limit', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {

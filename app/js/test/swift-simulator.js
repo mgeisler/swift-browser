@@ -1,11 +1,13 @@
 /* global SparkMD5: false */
 'use strict';
 
-function byProperty(prop) {
+function byProperty(prop, fallbackProp) {
     return function (a, b) {
-        if (a[prop] < b[prop]) {
+        var x = a[prop] || a[fallbackProp];
+        var y = b[prop] || b[fallbackProp];
+        if (x < y) {
             return -1;
-        } else if (a[prop] > b[prop]) {
+        } else if (x > y) {
             return 1;
         }
         return 0;
@@ -153,7 +155,7 @@ SwiftSimulator.prototype.listObjects = function (method, url) {
             }
         }
     });
-    results.sort(byProperty('name'));
+    results.sort(byProperty('name', 'subdir'));
     return [200, results.slice(0, params.limit)];
 };
 
