@@ -147,6 +147,28 @@ describe('listObjects', function () {
         var result = callListObjects('no-such-container');
         expect(result.then(select('status'))).toBe(404);
     });
+
+    it('should respect limit', function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var data = callListObjects('foo', {limit: 1}).then(select('data'));
+        expect(data.then(select('length'))).toBe(1);
+        expect(data.then(select('0')).then(select('name'))).toEqual('a.txt');
+    });
 });
 
 describe('deleteObject', function () {

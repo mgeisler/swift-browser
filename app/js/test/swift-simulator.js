@@ -116,7 +116,7 @@ SwiftSimulator.prototype.listContainers = function () {
 };
 
 SwiftSimulator.prototype.listObjects = function (method, url) {
-    var params = {prefix: '', delimiter: null};
+    var params = {prefix: '', delimiter: null, limit: 10000};
     var match = url.match(this.listRegex);
     var contName = match[1];
     var qs = match[2];
@@ -154,7 +154,7 @@ SwiftSimulator.prototype.listObjects = function (method, url) {
         }
     });
     results.sort(byProperty('name'));
-    return [200, results];
+    return [200, results.slice(0, params.limit)];
 };
 
 SwiftSimulator.prototype.createContainer = function (method, url) {
