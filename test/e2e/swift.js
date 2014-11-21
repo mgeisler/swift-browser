@@ -203,6 +203,50 @@ describe('listObjects', function () {
         expect(data.then(select('length'))).toBe(1);
         expect(data.then(select(0, 'name'))).toEqual('a.txt');
     });
+
+    it('should respect marker', function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var result = callListObjects('foo', {marker: 'a.txt'});
+        expect(result.then(select('data', 'length'))).toBe(1);
+        expect(result.then(select('data', 0, 'name'))).toEqual('b.txt');
+    });
+
+    it('should respect marker with pseudo-directories', function () {
+        SwiftMock.setObjects('foo', {
+            'foo/a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'bar/b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var result = callListObjects('foo', {marker: 'bar/', delimiter: '/'});
+        expect(result.then(select('data', 'length'))).toBe(1);
+        expect(result.then(select('data', 0, 'subdir'))).toEqual('foo/');
+    });
 });
 
 describe('deleteObject', function () {
