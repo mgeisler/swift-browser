@@ -87,8 +87,15 @@ describe('ContainerCtrl', function () {
              subdir: true},
         ];
 
-        var url = '/v1/AUTH_abc/cont?delimiter=%2F&prefix=foo%2F';
-        $httpBackend.whenGET(url).respond(200, reply);
+        var base = '/v1/AUTH_abc/cont?';
+        var delimiter = 'delimiter=%2F&';
+        var limit = 'limit=16&';
+        var marker = 'marker=foo%2Fbar%2F&';
+        var prefix = 'prefix=foo%2F';
+        $httpBackend.whenGET(base + delimiter + limit + prefix)
+            .respond(200, reply);
+        $httpBackend.whenGET(base + delimiter + limit + marker + prefix)
+            .respond(200, []);
 
         expect(this.scope.items).toEqual([]);
         $httpBackend.flush();

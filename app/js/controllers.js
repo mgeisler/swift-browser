@@ -250,22 +250,33 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
         $scope.breadcrumbs.push(crumb);
     }
 
-    var params = {prefix: prefix, delimiter: '/'};
-    $swift.listObjects(container, params).then(function (result) {
-        $scope.items = result.data.map(function (item) {
-            var parts = (item.subdir || item.name).split('/');
+    function chunkedListObjects($scope, container, params) {
+        var req = $swift.listObjects(container, params);
+        req.then(function (result) {
+            var newItems = result.data.map(function (item) {
+                var parts = (item.subdir || item.name).split('/');
+                if (item.subdir) {
+                    return {name: item.subdir,
+                            title: parts[parts.length - 2] + '/',
+                            bytes: '\u2014', // em dash
+                            subdir: true};
+                } else {
+                    item.title = parts[parts.length - 1];
+                    return item;
+                }
+            });
+            Array.prototype.push.apply($scope.items, newItems);
 
-            if (item.subdir) {
-                return {name: item.subdir,
-                        title: parts[parts.length - 2] + '/',
-                        bytes: '\u2014', // em dash
-                        subdir: true};
-            } else {
-                item.title = parts[parts.length - 1];
-                return item;
+            if (result.data.length > 0) {
+                var last = result.data[result.data.length - 1];
+                params.marker = last.subdir || last.name;
+                chunkedListObjects($scope, container, params);
             }
         });
-    });
+    }
+
+    var params = {prefix: prefix, delimiter: '/', limit: 16};
+    chunkedListObjects($scope, container, params);
 });
 
 mod.controller('ObjectCtrl', function ($scope, $stateParams, $swift,
