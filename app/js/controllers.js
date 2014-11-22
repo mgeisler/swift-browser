@@ -270,12 +270,13 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
             if (result.data.length > 0) {
                 var last = result.data[result.data.length - 1];
                 params.marker = last.subdir || last.name;
+                params.limit = Math.min(2 * params.limit, 128);
                 chunkedListObjects($scope, container, params);
             }
         });
     }
 
-    var params = {prefix: prefix, delimiter: '/', limit: 16};
+    var params = {prefix: prefix, delimiter: '/', limit: 8};
     chunkedListObjects($scope, container, params);
 });
 

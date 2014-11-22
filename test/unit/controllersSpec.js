@@ -89,12 +89,13 @@ describe('ContainerCtrl', function () {
 
         var base = '/v1/AUTH_abc/cont?';
         var delimiter = 'delimiter=%2F&';
-        var limit = 'limit=16&';
+        var limit8 = 'limit=8&';
+        var limit16 = 'limit=16&';
         var marker = 'marker=foo%2Fbar%2F&';
         var prefix = 'prefix=foo%2F';
-        $httpBackend.whenGET(base + delimiter + limit + prefix)
+        $httpBackend.whenGET(base + delimiter + limit8 + prefix)
             .respond(200, reply);
-        $httpBackend.whenGET(base + delimiter + limit + marker + prefix)
+        $httpBackend.whenGET(base + delimiter + limit16 + marker + prefix)
             .respond(200, []);
 
         expect(this.scope.items).toEqual([]);
