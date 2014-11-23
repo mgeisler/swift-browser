@@ -1,11 +1,13 @@
 /* global SparkMD5: false */
 'use strict';
 
-function byProperty(prop) {
+function byProperty(prop, fallbackProp) {
     return function (a, b) {
-        if (a[prop] < b[prop]) {
+        var x = a[prop] || a[fallbackProp];
+        var y = b[prop] || b[fallbackProp];
+        if (x < y) {
             return -1;
-        } else if (a[prop] > b[prop]) {
+        } else if (x > y) {
             return 1;
         }
         return 0;
@@ -116,7 +118,7 @@ SwiftSimulator.prototype.listContainers = function () {
 };
 
 SwiftSimulator.prototype.listObjects = function (method, url) {
-    var params = {prefix: '', delimiter: null};
+    var params = {prefix: '', delimiter: null, limit: 10000, marker: ''};
     var match = url.match(this.listRegex);
     var contName = match[1];
     var qs = match[2];
@@ -125,6 +127,7 @@ SwiftSimulator.prototype.listObjects = function (method, url) {
     }
     var prefix = params.prefix;
     var delimiter = params.delimiter;
+    var marker = params.marker;
     var results = [];
     var subdirs = {};
     var container = this.data[contName];
@@ -137,11 +140,11 @@ SwiftSimulator.prototype.listObjects = function (method, url) {
             var idx = name.indexOf(delimiter, prefix.length);
             if (idx > -1) {
                 var subdir = name.slice(0, idx + 1);
-                if (!subdirs[subdir]) {
+                if (!subdirs[subdir] && subdir > marker) {
                     results.push({subdir: subdir});
                     subdirs[subdir] = true;
                 }
-            } else {
+            } else if (name > marker) {
                 var lastModified = new Date(object.headers['last-modified']);
                 results.push({
                     hash: object.headers.etag,
@@ -153,8 +156,8 @@ SwiftSimulator.prototype.listObjects = function (method, url) {
             }
         }
     });
-    results.sort(byProperty('name'));
-    return [200, results];
+    results.sort(byProperty('name', 'subdir'));
+    return [200, results.slice(0, params.limit)];
 };
 
 SwiftSimulator.prototype.createContainer = function (method, url) {

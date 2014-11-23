@@ -29,9 +29,13 @@ function callSwiftMethod(method) {
     };
 }
 
-function select(prop) {
+function select(/* props, ... */) {
+    var props = arguments;
     return function (result) {
-        return result[prop];
+        for (var i = 0; i < props.length; i++) {
+            result = result[props[i]];
+        }
+        return result;
     };
 }
 
@@ -64,10 +68,8 @@ describe('listContainers', function () {
         browser.get('index.html#/');
 
         callUploadObject('foo', 'a.txt', 'new length', {});
-        var containers = callListContainers().then(select('data'));
-        var container = containers.then(select(0));
-        var bytes = container.then(select('bytes'));
-        expect(bytes).toEqual(10);
+        var result = callListContainers();
+        expect(result.then(select('data', 0, 'bytes'))).toEqual(10);
     });
 });
 
@@ -146,6 +148,104 @@ describe('listObjects', function () {
         browser.get('index.html#/');
         var result = callListObjects('no-such-container');
         expect(result.then(select('status'))).toBe(404);
+    });
+
+    it('should sort results', function () {
+        /* The property order here seems to determine the iteration
+         * order later. We therefore test with the 'bbb/x.txt'
+         * property set before the 'aaa' property. */
+        SwiftMock.setObjects('foo', {
+            'bbb/x.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'aaa': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var result = callListObjects('foo', {delimiter: '/'});
+        expect(result.then(select('data'))).toEqual([
+            {'last_modified': '2014-08-16T13:33:21.000Z',
+             bytes: 20,
+             hash: '401b30e3b8b5d629635a5c613cdb7919',
+             name: 'aaa',
+             'content_type': 'text/plain'},
+            {subdir: 'bbb/'}
+        ]);
+    });
+
+
+    it('should respect limit', function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var data = callListObjects('foo', {limit: 1}).then(select('data'));
+        expect(data.then(select('length'))).toBe(1);
+        expect(data.then(select(0, 'name'))).toEqual('a.txt');
+    });
+
+    it('should respect marker', function () {
+        SwiftMock.setObjects('foo', {
+            'a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var result = callListObjects('foo', {marker: 'a.txt'});
+        expect(result.then(select('data', 'length'))).toBe(1);
+        expect(result.then(select('data', 0, 'name'))).toEqual('b.txt');
+    });
+
+    it('should respect marker with pseudo-directories', function () {
+        SwiftMock.setObjects('foo', {
+            'foo/a.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }},
+            'bar/b.txt': {headers: {
+                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
+                'Content-Length': 20,
+                'Content-Type': 'text/plain'
+            }}
+        });
+
+        browser.get('index.html#/');
+        var result = callListObjects('foo', {marker: 'bar/', delimiter: '/'});
+        expect(result.then(select('data', 'length'))).toBe(1);
+        expect(result.then(select('data', 0, 'subdir'))).toEqual('foo/');
     });
 });
 
