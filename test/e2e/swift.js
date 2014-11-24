@@ -59,7 +59,6 @@ describe('listContainers', function () {
     it('should correctly update byte count after putObject', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Content-Length': 1000,
             }}
         });
@@ -91,9 +90,7 @@ describe('createContainer', function () {
 describe('deleteContainer', function () {
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
-            'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'a.txt': {},
         });
         browser.get('index.html#/');
     });
@@ -117,9 +114,7 @@ describe('listObjects', function () {
 
     it('should return 200 for an existing container', function () {
         SwiftMock.setObjects('foo', {
-            'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'a.txt': {},
         });
 
 
@@ -128,7 +123,7 @@ describe('listObjects', function () {
             return [result.status, result.data];
         });
         expect(data).toEqual([200, [{
-            hash: '401b30e3b8b5d629635a5c613cdb7919',
+            hash: 'd41d8cd98f00b204e9800998ecf8427e',
             'last_modified': '2014-08-12T09:52:09.000Z',
             bytes: 0,
             name: 'a.txt',
@@ -147,12 +142,8 @@ describe('listObjects', function () {
          * order later. We therefore test with the 'bbb/x.txt'
          * property set before the 'aaa' property. */
         SwiftMock.setObjects('foo', {
-            'bbb/x.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }},
-            'aaa': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'bbb/x.txt': {},
+            'aaa': {},
         });
 
         browser.get('index.html#/');
@@ -160,7 +151,7 @@ describe('listObjects', function () {
         expect(result.then(select('data'))).toEqual([
             {'last_modified': '2014-08-12T09:52:09.000Z',
              bytes: 0,
-             hash: '401b30e3b8b5d629635a5c613cdb7919',
+             hash: 'd41d8cd98f00b204e9800998ecf8427e',
              name: 'aaa',
              'content_type': 'text/plain'},
             {subdir: 'bbb/'}
@@ -170,12 +161,8 @@ describe('listObjects', function () {
 
     it('should respect limit', function () {
         SwiftMock.setObjects('foo', {
-            'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }},
-            'b.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'a.txt': {},
+            'b.txt': {},
         });
 
         browser.get('index.html#/');
@@ -186,12 +173,8 @@ describe('listObjects', function () {
 
     it('should respect marker', function () {
         SwiftMock.setObjects('foo', {
-            'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }},
-            'b.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'a.txt': {},
+            'b.txt': {},
         });
 
         browser.get('index.html#/');
@@ -202,12 +185,8 @@ describe('listObjects', function () {
 
     it('should respect marker with pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'foo/a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }},
-            'bar/b.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'foo/a.txt': {},
+            'bar/b.txt': {},
         });
 
         browser.get('index.html#/');
@@ -222,9 +201,7 @@ describe('deleteObject', function () {
 
     it('should return 204 for an existing object', function () {
         SwiftMock.setObjects('foo', {
-            'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'a.txt': {},
         });
         browser.get('index.html#/');
         var status = callDeleteObject('foo', 'a.txt').then(select('status'));
@@ -248,12 +225,8 @@ describe('deleteObject', function () {
 describe('deleteDirectory', function () {
     it('should return an array with deletion results', function () {
         SwiftMock.setObjects('foo', {
-            'bar/a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }},
-            'bar/b.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'bar/a.txt': {},
+            'bar/b.txt': {},
         });
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
@@ -347,9 +320,7 @@ describe('getObject', function () {
 describe('postObject', function () {
     beforeEach(function () {
         SwiftMock.setObjects('foo', {
-            'a.txt': {headers: {
-                'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-            }}
+            'a.txt': {},
         });
         browser.get('index.html#/');
     });
