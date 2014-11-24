@@ -29,21 +29,15 @@ describe('Container listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 1000,
-                    'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 234,
-                    'Content-Type': 'text/plain'
                 }}
             });
             SwiftMock.setObjects('bar', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 2345,
-                    'Content-Type': 'text/plain'
                 }}
             });
             browser.get('index.html#/');
@@ -192,16 +186,8 @@ describe('Container listing', function () {
 
         it('should succeed with non-empty container', function () {
             SwiftMock.setObjects('foo', {
-                'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Length': 10,
-                    'Content-Type': 'text/plain'
-                }},
-                'nested/y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Length': 20,
-                    'Content-Type': 'text/plain'
-                }}
+                'x.txt': {},
+                'nested/y.txt': {},
             });
             browser.get('index.html#/');
             toggles.first().click();
@@ -218,14 +204,10 @@ describe('Object listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
-                    'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
-                    'Content-Type': 'text/plain'
                 }}
             });
             browser.get('index.html#/foo/');
@@ -255,16 +237,8 @@ describe('Object listing', function () {
 
     it('should understand pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 13,
-                'Content-Type': 'text/plain'
-            }},
-            'dir/y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }},
+            'x.txt': {},
+            'dir/y.txt': {}
         });
         browser.get('index.html#/foo/');
 
@@ -275,21 +249,9 @@ describe('Object listing', function () {
 
     it('should understand deep pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 13,
-                'Content-Type': 'text/plain'
-            }},
-            'deeply/y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }},
-            'deeply/nested/z.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }}
+            'x.txt': {},
+            'deeply/y.txt': {},
+            'deeply/nested/z.txt': {},
         });
         browser.get('index.html#/foo/');
 
@@ -307,16 +269,8 @@ describe('Object listing', function () {
     describe('selection', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
-                'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Length': 20,
-                    'Content-Type': 'text/plain'
-                }},
-                'y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Length': 10,
-                    'Content-Type': 'text/plain'
-                }}
+                'x.txt': {},
+                'y.txt': {},
             });
             browser.get('index.html#/foo/');
         });
@@ -352,21 +306,9 @@ describe('Object listing', function () {
 
     it('should allow deletion', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 20,
-                'Content-Type': 'text/plain'
-            }},
-            'y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }},
-            'z.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }}
+            'x.txt': {},
+            'y.txt': {},
+            'z.txt': {},
         });
         browser.get('index.html#/foo/');
         var rows = by.repeater('item in items');
@@ -404,21 +346,9 @@ describe('Object listing', function () {
 
     it('should allow deleting pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 20,
-                'Content-Type': 'text/plain'
-            }},
-            'bar/y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }},
-            'bar/z.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }}
+            'x.txt': {},
+            'bar/y.txt': {},
+            'bar/z.txt': {},
         });
         browser.get('index.html#/foo/');
 
@@ -439,11 +369,7 @@ describe('Object listing', function () {
 
     it('should allow uploading files', function () {
         SwiftMock.setObjects('foo', {
-            'nested/x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 20,
-                'Content-Type': 'text/plain'
-            }}
+            'nested/x.txt': {},
         });
         browser.get('index.html#/foo/nested/');
 
@@ -565,11 +491,7 @@ describe('Object listing', function () {
 
     it('should allow copying files', function () {
         SwiftMock.setObjects('foo', {
-            'nested/x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 20,
-                'Content-Type': 'text/plain'
-            }}
+            'nested/x.txt': {},
         });
         SwiftMock.addContainer('bar');
         browser.get('index.html#/foo/nested/');
@@ -619,11 +541,7 @@ describe('Object listing', function () {
 describe('Listing a pseudo-directory', function () {
     it('should add traling slash', function () {
         SwiftMock.setObjects('foo', {
-            'bar/baz.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Length': 20,
-                'Content-Type': 'text/plain'
-            }}
+            'bar/baz.txt': {},
         });
         browser.get('index.html#/foo/bar');
 
@@ -794,7 +712,6 @@ describe('Object content', function () {
         SwiftMock.setObjects('foo', {
             'bar.html': {
                 headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Type': 'text/html',
                     'X-Object-Meta-Foo': 'bar',
                 },
