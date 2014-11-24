@@ -296,17 +296,17 @@ SwiftSimulator.prototype.setObjects = function (container, objects) {
         this.addContainer(container);
     }
     angular.forEach(objects, function (object) {
+        var newHeaders = {};
+        angular.forEach(object.headers, function (value, name) {
+            newHeaders[name.toLowerCase()] = value;
+        });
+        object.headers = newHeaders;
         if (object.content) {
             object.headers.etag = SparkMD5.hash(object.content);
             object.headers['content-length'] = object.content.length;
         } else {
             object.content = '';
         }
-        var newHeaders = {};
-        angular.forEach(object.headers, function (value, name) {
-            newHeaders[name.toLowerCase()] = value;
-        });
-        object.headers = newHeaders;
     });
     this.data[container].objects = objects;
 };
