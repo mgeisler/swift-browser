@@ -93,7 +93,6 @@ describe('deleteContainer', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
         browser.get('index.html#/');
@@ -120,7 +119,6 @@ describe('listObjects', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
 
@@ -132,7 +130,7 @@ describe('listObjects', function () {
         expect(data).toEqual([200, [{
             hash: '401b30e3b8b5d629635a5c613cdb7919',
             'last_modified': '2014-08-12T09:52:09.000Z',
-            bytes: 20,
+            bytes: 0,
             name: 'a.txt',
             'content_type': 'text/plain'
         }]]);
@@ -151,11 +149,9 @@ describe('listObjects', function () {
         SwiftMock.setObjects('foo', {
             'bbb/x.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }},
             'aaa': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
 
@@ -163,7 +159,7 @@ describe('listObjects', function () {
         var result = callListObjects('foo', {delimiter: '/'});
         expect(result.then(select('data'))).toEqual([
             {'last_modified': '2014-08-12T09:52:09.000Z',
-             bytes: 20,
+             bytes: 0,
              hash: '401b30e3b8b5d629635a5c613cdb7919',
              name: 'aaa',
              'content_type': 'text/plain'},
@@ -176,11 +172,9 @@ describe('listObjects', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }},
             'b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
 
@@ -194,11 +188,9 @@ describe('listObjects', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }},
             'b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
 
@@ -212,11 +204,9 @@ describe('listObjects', function () {
         SwiftMock.setObjects('foo', {
             'foo/a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }},
             'bar/b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
 
@@ -234,7 +224,6 @@ describe('deleteObject', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
         browser.get('index.html#/');
@@ -261,11 +250,9 @@ describe('deleteDirectory', function () {
         SwiftMock.setObjects('foo', {
             'bar/a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }},
             'bar/b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
         browser.get('index.html#/');
@@ -362,7 +349,6 @@ describe('postObject', function () {
         SwiftMock.setObjects('foo', {
             'a.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
-                'Content-Length': 20,
             }}
         });
         browser.get('index.html#/');

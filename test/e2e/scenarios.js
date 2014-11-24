@@ -186,12 +186,8 @@ describe('Container listing', function () {
 
         it('should succeed with non-empty container', function () {
             SwiftMock.setObjects('foo', {
-                'x.txt': {headers: {
-                    'Content-Length': 10,
-                }},
-                'nested/y.txt': {headers: {
-                    'Content-Length': 20,
-                }}
+                'x.txt': {},
+                'nested/y.txt': {},
             });
             browser.get('index.html#/');
             toggles.first().click();
@@ -241,12 +237,8 @@ describe('Object listing', function () {
 
     it('should understand pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Content-Length': 13,
-            }},
-            'dir/y.txt': {headers: {
-                'Content-Length': 10,
-            }}
+            'x.txt': {},
+            'dir/y.txt': {}
         });
         browser.get('index.html#/foo/');
 
@@ -257,15 +249,9 @@ describe('Object listing', function () {
 
     it('should understand deep pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Content-Length': 13,
-            }},
-            'deeply/y.txt': {headers: {
-                'Content-Length': 10,
-            }},
-            'deeply/nested/z.txt': {headers: {
-                'Content-Length': 10,
-            }}
+            'x.txt': {},
+            'deeply/y.txt': {},
+            'deeply/nested/z.txt': {},
         });
         browser.get('index.html#/foo/');
 
@@ -283,12 +269,8 @@ describe('Object listing', function () {
     describe('selection', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
-                'x.txt': {headers: {
-                    'Content-Length': 20,
-                }},
-                'y.txt': {headers: {
-                    'Content-Length': 10,
-                }}
+                'x.txt': {},
+                'y.txt': {},
             });
             browser.get('index.html#/foo/');
         });
@@ -324,15 +306,9 @@ describe('Object listing', function () {
 
     it('should allow deletion', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Content-Length': 20,
-            }},
-            'y.txt': {headers: {
-                'Content-Length': 10,
-            }},
-            'z.txt': {headers: {
-                'Content-Length': 10,
-            }}
+            'x.txt': {},
+            'y.txt': {},
+            'z.txt': {},
         });
         browser.get('index.html#/foo/');
         var rows = by.repeater('item in items');
@@ -370,15 +346,9 @@ describe('Object listing', function () {
 
     it('should allow deleting pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
-            'x.txt': {headers: {
-                'Content-Length': 20,
-            }},
-            'bar/y.txt': {headers: {
-                'Content-Length': 10,
-            }},
-            'bar/z.txt': {headers: {
-                'Content-Length': 10,
-            }}
+            'x.txt': {},
+            'bar/y.txt': {},
+            'bar/z.txt': {},
         });
         browser.get('index.html#/foo/');
 
@@ -399,9 +369,7 @@ describe('Object listing', function () {
 
     it('should allow uploading files', function () {
         SwiftMock.setObjects('foo', {
-            'nested/x.txt': {headers: {
-                'Content-Length': 20,
-            }}
+            'nested/x.txt': {},
         });
         browser.get('index.html#/foo/nested/');
 
@@ -523,9 +491,7 @@ describe('Object listing', function () {
 
     it('should allow copying files', function () {
         SwiftMock.setObjects('foo', {
-            'nested/x.txt': {headers: {
-                'Content-Length': 20,
-            }}
+            'nested/x.txt': {},
         });
         SwiftMock.addContainer('bar');
         browser.get('index.html#/foo/nested/');
@@ -575,9 +541,7 @@ describe('Object listing', function () {
 describe('Listing a pseudo-directory', function () {
     it('should add traling slash', function () {
         SwiftMock.setObjects('foo', {
-            'bar/baz.txt': {headers: {
-                'Content-Length': 20,
-            }}
+            'bar/baz.txt': {},
         });
         browser.get('index.html#/foo/bar');
 
