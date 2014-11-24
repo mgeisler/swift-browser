@@ -49,9 +49,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
         swiftSim.addContainer('empty container');
         swiftSim.setObjects('foo', {
-            'x.txt': {headers: {}, content: text.join('\n')},
-            'primes.py': {headers: {}, content: python.join('\n')},
-            'nested/z.html': {headers: {}, content: html.join('\n')}
+            'x.txt': {content: text.join('\n')},
+            'primes.py': {content: python.join('\n')},
+            'nested/z.html': {content: html.join('\n')}
         });
 
         /* Simple linear congruential random generator */
@@ -75,28 +75,23 @@ window.addEventListener('DOMContentLoaded', function () {
                 '',
                 'Here are: ' + r + " x's: " + xs + '.'
             ];
-            large['o-' + i] = {
-                headers: {}, content: content.join('\n')
-            };
+            large['o-' + i] = {content: content.join('\n')};
         }
         swiftSim.setObjects('large', large);
 
         swiftSim.setObjects('deep', {
             'this/is/a/deeply/nested/object.txt': {
-                headers: {},
                 content: 'Maybe we could short-circuit the directories?\n'
             }
         });
 
         swiftSim.setObjects('funny names', {
-            '   leading spaces': {headers: {}, content: ''},
-            'trailing spaces   ': {headers: {}, content: ''},
+            '   leading spaces': {content: ''},
+            'trailing spaces   ': {content: ''},
             'Danish word: blåbærgrød': {
-                headers: {},
                 content: 'This word means "blueberry porridge".\n'
             },
             'Japanese word: ブルーベリー': {
-                headers: {},
                 content: 'Google Translate says this means "blueberry".\n'
             }
         });
