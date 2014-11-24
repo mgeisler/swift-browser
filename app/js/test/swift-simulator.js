@@ -301,7 +301,7 @@ SwiftSimulator.prototype.setObjects = function (container, objects) {
             newHeaders[name.toLowerCase()] = value;
         });
         object.headers = newHeaders;
-        if (object.content) {
+        if (object.content != undefined) {
             object.headers.etag = SparkMD5.hash(object.content);
             object.headers['content-length'] = object.content.length;
         } else {
