@@ -301,11 +301,25 @@ SwiftSimulator.prototype.setObjects = function (container, objects) {
             newHeaders[name.toLowerCase()] = value;
         });
         object.headers = newHeaders;
-        if (object.content != undefined) {
-            object.headers.etag = SparkMD5.hash(object.content);
-            object.headers['content-length'] = object.content.length;
-        } else {
+
+        /* Fill missing values with suitable defaults. This allows for
+         * inconsistent objects (Content-Length and ETag not matching
+         * content), but we don't need to care about that here. */
+        if (!object.content) {
             object.content = '';
+        }
+        if (!object.headers['content-length']) {
+            object.headers['content-length'] = object.content.length;
+        }
+        if (!object.headers.etag) {
+            object.headers.etag = SparkMD5.hash(object.content);
+        }
+        if (!object.headers['content-type']) {
+            object.headers['content-type'] = 'text/plain';
+        }
+        if (!object.headers['last-modified']) {
+            // Date of first commit.
+            object.headers['last-modified'] = 'Tue, 12 Aug 2014 11:52:09 +0200';
         }
     });
     this.data[container].objects = objects;
