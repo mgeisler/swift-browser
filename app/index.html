@@ -65,6 +65,15 @@
   <script src="js/config.js"></script>
   <script src="js/partials.js"></script>
   <!-- endbuild -->
+
+  <!-- @if BUILD_TYPE = 'release' !>
+  <script type="text/javascript">
+    angular.module('swiftBrowser').config(function ($compileProvider) {
+        $compileProvider.debugInfoEnabled(false);
+    });
+  </script>
+  <!-- @endif -->
+
   <!-- @if BUILD_TYPE = 'mock' !>
   <script src="bower_components/angular-mocks/angular-mocks.js"></script>
   <script src="bower_components/spark-md5/spark-md5.js"></script>
