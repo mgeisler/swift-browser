@@ -4,7 +4,8 @@ Swift Browser
 [![Build Status](https://travis-ci.org/zerovm/swift-browser.svg?branch=master)](https://travis-ci.org/zerovm/swift-browser)
 [![Coverage Status](https://codecov.io/github/zerovm/swift-browser/coverage.svg?branch=master)](https://codecov.io/github/zerovm/swift-browser?branch=master)
 
-JavaScript based UI for [OpenStack Swift][].
+JavaScript based UI for [OpenStack Swift][]. You can
+[**try our demo**][demo] if you want to see how it looks and behaves.
 
 Deployment
 ==========
@@ -169,6 +170,7 @@ Other Swift File Managers
 * [swift-ui][]: implemented in JavaScript using Backbone.js
 
 [OpenStack Swift]: http://docs.openstack.org/developer/swift/
+[demo]: http://www.zerovm.org/swift-browser/
 [Bower]: http://bower.io/
 [npm]: https://www.npmjs.org/
 [LiteAuth]: https://github.com/zerovm/liteauth

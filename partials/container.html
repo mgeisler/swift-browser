@@ -38,4 +38,13 @@
     <td><a href="#/{{ container }}/{{ item.name }}">{{ item.title }}</a></td>
     <td class="text-right" sb-format-bytes count="item.bytes"></td>
   </tr>
+  <tr ng-hide="finishedLoading">
+    <td colspan="3">
+      <i>Loading<span class="loading">
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </span></i>
+    </td>
+  </tr>
 </table>
