@@ -135,7 +135,7 @@ module.exports = function (grunt) {
                 dest: 'app/mock.html',
                 options: {
                     context: {
-                        MOCK: true
+                        BUILD_TYPE: 'mock'
                     }
                 }
             }

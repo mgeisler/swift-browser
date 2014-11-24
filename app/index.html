@@ -19,7 +19,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
-        <!-- @ifdef MOCK !>
+        <!-- @if BUILD_TYPE = 'mock' !>
         <div class="alert alert-info h5">
           <p><i>This is a mock version of Swift Browser.</i> You are working
             on an in-memory database which will reflect the changes
@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <!-- @ifdef MOCK !>
+  <!-- @if BUILD_TYPE = 'mock' !>
   <script>
     // Defer bootstrap so we can mock $httpBackend
     window.name = 'NG_DEFER_BOOTSTRAP!' + window.name;
@@ -65,7 +65,7 @@
   <script src="js/config.js"></script>
   <script src="js/partials.js"></script>
   <!-- endbuild -->
-  <!-- @ifdef MOCK !>
+  <!-- @if BUILD_TYPE = 'mock' !>
   <script src="bower_components/angular-mocks/angular-mocks.js"></script>
   <script src="bower_components/spark-md5/spark-md5.js"></script>
   <script src="js/test/swift-simulator.js"></script>
