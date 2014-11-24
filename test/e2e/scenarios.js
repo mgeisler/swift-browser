@@ -243,7 +243,7 @@ describe('Object listing', function () {
         });
 
         it('by size', function () {
-            var sizes = $$('td:last-child');
+            var sizes = $$('td[sb-format-bytes]');
 
             // Initial sort order is by name
             expect(sizes.getText()).toEqual(['20.0 B', '10.0 B']);
