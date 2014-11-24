@@ -62,7 +62,6 @@ describe('listContainers', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 1000,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/');
@@ -97,7 +96,6 @@ describe('deleteContainer', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/');
@@ -126,7 +124,6 @@ describe('listObjects', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
 
@@ -159,13 +156,11 @@ describe('listObjects', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'aaa': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
 
@@ -188,13 +183,11 @@ describe('listObjects', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
 
@@ -210,13 +203,11 @@ describe('listObjects', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
 
@@ -232,13 +223,11 @@ describe('listObjects', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'bar/b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
 
@@ -258,7 +247,6 @@ describe('deleteObject', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/');
@@ -287,13 +275,11 @@ describe('deleteDirectory', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'bar/b.txt': {headers: {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/');
@@ -318,7 +304,6 @@ describe('headObject', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/');
@@ -354,7 +339,6 @@ describe('getObject', function () {
                     'ETag': 'e59ff97941044f85df5297e1c302d260',
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 12,
-                    'Content-Type': 'text/plain'
                 },
                 content: 'Hello World\n'
             }
@@ -396,7 +380,6 @@ describe('postObject', function () {
                 'ETag': '401b30e3b8b5d629635a5c613cdb7919',
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/');

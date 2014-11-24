@@ -31,19 +31,16 @@ describe('Container listing', function () {
                 'x.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 1000,
-                    'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 234,
-                    'Content-Type': 'text/plain'
                 }}
             });
             SwiftMock.setObjects('bar', {
                 'x.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 2345,
-                    'Content-Type': 'text/plain'
                 }}
             });
             browser.get('index.html#/');
@@ -195,12 +192,10 @@ describe('Container listing', function () {
                 'x.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
-                    'Content-Type': 'text/plain'
                 }},
                 'nested/y.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
-                    'Content-Type': 'text/plain'
                 }}
             });
             browser.get('index.html#/');
@@ -220,12 +215,10 @@ describe('Object listing', function () {
                 'x.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
-                    'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
-                    'Content-Type': 'text/plain'
                 }}
             });
             browser.get('index.html#/foo/');
@@ -258,13 +251,11 @@ describe('Object listing', function () {
             'x.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 13,
-                'Content-Type': 'text/plain'
             }},
             'dir/y.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
-            }},
+            }}
         });
         browser.get('index.html#/foo/');
 
@@ -278,17 +269,14 @@ describe('Object listing', function () {
             'x.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 13,
-                'Content-Type': 'text/plain'
             }},
             'deeply/y.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
             }},
             'deeply/nested/z.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/foo/');
@@ -310,12 +298,10 @@ describe('Object listing', function () {
                 'x.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
-                    'Content-Type': 'text/plain'
                 }},
                 'y.txt': {headers: {
                     'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
-                    'Content-Type': 'text/plain'
                 }}
             });
             browser.get('index.html#/foo/');
@@ -355,17 +341,14 @@ describe('Object listing', function () {
             'x.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'y.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
             }},
             'z.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/foo/');
@@ -407,17 +390,14 @@ describe('Object listing', function () {
             'x.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }},
             'bar/y.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
             }},
             'bar/z.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/foo/');
@@ -442,7 +422,6 @@ describe('Object listing', function () {
             'nested/x.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/foo/nested/');
@@ -568,7 +547,6 @@ describe('Object listing', function () {
             'nested/x.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         SwiftMock.addContainer('bar');
@@ -622,7 +600,6 @@ describe('Listing a pseudo-directory', function () {
             'bar/baz.txt': {headers: {
                 'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
-                'Content-Type': 'text/plain'
             }}
         });
         browser.get('index.html#/foo/bar');

@@ -50,16 +50,13 @@ window.addEventListener('DOMContentLoaded', function () {
         swiftSim.addContainer('empty container');
         swiftSim.setObjects('foo', {
             'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/plain'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: text.join('\n')},
             'primes.py': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/x-python'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: python.join('\n')},
             'nested/z.html': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/html'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: html.join('\n')}
         });
 
@@ -86,8 +83,7 @@ window.addEventListener('DOMContentLoaded', function () {
             ];
             large['o-' + i] = {
                 headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                    'Content-Type': 'text/plain'
+                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
                 }, content: content.join('\n')
             };
         }
@@ -95,27 +91,22 @@ window.addEventListener('DOMContentLoaded', function () {
 
         swiftSim.setObjects('deep', {
             'this/is/a/deeply/nested/object.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/plain'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: 'Maybe we could short-circuit the directories?\n'}
         });
 
         swiftSim.setObjects('funny names', {
             '   leading spaces': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/plain'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: ''},
             'trailing spaces   ': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/plain'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: ''},
             'Danish word: blåbærgrød': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/plain'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: 'This word means "blueberry porridge".\n'},
             'Japanese word: ブルーベリー': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
-                'Content-Type': 'text/plain'
+                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
             }, content: 'Google Translate says this means "blueberry".\n'}
         });
     });
