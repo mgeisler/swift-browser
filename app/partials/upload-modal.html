@@ -19,7 +19,7 @@
                aria-valuenow="{{ file.uploadPct }}"
                aria-valuemin="0" aria-valuemax="100"
                ng-style="{width: file.uploadPct + '%'}">
-            {{ file.uploadPct }}%
+            {{ file.uploadPct | number:0 }}%
           </div>
         </div>
       </td>
