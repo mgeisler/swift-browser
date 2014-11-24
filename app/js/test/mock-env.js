@@ -49,15 +49,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
         swiftSim.addContainer('empty container');
         swiftSim.setObjects('foo', {
-            'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: text.join('\n')},
-            'primes.py': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: python.join('\n')},
-            'nested/z.html': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: html.join('\n')}
+            'x.txt': {headers: {}, content: text.join('\n')},
+            'primes.py': {headers: {}, content: python.join('\n')},
+            'nested/z.html': {headers: {}, content: html.join('\n')}
         });
 
         /* Simple linear congruential random generator */
@@ -82,32 +76,29 @@ window.addEventListener('DOMContentLoaded', function () {
                 'Here are: ' + r + " x's: " + xs + '.'
             ];
             large['o-' + i] = {
-                headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-                }, content: content.join('\n')
+                headers: {}, content: content.join('\n')
             };
         }
         swiftSim.setObjects('large', large);
 
         swiftSim.setObjects('deep', {
-            'this/is/a/deeply/nested/object.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: 'Maybe we could short-circuit the directories?\n'}
+            'this/is/a/deeply/nested/object.txt': {
+                headers: {},
+                content: 'Maybe we could short-circuit the directories?\n'
+            }
         });
 
         swiftSim.setObjects('funny names', {
-            '   leading spaces': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: ''},
-            'trailing spaces   ': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: ''},
-            'Danish word: blåbærgrød': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: 'This word means "blueberry porridge".\n'},
-            'Japanese word: ブルーベリー': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT'
-            }, content: 'Google Translate says this means "blueberry".\n'}
+            '   leading spaces': {headers: {}, content: ''},
+            'trailing spaces   ': {headers: {}, content: ''},
+            'Danish word: blåbærgrød': {
+                headers: {},
+                content: 'This word means "blueberry porridge".\n'
+            },
+            'Japanese word: ブルーベリー': {
+                headers: {},
+                content: 'Google Translate says this means "blueberry".\n'
+            }
         });
     });
     angular.resumeBootstrap(['swiftBrowserE2E']);

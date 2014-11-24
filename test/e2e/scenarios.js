@@ -29,17 +29,14 @@ describe('Container listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 1000,
                 }},
                 'y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 234,
                 }}
             });
             SwiftMock.setObjects('bar', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 2345,
                 }}
             });
@@ -190,11 +187,9 @@ describe('Container listing', function () {
         it('should succeed with non-empty container', function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
                 }},
                 'nested/y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
                 }}
             });
@@ -213,11 +208,9 @@ describe('Object listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
                 }},
                 'y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
                 }}
             });
@@ -249,11 +242,9 @@ describe('Object listing', function () {
     it('should understand pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 13,
             }},
             'dir/y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }}
         });
@@ -267,15 +258,12 @@ describe('Object listing', function () {
     it('should understand deep pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 13,
             }},
             'deeply/y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }},
             'deeply/nested/z.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }}
         });
@@ -296,11 +284,9 @@ describe('Object listing', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
                 'x.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 20,
                 }},
                 'y.txt': {headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Length': 10,
                 }}
             });
@@ -339,15 +325,12 @@ describe('Object listing', function () {
     it('should allow deletion', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
             }},
             'y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }},
             'z.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }}
         });
@@ -388,15 +371,12 @@ describe('Object listing', function () {
     it('should allow deleting pseudo-directories', function () {
         SwiftMock.setObjects('foo', {
             'x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
             }},
             'bar/y.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }},
             'bar/z.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 10,
             }}
         });
@@ -420,7 +400,6 @@ describe('Object listing', function () {
     it('should allow uploading files', function () {
         SwiftMock.setObjects('foo', {
             'nested/x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
             }}
         });
@@ -545,7 +524,6 @@ describe('Object listing', function () {
     it('should allow copying files', function () {
         SwiftMock.setObjects('foo', {
             'nested/x.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
             }}
         });
@@ -598,7 +576,6 @@ describe('Listing a pseudo-directory', function () {
     it('should add traling slash', function () {
         SwiftMock.setObjects('foo', {
             'bar/baz.txt': {headers: {
-                'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                 'Content-Length': 20,
             }}
         });
@@ -771,7 +748,6 @@ describe('Object content', function () {
         SwiftMock.setObjects('foo', {
             'bar.html': {
                 headers: {
-                    'Last-Modified': 'Sat, 16 Aug 2014 13:33:21 GMT',
                     'Content-Type': 'text/html',
                     'X-Object-Meta-Foo': 'bar',
                 },
