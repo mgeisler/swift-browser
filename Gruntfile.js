@@ -128,14 +128,19 @@ module.exports = function (grunt) {
                     cwd: 'app',
                     src: ['index.html'],
                     dest: '<%= build.dir %>'
-                }]
+                }],
+                options: {
+                    context: {
+                        BUILD_TYPE: 'release'
+                    }
+                }
             },
             mock: {
                 src: 'app/index.html',
                 dest: 'app/mock.html',
                 options: {
                     context: {
-                        MOCK: true
+                        BUILD_TYPE: 'mock'
                     }
                 }
             }
