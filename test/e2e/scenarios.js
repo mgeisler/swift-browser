@@ -61,7 +61,7 @@ describe('Container listing', function () {
         });
 
         it('by size', function () {
-            var sizes = $$('td:nth-child(3)');
+            var sizes = $$('td[sb-format-bytes]');
 
             // Initial sort is by name
             expect(sizes.getText()).toEqual(['2.3 KB', '1.2 KB']);
@@ -96,7 +96,7 @@ describe('Container listing', function () {
         });
 
         var toggle = $('th.toggle input');
-        var checkboxes = $$('td:nth-child(1) input');
+        var checkboxes = element.all(by.model('container.selected'));
 
         it('should be deselected by default', function () {
             expect(toggle.isSelected()).toBe(false);
@@ -126,7 +126,7 @@ describe('Container listing', function () {
     it('should allow creating a new container', function () {
         var rows = by.repeater('container in containers');
         var names = element.all(rows.column('container.name'));
-        var sizes = $$('td:nth-child(3)');
+        var sizes = $$('td[sb-format-bytes]');
         var counts = element.all(rows.column('container.count | number'));
         var openBtn = $('.btn[ng-click="create()"]');
         var createBtn = $('.btn[ng-click="$close(name)"]');
@@ -243,7 +243,7 @@ describe('Object listing', function () {
         });
 
         it('by size', function () {
-            var sizes = $$('td:last-child');
+            var sizes = $$('td[sb-format-bytes]');
 
             // Initial sort order is by name
             expect(sizes.getText()).toEqual(['20.0 B', '10.0 B']);
@@ -268,7 +268,8 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var names = $$('td:nth-child(2)');
+        var rows = by.repeater('item in items');
+        var names = element.all(rows.column('item.title'));
         expect(names.getText()).toEqual(['dir/', 'x.txt']);
     });
 
@@ -292,7 +293,8 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var links = $$('td:nth-child(2) a');
+        var rows = by.repeater('item in items');
+        var links = element.all(rows.column('item.title'));
         expect(links.getText()).toEqual(['deeply/', 'x.txt']);
         links.first().click();
 
@@ -320,7 +322,7 @@ describe('Object listing', function () {
         });
 
         var toggle = $('th.toggle input');
-        var checkboxes = $$('td:nth-child(1) input');
+        var checkboxes = element.all(by.model('item.selected'));
 
         it('should be deselected by default', function () {
             expect(toggle.isSelected()).toBe(false);
@@ -367,8 +369,9 @@ describe('Object listing', function () {
             }}
         });
         browser.get('index.html#/foo/');
-        var names = $$('td:nth-child(2)');
-        var checkboxes = $$('td:nth-child(1) input');
+        var rows = by.repeater('item in items');
+        var names = element.all(rows.column('item.title'));
+        var checkboxes = element.all(by.model('item.selected'));
         var deleteBtn = $('.btn[ng-click="delete()"]');
 
         expect(deleteBtn.isEnabled()).toBe(false);
@@ -376,8 +379,8 @@ describe('Object listing', function () {
         checkboxes.get(2).click();
         deleteBtn.click();
 
-        var modalNames = $$('div.modal td:nth-child(2)');
-        var modalCheckboxes = $$('div.modal td:nth-child(1) input');
+        var modalNames = $('div.modal').all(rows.column('item.title'));
+        var modalCheckboxes = $('div.modal').all(by.model('item.selected'));
         var modalTitle = $('div.modal h3');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
@@ -419,12 +422,14 @@ describe('Object listing', function () {
         });
         browser.get('index.html#/foo/');
 
-        var names = $$('td:nth-child(2)');
-        var modalNames = $$('div.modal td:nth-child(2)');
+        var rows = by.repeater('item in items');
+        var names = element.all(rows.column('item.title'));
+        var checkboxes = element.all(by.model('item.selected'));
+        var modalNames = $('div.modal').all(rows.column('item.title'));
         var deleteBtn = $('.btn[ng-click="delete()"]');
         var closeBtn = $('div.modal .btn[ng-click="$close()"]');
 
-        $$('td:nth-child(1) input').first().click();
+        checkboxes.first().click();
         deleteBtn.click();
         expect(modalNames.getText()).toEqual(['bar/']);
 
@@ -443,7 +448,8 @@ describe('Object listing', function () {
         browser.get('index.html#/foo/nested/');
 
         var openModalBtn = $('.btn[ng-click="upload()"]');
-        var names = $$('td:nth-child(2)');
+        var rows = by.repeater('item in items');
+        var names = element.all(rows.column('item.title'));
         expect(names.getText()).toEqual(['x.txt']);
 
         openModalBtn.click();
@@ -457,8 +463,8 @@ describe('Object listing', function () {
             paths.forEach(uploadFile);
 
             var uploadBtn = $('.btn[ng-click="uploadFiles()"]');
-            var rows = by.repeater('file in files');
-            var uploads = element.all(rows.column('file.name'));
+            var files = by.repeater('file in files');
+            var uploads = element.all(files.column('file.name'));
             var newNames = paths.map(path.basename);
             expect(uploads.getText()).toEqual(newNames);
 
@@ -482,13 +488,14 @@ describe('Object listing', function () {
         SwiftMock.addContainer('foo');
         browser.get('index.html#/foo/');
 
-        var names = $$('td:nth-child(2)');
+        var rows = by.repeater('item in items');
+        var names = element.all(rows.column('item.title'));
         $('.btn[ng-click="upload()"]').click();
 
         Q.all([mktemp(), mktemp()]).spread(function (res1, res2) {
             var paths = [res1[0], res2[0]];
-            var rows = by.repeater('file in files');
-            var uploads = element.all(rows.column('file.name'));
+            var files = by.repeater('file in files');
+            var uploads = element.all(files.column('file.name'));
             var base = path.basename(paths[1]);
             paths.forEach(uploadFile);
 
@@ -508,7 +515,7 @@ describe('Object listing', function () {
         browser.get('index.html#/foo/');
         $('.btn[ng-click="upload()"]').click();
 
-        var sizes = $$('td:nth-child(4)');
+        var sizes = $$('td[sb-format-bytes]');
 
         // Two files with a known sort order
         var tmpX = mktemp({prefix: 'x'});
@@ -567,13 +574,14 @@ describe('Object listing', function () {
         SwiftMock.addContainer('bar');
         browser.get('index.html#/foo/nested/');
 
-        var checkboxes = $$('td:nth-child(1) input');
-        var names = $$('td:nth-child(2)');
+        var rows = by.repeater('item in items');
+        var checkboxes = element.all(by.model('item.selected'));
+        var names = element.all(rows.column('item.title'));
         var openCopyModalBtn = $('.btn[ng-click="copy()"]');
         var copyBtn = $('div.modal .btn[ng-click="copyObjects()"]');
         var closeBtn = $('div.modal .btn[ng-click="$dismiss()"]');
         var modalTitle = $('div.modal h3');
-        var modalNames = $$('div.modal td:nth-child(1)');
+        var modalNames = $('div.modal').all(rows.column('item.title'));
         var successes = $$('div.modal td:nth-child(3) .glyphicon-ok');
         var containers = element.all(
             by.options('c.name as c.name for c in containers')

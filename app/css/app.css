@@ -70,3 +70,49 @@ span.sort-desc:after {
 .btn-toolbar {
     margin-bottom: 20px;
 }
+
+/* Loading animation. Put these classes on three dots and they'll
+   pulse back and forth. */
+.loading {
+    font-size: 0px;
+}
+
+.loading * {
+    font-size: 14px;
+    opacity: 1;
+    animation-duration: 1.8s;
+    animation-iteration-count: infinite;
+}
+.loading :nth-child(1) {
+    animation-name: dot-1;
+}
+.loading :nth-child(2) {
+    animation-name: dot-2;
+}
+.loading :nth-child(3) {
+    animation-name: dot-3;
+}
+
+@keyframes dot-1 {
+    0% { opacity: 0; }
+    15% { opacity: 0; }
+    25% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes dot-2 {
+    0% { opacity: 0; }
+    40% { opacity: 0; }
+    50% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes dot-3 {
+    0% { opacity: 0; }
+    65% { opacity: 0; }
+    75% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}

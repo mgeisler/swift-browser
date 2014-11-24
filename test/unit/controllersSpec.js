@@ -87,20 +87,36 @@ describe('ContainerCtrl', function () {
              subdir: true},
         ];
 
-        var base = '/v1/AUTH_abc/cont?';
-        var delimiter = 'delimiter=%2F&';
-        var limit8 = 'limit=8&';
-        var limit16 = 'limit=16&';
-        var marker = 'marker=foo%2Fbar%2F&';
-        var prefix = 'prefix=foo%2F';
-        $httpBackend.whenGET(base + delimiter + limit8 + prefix)
-            .respond(200, reply);
-        $httpBackend.whenGET(base + delimiter + limit16 + marker + prefix)
-            .respond(200, []);
-
+        var url = '/v1/AUTH_abc/cont?delimiter=%2F&limit=8&prefix=foo%2F';
+        $httpBackend.expectGET(url).respond(200, reply);
         expect(this.scope.items).toEqual([]);
         $httpBackend.flush();
         expect(this.scope.items).toEqual(items);
+        $httpBackend.verifyNoOutstandingExpectation();
+    }));
+
+    it('should list objects in chunks', inject(function ($httpBackend) {
+        setupCtrl({container: 'cont', prefix: ''});
+        function makeReply(limit, cutoff) {
+            function fmt(i) {
+                return (i < 10 ? '0' : '') + i;
+            }
+            var reply = [];
+            for (var i = 0; i < cutoff; i++) {
+                reply.push({subdir: fmt(limit) + '-' + fmt(i + 1) + '/'});
+            }
+            return reply;
+        }
+
+        var base = '/v1/AUTH_abc/cont?delimiter=%2F';
+        $httpBackend.expectGET(base + '&limit=8&prefix=')
+            .respond(200, makeReply(8, 8));
+        $httpBackend.expectGET(base + '&limit=16&marker=08-08%2F&prefix=')
+            .respond(200, makeReply(16, 16));
+        $httpBackend.expectGET(base + '&limit=32&marker=16-16%2F&prefix=')
+            .respond(200, makeReply(32, 1));
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
     }));
 });
 
