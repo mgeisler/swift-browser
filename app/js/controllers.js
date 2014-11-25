@@ -207,8 +207,7 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
                                                  file, headers);
                 upload.progress(function (evt) {
                     if (evt.lengthComputable) {
-                        var frac = evt.loaded / evt.total;
-                        file.uploadPct = parseInt(100.0 * frac);
+                        file.uploadPct = 100 * evt.loaded / evt.total;
                     }
                 });
                 upload.success(function () {
