@@ -17,10 +17,10 @@ describe('my app', function () {
 
 function uploadFile(path) {
     browser.executeScript(function () {
-        var file = document.getElementById('file-1');
+        var file = document.getElementById('fileInput');
         angular.element(file).removeClass('hidden');
     }).then(function () {
-        $('#file-1').sendKeys(path);
+        $('#fileInput').sendKeys(path);
     });
 }
 
