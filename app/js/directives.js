@@ -25,3 +25,15 @@ mod.directive('sbFormatBytes', function (bytesFilter) {
         template: '{{number}} <span class="unit">{{unit}}</span>'
     };
 });
+
+mod.directive('sbOnChange', function () {
+    return {
+        restrict: 'A',
+        scope: {
+            sbOnChange: '='
+        },
+        link: function (scope, element) {
+            element.on('change', scope.sbOnChange);
+        }
+    };
+});

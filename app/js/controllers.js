@@ -171,7 +171,8 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
         var scope = $scope.$new(true);
         scope.files = [];
         scope.path = container + '/' + prefix;
-        scope.fileSelected = function (elm) {
+        scope.fileSelected = function () {
+            var elm = this;
             // Since fileSelected is called from a non-Angular
             // event handler, we need to inform the scope
             // about the update. Otherwise the update won't be
