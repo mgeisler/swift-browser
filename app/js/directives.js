@@ -33,7 +33,16 @@ mod.directive('sbOnChange', function () {
             sbOnChange: '='
         },
         link: function (scope, element) {
-            element.on('change', scope.sbOnChange);
+            element.on('change', function () {
+                var elm = this;
+                // This is called from a non-Angular event handler, so
+                // we invoke the callback with $apply to inform the
+                // scope about the update. Otherwise the update won't
+                // be noticed until the next digest cycle.
+                scope.$apply(function () {
+                    scope.sbOnChange(elm);
+                });
+            });
         }
     };
 });
