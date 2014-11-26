@@ -171,9 +171,9 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
         var scope = $scope.$new(true);
         scope.files = [];
         scope.path = container + '/' + prefix;
-        scope.fileSelected = function (elm) {
-            for (var j = 0; j < elm.files.length; j++) {
-                var file = elm.files[j];
+        scope.fileSelected = function () {
+            for (var j = 0; j < this.files.length; j++) {
+                var file = this.files[j];
                 file.uploadPct = null;
                 scope.files.push(file);
             }
