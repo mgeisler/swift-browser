@@ -25,3 +25,24 @@ mod.directive('sbFormatBytes', function (bytesFilter) {
         template: '{{number}} <span class="unit">{{unit}}</span>'
     };
 });
+
+mod.directive('sbOnChange', function () {
+    return {
+        restrict: 'A',
+        scope: {
+            sbOnChange: '='
+        },
+        link: function (scope, element) {
+            element.on('change', function (event) {
+                var target = this;
+                // This is called from a non-Angular event handler, so
+                // we invoke the callback with $apply to inform the
+                // scope about the update. Otherwise the update won't
+                // be noticed until the next digest cycle.
+                scope.$apply(function () {
+                    scope.sbOnChange.call(target, event);
+                });
+            });
+        }
+    };
+});

@@ -37,13 +37,13 @@
       </td>
     </tr>
   </table>
-  <input class="hidden" type="file" id="file-1" multiple
-         onchange="angular.element(this).scope().fileSelected(this)" >
+  <input class="hidden" type="file" id="fileInput" multiple
+         sb-on-change="fileSelected">
 </div>
 
 <div class="modal-footer">
   <button type="button" class="btn btn-default pull-left"
-          onclick="document.getElementById('file-1').click()">Select File</button>
+          onclick="document.getElementById('fileInput').click()">Select File</button>
   <button type="button" class="btn btn-primary" ng-click="uploadFiles()"
           ng-disabled="disableUpload()">Upload</button>
   <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>

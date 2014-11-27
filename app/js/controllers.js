@@ -171,18 +171,12 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
         var scope = $scope.$new(true);
         scope.files = [];
         scope.path = container + '/' + prefix;
-        scope.fileSelected = function (elm) {
-            // Since fileSelected is called from a non-Angular
-            // event handler, we need to inform the scope
-            // about the update. Otherwise the update won't be
-            // noticed until the next digest cycle.
-            scope.$apply(function () {
-                for (var j = 0; j < elm.files.length; j++) {
-                    var file = elm.files[j];
-                    file.uploadPct = null;
-                    scope.files.push(file);
-                }
-            });
+        scope.fileSelected = function () {
+            for (var j = 0; j < this.files.length; j++) {
+                var file = this.files[j];
+                file.uploadPct = null;
+                scope.files.push(file);
+            }
         };
         scope.remove = function (idx) {
             scope.files.splice(idx, 1);
