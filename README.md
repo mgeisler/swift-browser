@@ -125,27 +125,17 @@ Furthermore, the JavaScript and CSS files are now concatenated and
 minified, resulting in a faster load. Issues closed since 0.1.0:
 
 * [#176][]: Fix Bootstrap fonts missing in minified build.
-
 * [#164][]: Run E2E tests on minified JavaScript.
-
 * [#163][]: Test page speed using online tools.
-
 * [#157][]: Use grunt-usemin to concat and minimize assets.
-
 * [#155][]: Use load-grunt-tasks to simplify Gruntfile
-
 * [#154][]: Use grunt-contrib-compress to create release tarball and
   zip file.
-
 * [#120][]: Look at using a CDN for third-party dependencies.
-
 * [#95][]: Concatenate HTML templates into a single file for
   production deployment.
-
 * [#53][]: Implement copy operation.
-
 * [#37][]: Add support for deleting containers.
-
 * [#20][]: Look at using ng-annotate.
 
 0.1.0: 2014-11-06
@@ -164,9 +154,7 @@ Other Swift File Managers
 =========================
 
 * [Swift Explorer][]: implemented in Java.
-
 * [django-swiftbrowser][]: implemented in Python using Django.
-
 * [swift-ui][]: implemented in JavaScript using Backbone.js
 
 [OpenStack Swift]: http://docs.openstack.org/developer/swift/
