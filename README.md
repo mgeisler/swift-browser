@@ -7,6 +7,7 @@ Swift Browser
 JavaScript based UI for [OpenStack Swift][]. You can
 [**try our demo**][demo] if you want to see how it looks and behaves.
 
+
 Deployment
 ==========
 
@@ -61,6 +62,7 @@ Browser like this:
         }
     }
 
+
 Same-Origin Restrictions
 ========================
 
@@ -90,6 +92,7 @@ So to make Swift Browser talk to Keystone, you need to either
   allow API requests from the origin where Swift is running (or from
   any origin). Please see this [blog post][swift-cors] for details.
 
+
 Testing
 =======
 
@@ -107,6 +110,7 @@ in your browser will now show the mocked test environment. You will be
 working on an in-memory database which reflects the changes you make
 until you reload the page. Navigating using the in-page links is okay
 since that doesn't trigger a full page reload.
+
 
 Supported Browsers
 ==================
