@@ -117,8 +117,8 @@ We support IE 10+ and test with Firefox and Chrome.
 Release History
 ===============
 
-0.2.0: 2014-11-17
------------------
+Version 0.2.0: 2014-11-17
+-------------------------
 
 This release adds support for copying objects and deleting containers.
 Furthermore, the JavaScript and CSS files are now concatenated and
@@ -138,8 +138,8 @@ minified, resulting in a faster load. Issues closed since 0.1.0:
 * [#37][]: Add support for deleting containers.
 * [#20][]: Look at using ng-annotate.
 
-0.1.0: 2014-11-06
------------------
+Version 0.1.0: 2014-11-06
+-------------------------
 
 First release with a basic feature set:
 
