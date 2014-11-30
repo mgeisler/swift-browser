@@ -7,6 +7,7 @@ Swift Browser
 JavaScript based UI for [OpenStack Swift][]. You can
 [**try our demo**][demo] if you want to see how it looks and behaves.
 
+
 Deployment
 ==========
 
@@ -61,6 +62,7 @@ Browser like this:
         }
     }
 
+
 Same-Origin Restrictions
 ========================
 
@@ -90,6 +92,7 @@ So to make Swift Browser talk to Keystone, you need to either
   allow API requests from the origin where Swift is running (or from
   any origin). Please see this [blog post][swift-cors] for details.
 
+
 Testing
 =======
 
@@ -108,6 +111,7 @@ working on an in-memory database which reflects the changes you make
 until you reload the page. Navigating using the in-page links is okay
 since that doesn't trigger a full page reload.
 
+
 Supported Browsers
 ==================
 
@@ -117,39 +121,29 @@ We support IE 10+ and test with Firefox and Chrome.
 Release History
 ===============
 
-0.2.0: 2014-11-17
------------------
+Version 0.2.0: 2014-11-17
+-------------------------
 
 This release adds support for copying objects and deleting containers.
 Furthermore, the JavaScript and CSS files are now concatenated and
 minified, resulting in a faster load. Issues closed since 0.1.0:
 
 * [#176][]: Fix Bootstrap fonts missing in minified build.
-
 * [#164][]: Run E2E tests on minified JavaScript.
-
 * [#163][]: Test page speed using online tools.
-
 * [#157][]: Use grunt-usemin to concat and minimize assets.
-
 * [#155][]: Use load-grunt-tasks to simplify Gruntfile
-
 * [#154][]: Use grunt-contrib-compress to create release tarball and
   zip file.
-
 * [#120][]: Look at using a CDN for third-party dependencies.
-
 * [#95][]: Concatenate HTML templates into a single file for
   production deployment.
-
 * [#53][]: Implement copy operation.
-
 * [#37][]: Add support for deleting containers.
-
 * [#20][]: Look at using ng-annotate.
 
-0.1.0: 2014-11-06
------------------
+Version 0.1.0: 2014-11-06
+-------------------------
 
 First release with a basic feature set:
 
@@ -164,9 +158,7 @@ Other Swift File Managers
 =========================
 
 * [Swift Explorer][]: implemented in Java.
-
 * [django-swiftbrowser][]: implemented in Python using Django.
-
 * [swift-ui][]: implemented in JavaScript using Backbone.js
 
 [OpenStack Swift]: http://docs.openstack.org/developer/swift/
