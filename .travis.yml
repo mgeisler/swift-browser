@@ -7,7 +7,6 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - grunt start > /dev/null &
-  - grunt update-webdriver
 script:
   - grunt eslint
   - grunt karma:travis

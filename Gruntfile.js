@@ -109,11 +109,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        exec: {
-            webdriver: {
-                cmd: 'node_modules/.bin/webdriver-manager update'
-            }
-        },
 
         clean: {
             build: {
@@ -292,7 +287,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('update-webdriver', ['exec:webdriver']);
     grunt.registerTask('start', ['connect:server']);
     grunt.registerTask('coverage', [
         'copy:e2e', 'instrument', 'protractor_coverage', 'makeReport'
