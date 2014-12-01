@@ -11,6 +11,8 @@ exports.config = {
         browserName: 'firefox'
     },
 
+    directConnect: true,
+
     baseUrl: 'http://localhost:8000/app/',
 
     onPrepare: function () {
