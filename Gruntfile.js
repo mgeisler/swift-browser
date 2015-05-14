@@ -158,8 +158,11 @@ module.exports = function (grunt) {
 
         copy: {
             e2e: {
-                src: ['app/**/*', '!**/*.orig', '!**/*~'],
-                dest: 'coverage/instrumented/'
+                files: [{
+                    expand: true,
+                    src: ['app/**/*', '!**/*.orig', '!**/*~'],
+                    dest: 'coverage/instrumented/'
+                }]
             },
             build: {
                 files: [
