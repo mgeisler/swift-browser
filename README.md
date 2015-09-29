@@ -13,10 +13,14 @@ Deployment
 
 Deployment is simple: if you got this file from a release tarball or
 zip file, then you simply need to upload all files in this folder to
-Swift. That will look like this:
+Swift. First create a container on Swift to hold the files and make
+this container world readable:
 
     $ swift post swift-browser
     $ swift post -r '.r:*' swift-browser
+
+Upload all files to the new container:
+
     $ swift upload swift-browser .
 
 Then load the `index.html` page in your browser. You will be asked for
