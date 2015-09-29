@@ -1,4 +1,5 @@
 language: node_js
+sudo: false
 node_js:
   - 0.10
 before_install:
@@ -12,6 +13,5 @@ script:
   - grunt karma:travis
   - grunt coverage
   - grunt e2e-build
-after_script:
-  - sudo pip install codecov
-  - codecov
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
