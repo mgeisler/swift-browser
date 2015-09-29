@@ -4,7 +4,7 @@ Swift Browser
 [![Build Status](https://travis-ci.org/zerovm/swift-browser.svg?branch=master)](https://travis-ci.org/zerovm/swift-browser)
 [![Coverage Status](https://codecov.io/github/zerovm/swift-browser/coverage.svg?branch=master)](https://codecov.io/github/zerovm/swift-browser?branch=master)
 
-JavaScript based UI for [OpenStack Swift][]. You can
+Swift Browser is a web based UI for [OpenStack Swift][]. You can
 [**try our demo**][demo] if you want to see how it looks and behaves.
 
 
