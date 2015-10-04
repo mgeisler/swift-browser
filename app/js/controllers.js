@@ -56,6 +56,7 @@ var mod = angular.module('swiftBrowser.controllers', [
 ]);
 
 mod.controller('RootCtrl', function ($scope, $swift, $modal) {
+    $scope.breadcrumbs = [{name: '', title: 'Root'}];
     $scope.containers = [];
     $scope.updateOrderBy = mkUpdateOrderBy($scope);
     $scope.updateOrderBy('name');
