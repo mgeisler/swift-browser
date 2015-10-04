@@ -46,3 +46,9 @@ mod.directive('sbOnChange', function () {
         }
     };
 });
+
+mod.directive('sbBreadcrumbs', function () {
+    return {
+        templateUrl: 'partials/breadcrumbs.html'
+    };
+});
