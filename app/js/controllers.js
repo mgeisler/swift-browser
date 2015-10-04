@@ -56,7 +56,6 @@ var mod = angular.module('swiftBrowser.controllers', [
 ]);
 
 mod.controller('RootCtrl', function ($scope, $swift, $modal) {
-    $scope.breadcrumbs = [{name: '', title: 'Root'}];
     $scope.containers = [];
     $scope.updateOrderBy = mkUpdateOrderBy($scope);
     $scope.updateOrderBy('name');
@@ -120,6 +119,8 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
                                           $location, $modal) {
     var container = $stateParams.container;
     var prefix = $stateParams.prefix || '';
+
+    $scope.prefix = prefix;
     $scope.container = container;
     $scope.updateOrderBy = mkUpdateOrderBy($scope);
     $scope.updateOrderBy('name');
@@ -234,16 +235,6 @@ mod.controller('ContainerCtrl', function ($scope, $swift, $stateParams,
         $modal.open(opt);
     };
 
-    $scope.breadcrumbs = [{name: '', title: 'Root'}];
-
-    var prefixes = prefix.split('/');
-    prefixes.unshift(container);
-    for (var i = 0; i < prefixes.length - 1; i++) {
-        var crumb = {name: prefixes.slice(0, i + 1).join('/') + '/',
-                     title: prefixes[i]};
-        $scope.breadcrumbs.push(crumb);
-    }
-
     $scope.finishedLoading = false;
     function chunkedListObjects($scope, container, params) {
         var req = $swift.listObjects(container, params);
@@ -283,15 +274,8 @@ mod.controller('ObjectCtrl', function ($scope, $stateParams, $swift,
                                        $location, $modal) {
     var container = $stateParams.container;
     var name = $stateParams.name;
-
-    $scope.breadcrumbs = [{name: '', title: 'Root'}];
-    var parts = name.split('/');
-    parts.unshift(container);
-    for (var i = 0; i < parts.length; i++) {
-        var crumb = {name: parts.slice(0, i + 1).join('/') + '/',
-                     title: parts[i]};
-        $scope.breadcrumbs.push(crumb);
-    }
+    $scope.container = container;
+    $scope.name = name;
 
     function flatten(headers) {
         var flattened = {};
@@ -322,8 +306,6 @@ mod.controller('ObjectCtrl', function ($scope, $stateParams, $swift,
         }
 
         var headers = {meta: [], sys: []};
-        $scope.container = container;
-        $scope.name = name;
         $scope.reset = function () {
             $scope.headers = angular.copy(headers);
         };
