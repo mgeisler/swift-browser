@@ -49,9 +49,17 @@ window.addEventListener('DOMContentLoaded', function () {
 
         swiftSim.addContainer('empty container');
         swiftSim.setObjects('foo', {
-            'x.txt': {content: text.join('\n')},
-            'primes.py': {content: python.join('\n')},
-            'nested/z.html': {content: html.join('\n')}
+            'x.txt': {
+                content: text.join('\n')
+            },
+            'primes.py': {
+                content: python.join('\n'),
+                headers: {'Content-Type': 'text/x-python'}
+            },
+            'nested/z.html': {
+                content: html.join('\n'),
+                headers: {'Content-Type': 'text/html'}
+            }
         });
 
         /* Simple linear congruential random generator */
