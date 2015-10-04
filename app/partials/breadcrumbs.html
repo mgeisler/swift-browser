@@ -1,6 +1,8 @@
 <ol class="breadcrumb">
   <li ng-repeat="crumb in crumbs" ng-class="{active: $last}">
-    <a ng-if="!$last" href="#{{ crumb.path }}">{{ crumb.title }}</a>
-    <span ng-if="$last">{{ crumb.title }}</span>
+    <a ng-if="!$last" href="#{{ crumb.path }}">
+      <span ng-class="crumb.icon">{{ crumb.title }}</span>
+    </a>
+    <span ng-if="$last" ng-class="crumb.icon">{{ crumb.title }}</span>
   </li>
 </ol>

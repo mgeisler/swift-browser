@@ -54,7 +54,7 @@ mod.directive('sbBreadcrumbs', function () {
             path: '@'
         },
         link: function (scope) {
-            scope.crumbs = [{path: '/', title: 'Root'}];
+            scope.crumbs = [{path: '/', icon: 'glyphicon glyphicon-home'}];
             var lastIdx = 0;
             var idx;
             while (lastIdx + 1 < scope.path.length) {
