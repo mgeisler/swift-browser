@@ -46,3 +46,29 @@ mod.directive('sbOnChange', function () {
         }
     };
 });
+
+mod.directive('sbBreadcrumbs', function () {
+    return {
+        restruct: 'E',
+        scope: {
+            path: '@'
+        },
+        link: function (scope) {
+            scope.crumbs = [{path: '/', icon: 'glyphicon glyphicon-home'}];
+            var lastIdx = 0;
+            var idx;
+            while (lastIdx + 1 < scope.path.length) {
+                idx = scope.path.indexOf('/', lastIdx + 1);
+                if (idx == -1) {
+                    // Last path segment: slice to end of string.
+                    idx = scope.path.length;
+                }
+                var crumb = {path: scope.path.slice(0, idx + 1),
+                             title: scope.path.slice(lastIdx + 1, idx)};
+                scope.crumbs.push(crumb);
+                lastIdx = idx;
+            }
+        },
+        templateUrl: 'partials/breadcrumbs.html'
+    };
+});

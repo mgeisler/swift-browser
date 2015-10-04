@@ -24,8 +24,17 @@ module.exports = function (config) {
             'angular-bootstrap/ui-bootstrap-tpls.js',
         ]).concat([
             'app/js/*.js',
+            'app/partials/*.html',
             'test/unit/**/*.js'
         ]),
+
+        preprocessors: {
+            'app/partials/*.html': ['ng-html2js']
+        },
+        ngHtml2JsPreprocessor: {
+            stripPrefix: 'app/',
+        },
+
         // Files created by Emacs FlyCheck
         exclude: ['**/flycheck_*.js'],
         autoWatch: true,
@@ -36,6 +45,7 @@ module.exports = function (config) {
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-jasmine',
+            'karma-ng-html2js-preprocessor'
         ],
 
         reporters: ['progress'],

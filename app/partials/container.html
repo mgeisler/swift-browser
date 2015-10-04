@@ -2,12 +2,7 @@
   <h1>Listing</h1>
 </div>
 
-<ol class="breadcrumb">
-  <li ng-repeat="crumb in breadcrumbs" ng-class="{active: $last}">
-    <a ng-if="!$last" href="#/{{ crumb.name }}">{{ crumb.title }}</a>
-    <span ng-if="$last">{{ crumb.title }}</span>
-  </li>
-</ol>
+<sb-breadcrumbs path="/{{ container }}/{{ prefix }}"></sb-breadcrumbs>
 
 <div class="btn-toolbar" role="toolbar">
   <div class="btn-group">

@@ -50,17 +50,6 @@ describe('ContainerCtrl', function () {
         expect(this.scope.container).toEqual('cont');
     });
 
-    it('should create breadcrumbs', function () {
-        setupCtrl({container: 'cont',
-                   prefix: 'foo/bar/'});
-        expect(this.scope.breadcrumbs).toEqual([
-            {name: '', title: 'Root'},
-            {name: 'cont/', title: 'cont'},
-            {name: 'cont/foo/', title: 'foo'},
-            {name: 'cont/foo/bar/', title: 'bar'},
-        ]);
-    });
-
     it('should query container', inject(function ($httpBackend) {
         setupCtrl({container: 'cont',
                    prefix: 'foo/'});
