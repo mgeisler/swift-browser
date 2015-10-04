@@ -49,6 +49,10 @@ mod.directive('sbOnChange', function () {
 
 mod.directive('sbBreadcrumbs', function () {
     return {
+        restruct: 'E',
+        scope: {
+            crumbs: '='
+        },
         templateUrl: 'partials/breadcrumbs.html'
     };
 });
