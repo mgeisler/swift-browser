@@ -1,7 +1,7 @@
 'use strict';
 
 exports.config = {
-    allScriptsTimeout: 11000,
+    allScriptsTimeout: 300,
 
     specs: [
         'e2e/*.js'
