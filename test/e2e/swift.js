@@ -21,7 +21,9 @@ function callSwiftMethod(method) {
                           headers: result.headers(),
                           data: result.data});
             }
-            var $swift = window.getFromInjector('$swift');
+            var html = document.querySelector('html');
+            var injector = angular.element(html).injector();
+            var $swift = injector.get('$swift');
             var req = $swift[method].apply($swift, args);
             req.then(handler, handler);
         }
@@ -230,7 +232,9 @@ describe('deleteDirectory', function () {
         });
         browser.get('index.html#/');
         var data = browser.driver.executeAsyncScript(function (callback) {
-            var $swift = window.getFromInjector('$swift');
+            var html = document.querySelector('html');
+            var injector = angular.element(html).injector();
+            var $swift = injector.get('$swift');
             var req = $swift.deleteDirectory('foo', 'bar/');
             req.then(function (results) {
                 var statuses = results.map(function (result) {

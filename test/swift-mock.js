@@ -1,39 +1,39 @@
 'use strict';
+var requestPromise = require('request-promise');
+var Q = require('q');
+
+var defaults = {
+    baseUrl: 'http://localhost:8000/',
+    transform: function () {
+        return true;
+    }
+};
+var rp = requestPromise.defaults(defaults);
 
 exports.loadAngularMocks = function () {
-    browser.clearMockModules();
-    browser.addMockModule('swiftBrowserE2E', function () {
-        var srcs = [
-            'bower_components/angular-mocks/angular-mocks.js',
-            'bower_components/spark-md5/spark-md5.js',
-            'js/test/swift-simulator.js'
-        ];
-        srcs.forEach(function (src) {
-            var script = document.createElement('script');
-            script.async = false;
-            script.src = src;
-            document.body.appendChild(script);
-        });
-    });
-    browser.addMockModule('swiftBrowserE2E', function () {
-        angular.module('swiftBrowserE2E').run(function (swiftSim) {
-            swiftSim.reset();
-        });
+    browser.driver.wait(function () {
+        return rp.post('/reset');
     });
 };
 
 exports.addContainer = function (name) {
-    browser.addMockModule('swiftBrowserE2E', function (name) {
-        angular.module('swiftBrowserE2E').run(function (swiftSim) {
-            swiftSim.addContainer(name);
-        });
-    }, name);
+    browser.driver.wait(function () {
+        return rp.put('/swift/' + name);
+    });
 };
 
 exports.setObjects = function (container, objects) {
-    browser.addMockModule('swiftBrowserE2E', function (container, jsonObjects) {
-        angular.module('swiftBrowserE2E').run(function (swiftSim) {
-            swiftSim.setObjects(container, JSON.parse(jsonObjects));
-        });
-    }, container, JSON.stringify(objects));
+    exports.addContainer(container);
+
+    browser.driver.wait(function () {
+        var promisses = [];
+        for (var name in objects) {
+            var object = objects[name];
+            var options = {url: '/swift/' + container + '/' + name,
+                           body: object.content || '',
+                           headers: object.headers || {}};
+            promisses.push(rp.put(options));
+        }
+        return Q.all(promisses);
+    });
 };
