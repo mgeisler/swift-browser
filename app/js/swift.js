@@ -4,7 +4,7 @@ function SwiftClient($http, $q, $upload) {
     this._$http = $http;
     this._$q = $q;
     this._$upload = $upload;
-    this._swiftUrl = this.defaultSwiftUrl();
+    this._swiftUrl = '/swift';
     this._headers = {};
 }
 
