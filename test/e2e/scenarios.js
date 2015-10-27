@@ -25,6 +25,19 @@ function uploadFile(path) {
 }
 
 describe('Container listing', function () {
+    describe('should show empty indicator', function () {
+        it('when there are no containers', function () {
+            browser.get('index.html#/');
+            expect($('td.empty').isDisplayed()).toBe(true);
+        });
+
+        it('unless there are containers', function () {
+            SwiftMock.addContainer('foo');
+            browser.get('index.html#/');
+            expect($('td.empty').isDisplayed()).toBe(false);
+        });
+    });
+
     describe('should be sortable', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {
@@ -200,6 +213,24 @@ describe('Container listing', function () {
 
 
 describe('Object listing', function () {
+    describe('should show empty indicator', function () {
+        it('when there are no objects', function () {
+            SwiftMock.addContainer('foo');
+            browser.get('index.html#/foo/');
+            expect($('td.empty').isDisplayed()).toBe(true);
+        });
+
+        it('unless there are containers', function () {
+            SwiftMock.setObjects('foo', {
+                'x.txt': {headers: {
+                    'Content-Length': 20,
+                }},
+            });
+            browser.get('index.html#/foo/');
+            expect($('td.empty').isDisplayed()).toBe(false);
+        });
+    });
+
     describe('should be sortable', function () {
         beforeEach(function () {
             SwiftMock.setObjects('foo', {

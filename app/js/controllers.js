@@ -56,6 +56,7 @@ var mod = angular.module('swiftBrowser.controllers', [
 ]);
 
 mod.controller('RootCtrl', function ($scope, $swift, $modal) {
+    $scope.finishedLoading = false;
     $scope.containers = [];
     $scope.updateOrderBy = mkUpdateOrderBy($scope);
     $scope.updateOrderBy('name');
@@ -112,6 +113,7 @@ mod.controller('RootCtrl', function ($scope, $swift, $modal) {
 
     $swift.listContainers().then(function (result) {
         $scope.containers = result.data;
+        $scope.finishedLoading = true;
     });
 });
 
