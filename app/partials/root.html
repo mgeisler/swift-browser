@@ -36,7 +36,7 @@
     <td class="text-right" sb-format-bytes count="container.bytes"></td>
     <td class="text-right">{{ container.count | number }} objects</td>
   </tr>
-  <tr ng-hide="containers | notUndefined | length">
+  <tr ng-hide="finishedLoading">
     <td colspan="4">
       <i>Loading<span class="loading">
         <span>.</span>
@@ -44,5 +44,8 @@
         <span>.</span>
       </span></i>
     </td>
+  </tr>
+  <tr ng-show="finishedLoading && containers.length == 0">
+    <td colspan="4" class="empty">No containers.</td>
   </tr>
 </table>

@@ -28,6 +28,11 @@ td.icon {
     vertical-align: middle !important;
 }
 
+td.empty {
+    text-align: center;
+    font-style: italic;
+}
+
 div.upload {
     width: 12em;
     margin-bottom: 0px;
