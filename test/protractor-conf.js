@@ -16,8 +16,8 @@ exports.config = {
     baseUrl: 'http://localhost:8000/app/',
 
     onPrepare: function () {
-        var width = 640;
-        var height = 480;
+        var width = 800;
+        var height = 600;
         browser.driver.manage().window().setSize(width, height);
 
         var SwiftMock = require('./swift-mock.js');
